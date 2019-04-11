@@ -1,13 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Serial;
 
-public class moving : MonoBehaviour
+public class Moving : MonoBehaviour, Serializable
 {
-    public float paddleSpeed = 1f;
-    public float limitLeft = -10f;
-    public float limitRight = 10f;
-    public float paddleYPos = .5f;
+    public float paddleSpeed;
+    public float limitLeft;
+    public float limitRight;
+    public float paddleYPos;
     private Vector3 playerPos = new Vector3(0, 0, 0);
 
     /*
@@ -21,5 +22,43 @@ public class moving : MonoBehaviour
         float xPos = transform.position.x + (Input.GetAxis("Horizontal") * paddleSpeed);
         playerPos = new Vector3(Mathf.Clamp(xPos, limitLeft, limitRight), paddleYPos, 0f);
         transform.position = playerPos;
+    }
+
+    /*
+     * Being used for test only right now
+     */
+
+    void Start()
+    {
+        GetCurrentState();
+    }
+
+    public virtual SerialDataStore GetCurrentState()
+    {
+        return new MovingSave(   paddleSpeed, limitLeft,
+                                limitRight, paddleYPos,
+                                playerPos
+                             );
+    }
+}
+
+internal class MovingSave : SerialDataStore
+{
+    public float paddleSpeed { get; }
+    public float limitLeft { get; }
+    public float limitRight { get; }
+    public float paddleYPos { get; }
+    private Vector3 playerPos { get; }
+
+    public MovingSave(    float speed, float limitL,
+                            float limitR, float paddleY,
+                            Vector3 pos
+                       )
+    {
+        paddleSpeed = speed;
+        limitLeft = limitL;
+        limitRight = limitR;
+        paddleYPos = paddleY;
+        playerPos = pos;
     }
 }
