@@ -24,22 +24,12 @@ public class Moving : MonoBehaviour, Serializable
         transform.position = playerPos;
     }
 
-    /*
-     * Being used for test only right now
-     */
-    void Start()
-    {
-
-    }
-
     public virtual SerialDataStore GetCurrentState()
     {
-        var test = new MovingSave(paddleSpeed, limitLeft,
-                                 limitRight, paddleYPos,
-                                 playerPos
+        return new MovingSave(  paddleSpeed, limitLeft,
+                                limitRight, paddleYPos,
+                                playerPos
                              );
-
-        return test;
     }
 
     public virtual void SetState(SerialDataStore goalState)
@@ -66,9 +56,9 @@ public class MovingSave : SerialDataStore
     public float paddleYPos { get; }
     public Vector3 playerPos { get; }
 
-    public MovingSave(    float speed, float limitL,
-                            float limitR, float paddleY,
-                            Vector3 pos
+    public MovingSave(  float speed, float limitL,
+                        float limitR, float paddleY,
+                        Vector3 pos
                      )
     {
         paddleSpeed = speed;
