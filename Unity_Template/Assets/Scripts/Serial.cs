@@ -1,14 +1,14 @@
 ﻿// https://en.wikibooks.org/wiki/C_Sharp_Programming/Namespaces
 namespace Serial
 {
-    public interface Serializable
+    public interface ISerializable
     {
-        SerialDataStore GetCurrentState();
+        ISerialDataStore GetCurrentState();
 
-        void SetState(SerialDataStore state);
+        void SetState(ISerialDataStore state);
     }
 
-    public interface SerialDataStore
+    public interface ISerialDataStore
     {
 
     }

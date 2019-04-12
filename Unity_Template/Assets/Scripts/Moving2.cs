@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Serial;
 
-public class Moving2 : MonoBehaviour, Serializable
+public class Moving2 : MonoBehaviour, ISerializable
 {
     public float paddleSpeed;
     public float limitLeft;
@@ -24,15 +24,15 @@ public class Moving2 : MonoBehaviour, Serializable
         transform.position = playerPos;
     }
 
-    public virtual SerialDataStore GetCurrentState()
+    public virtual ISerialDataStore GetCurrentState()
     {
-        return new MovingSave2(paddleSpeed, limitLeft,
+        return new MovingSave2( paddleSpeed, limitLeft,
                                 limitRight, paddleXPos,
                                 playerPos
-                             );
+                              );
     }
 
-    public virtual void SetState(SerialDataStore goalState)
+    public virtual void SetState(ISerialDataStore goalState)
     {
         // https://stackoverflow.com/questions/16534253/c-sharp-converting-base-class-to-child-class
         MovingSave2 newState = (MovingSave2) goalState;
@@ -48,7 +48,7 @@ public class Moving2 : MonoBehaviour, Serializable
     }
 }
 
-internal class MovingSave2 : SerialDataStore
+internal class MovingSave2 : ISerialDataStore
 {
     public float paddleSpeed { get; }
     public float limitLeft { get; }
@@ -56,10 +56,10 @@ internal class MovingSave2 : SerialDataStore
     public float paddleXPos { get; }
     public Vector3 playerPos { get; }
 
-    public MovingSave2(float speed, float limitL,
+    public MovingSave2( float speed, float limitL,
                         float limitR, float paddleX,
                         Vector3 pos
-                     )
+                      )
     {
         paddleSpeed = speed;
         limitLeft = limitL;

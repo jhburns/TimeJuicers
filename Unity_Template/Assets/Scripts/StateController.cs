@@ -7,9 +7,9 @@ using Serial;
 
 public class StateController : MonoBehaviour
 {
-    Serializable[] allSerialObjects;
+    ISerializable[] allSerialObjects;
     // https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.stack-1?view=netframework-4.7.2
-    Stack<SerialDataStore[]> pastStates;
+    Stack<ISerialDataStore[]> pastStates;
 
     void Start()
     {
@@ -20,13 +20,13 @@ public class StateController : MonoBehaviour
     void FindSerializable()
     {
         // https://answers.unity.com/questions/863509/how-can-i-find-all-objects-that-have-a-script-that.html
-        var serialQuery = FindObjectsOfType<MonoBehaviour>().OfType<Serializable>();
-        allSerialObjects = serialQuery.Cast<Serializable>().ToArray();
+        var serialQuery = FindObjectsOfType<MonoBehaviour>().OfType<ISerializable>();
+        allSerialObjects = serialQuery.Cast<ISerializable>().ToArray();
     }
 
     void InitStack()
     {
-        pastStates = new Stack<SerialDataStore[]>();
+        pastStates = new Stack<ISerialDataStore[]>();
     }
 
     void Update()
@@ -44,9 +44,9 @@ public class StateController : MonoBehaviour
 
     }
 
-    SerialDataStore[] CollectStates()
+    ISerialDataStore[] CollectStates()
     {
-        SerialDataStore[] allCurrentStates = new SerialDataStore[allSerialObjects.Length];
+        ISerialDataStore[] allCurrentStates = new ISerialDataStore[allSerialObjects.Length];
 
         for (int i = 0; i < allSerialObjects.Length; i++)
         {
@@ -58,7 +58,7 @@ public class StateController : MonoBehaviour
 
     void RevetState()
     {
-        SerialDataStore[] lastState = pastStates.Pop();
+        ISerialDataStore[] lastState = pastStates.Pop();
 
         for (int i = 0; i < allSerialObjects.Length; i++)
         {
