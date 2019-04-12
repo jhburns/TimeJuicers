@@ -33,7 +33,7 @@ public class StateController : MonoBehaviour
     {
 
         // https://docs.unity3d.com/ScriptReference/Input.GetKeyDown.html
-        if (Input.GetKey(KeyCode.Space) && pastStates.Count > 0)
+        if (Input.GetKey(KeyCode.Space) && pastStates.Count > 1) // Check for greater than 1 to prevent initialization issues
         {
             RevetState();
         }
