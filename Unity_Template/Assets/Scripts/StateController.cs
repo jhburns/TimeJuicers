@@ -26,7 +26,7 @@ public class StateController : MonoBehaviour
     void Update()
     {
         // https://docs.unity3d.com/ScriptReference/Input.GetKeyDown.html
-        if (Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space) && pastStates.Count > 0)
         {
             RevetState();
         }
