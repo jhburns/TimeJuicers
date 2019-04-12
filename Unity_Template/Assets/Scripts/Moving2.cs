@@ -48,7 +48,7 @@ public class Moving2 : MonoBehaviour, Serializable
     }
 }
 
-public class MovingSave2 : SerialDataStore
+internal class MovingSave2 : SerialDataStore
 {
     public float paddleSpeed { get; }
     public float limitLeft { get; }
