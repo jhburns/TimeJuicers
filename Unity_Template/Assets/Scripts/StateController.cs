@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using Serial;
-
+using System;
 
 public class StateController : MonoBehaviour
 {
@@ -84,4 +84,58 @@ public class StateController : MonoBehaviour
             allSerialObjects[i].SetState(lastState[i]);
         }
     }
+}
+
+internal class FixedStack<T>
+{
+    public int maxSize { get; private set; }
+    public int Count { get; private set; }
+    private int currentIndex;
+    private T[] elements;
+
+    public FixedStack(int max)
+    {
+        maxSize = max;
+        elements = new T[maxSize];
+        currentIndex = -1;
+        Count = 0;
+    }
+
+    public void Push(T element)
+    {
+        currentIndex = (currentIndex + 1) % maxSize;
+        elements[currentIndex] = element;
+        Count++;
+    }
+
+    public T Pop()
+    {
+        if (Count < 1)
+        {
+            throw new EmptyStackException("Cannot Pop, from a empty list.");
+        }
+
+        T tempElement = elements[currentIndex];
+
+        currentIndex = (currentIndex - 1) % maxSize;
+        Count--;
+
+        return tempElement;
+    }
+}
+
+
+internal class EmptyStackException : Exception
+{
+    public EmptyStackException()
+    {
+
+    }
+
+    public EmptyStackException(string message)
+        : base(String.Format("FixedArray Stack is Empty: {0}", message))
+    {
+
+    }
+
 }
