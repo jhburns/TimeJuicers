@@ -27,33 +27,49 @@ public class Moving : MonoBehaviour, Serializable
     /*
      * Being used for test only right now
      */
-
     void Start()
     {
-        GetCurrentState();
+
     }
 
     public virtual SerialDataStore GetCurrentState()
     {
-        return new MovingSave(   paddleSpeed, limitLeft,
-                                limitRight, paddleYPos,
-                                playerPos
+        var test = new MovingSave(paddleSpeed, limitLeft,
+                                 limitRight, paddleYPos,
+                                 playerPos
                              );
+
+        return test;
+    }
+
+    public virtual void SetState(SerialDataStore goalState)
+    {
+        // https://stackoverflow.com/questions/16534253/c-sharp-converting-base-class-to-child-class
+        MovingSave newState = (MovingSave) goalState;
+
+        paddleSpeed = newState.paddleSpeed;
+        limitLeft = newState.limitLeft;
+        limitRight = newState.limitRight;
+        paddleYPos = newState.paddleYPos;
+        // https://docs.unity3d.com/ScriptReference/Vector3.Set.html
+        playerPos.Set(newState.playerPos.x, newState.playerPos.y, newState.playerPos.z);
+
+        transform.position = playerPos;
     }
 }
 
-internal class MovingSave : SerialDataStore
+public class MovingSave : SerialDataStore
 {
     public float paddleSpeed { get; }
     public float limitLeft { get; }
     public float limitRight { get; }
     public float paddleYPos { get; }
-    private Vector3 playerPos { get; }
+    public Vector3 playerPos { get; }
 
     public MovingSave(    float speed, float limitL,
                             float limitR, float paddleY,
                             Vector3 pos
-                       )
+                     )
     {
         paddleSpeed = speed;
         limitLeft = limitL;
