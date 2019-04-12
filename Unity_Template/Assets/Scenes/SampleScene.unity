@@ -281,7 +281,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b633f9b0f861448179f96c3fc96f6e82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  paddleSpeed: 2
+  paddleSpeed: 0.3
   limitLeft: -6.6
   limitRight: 6.6
   paddleYPos: 0
@@ -569,7 +569,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b633f9b0f861448179f96c3fc96f6e82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  paddleSpeed: 2
+  paddleSpeed: 1
   limitLeft: -6.6
   limitRight: 6.6
   paddleYPos: -3
@@ -665,7 +665,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b633f9b0f861448179f96c3fc96f6e82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  paddleSpeed: 2
+  paddleSpeed: 3
   limitLeft: -6.6
   limitRight: 6.6
   paddleYPos: 1
@@ -1131,7 +1131,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b633f9b0f861448179f96c3fc96f6e82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  paddleSpeed: 2
+  paddleSpeed: 1.5
   limitLeft: -6.6
   limitRight: 6.6
   paddleYPos: 4
@@ -1227,7 +1227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b633f9b0f861448179f96c3fc96f6e82, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  paddleSpeed: 2
+  paddleSpeed: 0.7
   limitLeft: -6.6
   limitRight: 6.6
   paddleYPos: 3
