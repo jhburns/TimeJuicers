@@ -11,12 +11,19 @@ public class StateController : MonoBehaviour
     // https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.stack-1?view=netframework-4.7.2
     Stack<ISerialDataStore[]> pastStates;
 
+    /*
+     * Start - finds serializable objects and initalizes stack  
+     */
     void Start()
     {
         FindSerializable();
         InitStack();
     }
 
+    /*
+     * FindSerializable - locates any object with 'ISerializable' type,
+     * then adds them to array
+     */
     void FindSerializable()
     {
         // https://answers.unity.com/questions/863509/how-can-i-find-all-objects-that-have-a-script-that.html
@@ -24,11 +31,17 @@ public class StateController : MonoBehaviour
         allSerialObjects = serialQuery.Cast<ISerializable>().ToArray();
     }
 
+    /*
+     * InitStack - creates stack to store global state
+     */
     void InitStack()
     {
         pastStates = new Stack<ISerialDataStore[]>();
     }
 
+    /*
+     * Update - checks every frame to either store or restore state
+     */
     void Update()
     {
 
@@ -44,6 +57,9 @@ public class StateController : MonoBehaviour
 
     }
 
+    /*
+     * CollectStates - gets the current state from each serializable object
+     */
     ISerialDataStore[] CollectStates()
     {
         ISerialDataStore[] allCurrentStates = new ISerialDataStore[allSerialObjects.Length];
@@ -56,6 +72,9 @@ public class StateController : MonoBehaviour
         return allCurrentStates;
     }
 
+    /*
+     * RevetState - sends stored state back to object
+     */
     void RevetState()
     {
         ISerialDataStore[] lastState = pastStates.Pop();

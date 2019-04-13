@@ -24,6 +24,10 @@ public class Moving : MonoBehaviour, ISerializable
         transform.position = playerPos;
     }
 
+    /*
+     * GetCurrentState
+     * Returns: ISerialDataStore of current global variables
+     */
     public virtual ISerialDataStore GetCurrentState()
     {
         return new MovingSave(  paddleSpeed, limitLeft,
@@ -32,6 +36,11 @@ public class Moving : MonoBehaviour, ISerializable
                              );
     }
 
+    /*
+     * SetState
+     * Params:
+     *  - ISerialDataStore goalState: what the object should try and change to
+     */
     public virtual void SetState(ISerialDataStore goalState)
     {
         // https://stackoverflow.com/questions/16534253/c-sharp-converting-base-class-to-child-class
