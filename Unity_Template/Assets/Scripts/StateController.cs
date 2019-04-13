@@ -55,9 +55,6 @@ public class StateController : MonoBehaviour
         {
             pastStates.Push(CollectStates());
         }
-
-        Debug.Log(pastStates.Count);
-
     }
 
     /*
@@ -104,6 +101,11 @@ internal class FixedStack<T>
         Count = 0;
     }
 
+    /*
+     * Push
+     * Params:
+     *  - T element: the element to be inserted to the front of the array
+     */
     public void Push(T element)
     {
         currentIndex = (currentIndex + 1) % maxSize;
@@ -115,6 +117,12 @@ internal class FixedStack<T>
         }
     }
 
+    /*
+     * Pop - remove top element of stack
+     * Returns: T which is the element in the top of the stack
+     * Throws:
+     *  - EmptyStackException because an empty stack can't have an element removed
+     */
     public T Pop()
     {
         if (Count < 1)
@@ -138,6 +146,10 @@ internal class FixedStack<T>
         return tempElement;
     }
 
+    /*
+     * Peek
+     * Returns: T the top element of the stack
+     */
     public T Peek()
     {
         return elements[currentIndex];
@@ -157,5 +169,4 @@ internal class EmptyStackException : Exception
     {
 
     }
-
 }

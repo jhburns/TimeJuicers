@@ -5,7 +5,7 @@ namespace Serial
     {
         /*
          * GetCurrentState
-         * Return ISerialDataStore of object's current state
+         * Return: ISerialDataStore of object's current state
          */
         ISerialDataStore GetCurrentState();
 
