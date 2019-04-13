@@ -9,7 +9,7 @@ public class Moving : MonoBehaviour, ISerializable
     public float limitLeft;
     public float limitRight;
     public float paddleYPos;
-    private Vector3 playerPos = new Vector3(0, 0, 0);
+    private Vector3 playerPos = new Vector3(0, 0, 0); // Only really mutable variable, but tracking others to test resource usage
 
     /*
      * Update()  
