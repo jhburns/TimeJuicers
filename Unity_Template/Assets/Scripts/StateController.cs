@@ -7,7 +7,7 @@ using System;
 
 public class StateController : MonoBehaviour
 {
-    ISerializable[] allSerialObjects;
+    ISerializable[] allSerialObjects; // Are also of the MonoBehaviour class, so can be cast to
     // https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.stack-1?view=netframework-4.7.2
     FixedStack<ISerialDataStore[]> pastStates;
     public int frameCount; // About 60 frames per second so 'frameCount = 3600' means the you can rewind for 1 minute
@@ -55,6 +55,17 @@ public class StateController : MonoBehaviour
         {
             pastStates.Push(CollectStates());
         }
+
+        // Prevents input when rewinding
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            ToggleBehaviourSerializable(false);
+        }
+
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            ToggleBehaviourSerializable(true);
+        }
     }
 
     /*
@@ -84,6 +95,20 @@ public class StateController : MonoBehaviour
             allSerialObjects[i].SetState(lastState[i]);
         }
     }
+
+    /*
+     * ToggleBehaviourSerializable - allows revert to block other inputs
+     * Params:
+     *  - bool toggle: sets the 'enable' state for all Serializable objects
+     */
+    private void ToggleBehaviourSerializable(bool toggle)
+    {
+        for (int i = 0; i < allSerialObjects.Length; i++)
+        {
+            ((MonoBehaviour) allSerialObjects[i]).enabled = toggle;
+        }
+    }
+
 }
 
 internal class FixedStack<T>
