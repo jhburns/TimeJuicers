@@ -9,7 +9,8 @@ public class StateController : MonoBehaviour
 {
     ISerializable[] allSerialObjects;
     // https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.stack-1?view=netframework-4.7.2
-    Stack<ISerialDataStore[]> pastStates;
+    FixedStack<ISerialDataStore[]> pastStates;
+    public int frameCount; // About 60 frames per second so 'frameCount = 3600' means the you can rewind for 1 minute
 
     /*
      * Start - finds serializable objects and initalizes stack  
@@ -36,7 +37,7 @@ public class StateController : MonoBehaviour
      */
     void InitStack()
     {
-        pastStates = new Stack<ISerialDataStore[]>();
+        pastStates = new FixedStack<ISerialDataStore[]>(frameCount);
     }
 
     /*
@@ -54,6 +55,8 @@ public class StateController : MonoBehaviour
         {
             pastStates.Push(CollectStates());
         }
+
+        Debug.Log(pastStates.Count);
 
     }
 
@@ -105,7 +108,11 @@ internal class FixedStack<T>
     {
         currentIndex = (currentIndex + 1) % maxSize;
         elements[currentIndex] = element;
-        Count++;
+
+        if (Count < maxSize)
+        {
+            Count++;
+        }
     }
 
     public T Pop()
@@ -115,12 +122,25 @@ internal class FixedStack<T>
             throw new EmptyStackException("Cannot Pop, from a empty list.");
         }
 
+
         T tempElement = elements[currentIndex];
 
-        currentIndex = (currentIndex - 1) % maxSize;
+        if (currentIndex < 1)
+        {
+            currentIndex = maxSize - 1;
+        } else
+        {
+            currentIndex--;
+        }
+
         Count--;
 
         return tempElement;
+    }
+
+    public T Peek()
+    {
+        return elements[currentIndex];
     }
 }
 
