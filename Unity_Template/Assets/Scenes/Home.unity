@@ -1340,6 +1340,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FollowSpeed: 2
   Target: {fileID: 849689629}
+  minHeight: -3
 --- !u!1 &1553573706
 GameObject:
   m_ObjectHideFlags: 0

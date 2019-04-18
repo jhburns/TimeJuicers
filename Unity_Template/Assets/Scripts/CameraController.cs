@@ -8,10 +8,13 @@ public class CameraController : MonoBehaviour
     public float FollowSpeed = 2f;
     public Transform Target;
 
+    public float minHeight;
+
     private void Update()
     {
         Vector3 newPosition = Target.position;
         newPosition.z = -10;
+        newPosition.y = Mathf.Clamp(newPosition.y, minHeight , float.PositiveInfinity);
         transform.position = Vector3.Slerp(transform.position, newPosition, FollowSpeed * Time.deltaTime);
     }
 }

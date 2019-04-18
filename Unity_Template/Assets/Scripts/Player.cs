@@ -8,7 +8,7 @@ public class Player : MonoBehaviour, ISerializable
 {
     public float jumpHeight; //IM = suppose to be immutable
     public float moveSpeed; //IM
-    private float velHorz;
+    private float velHorz;  // Mutable, but not tracked
     private const float acceleration = 0.1f; //IM
     private bool movingRight;
 
