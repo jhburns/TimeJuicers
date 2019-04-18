@@ -16,7 +16,7 @@ public class Player : MonoBehaviour, ISerializable
 
     private bool grounded;
     private int jumps;
-    private const int maxJumps = 1; //IM
+    private const int maxJumps = 6000; //IM
 
     // Start is called before the first frame update
     void Start()
@@ -43,6 +43,8 @@ public class Player : MonoBehaviour, ISerializable
     // Update is called once per frame
     void Update()
     {
+        // bascially everywhere: https://docs.unity3d.com/ScriptReference/Rigidbody2D.html
+
         Jump();
 
         InitialVelocitySet();
@@ -146,8 +148,12 @@ public class Player : MonoBehaviour, ISerializable
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        grounded = true;
-        jumps = maxJumps;
+        if (col.collider.sharedMaterial.name == "GroundMaterial")
+        {
+            grounded = true;
+            jumps = maxJumps;
+        }
+
     }
 
     ///  Serial Methods
