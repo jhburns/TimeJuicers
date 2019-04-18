@@ -16,7 +16,7 @@ public class Player : MonoBehaviour, ISerializable
 
     private bool grounded;
     private int jumps;
-    private const int maxJumps = 6000; //IM
+    private const int maxJumps = 1; //IM
 
     // Start is called before the first frame update
     void Start()
