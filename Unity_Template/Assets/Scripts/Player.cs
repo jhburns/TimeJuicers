@@ -6,17 +6,17 @@ using Serial;
 
 public class Player : MonoBehaviour, ISerializable
 {
-    public float jumpHeight;
-    public float moveSpeed;
+    public float jumpHeight; //IM = suppose to be immutable
+    public float moveSpeed; //IM
     private float velHorz;
-    private const float acceleration = 0.1f;
+    private const float acceleration = 0.1f; //IM
     private bool movingRight;
 
-    private Rigidbody2D rb;
+    private Rigidbody2D rb; // Mutable, but not tracked
 
     private bool grounded;
     private int jumps;
-    private const int maxJumps = 1;
+    private const int maxJumps = 1; //IM
 
     // Start is called before the first frame update
     void Start()
@@ -153,14 +153,15 @@ public class Player : MonoBehaviour, ISerializable
     ///  Serial Methods
     public ISerialDataStore GetCurrentState()
     {
-        return new SavePlayer(velHorz, movingRight, grounded, jumps, transform.position.x, transform.position.y);
+        return new SavePlayer(movingRight, grounded, jumps, transform.position.x, transform.position.y);
     }
 
     public void SetState(ISerialDataStore state)
     {
         SavePlayer past = (SavePlayer)state;
 
-        velHorz = past.velHorz;
+        velHorz = 0f;
+
         movingRight = past.movingRight;
         grounded = past.grounded;
         jumps = past.jumps;
@@ -172,7 +173,6 @@ public class Player : MonoBehaviour, ISerializable
 
 internal class SavePlayer : ISerialDataStore
 {
-    public float velHorz { get; private set; }
     public bool movingRight { get; private set; }
 
     public bool grounded { get; private set; }
@@ -181,12 +181,11 @@ internal class SavePlayer : ISerialDataStore
     public float positionX;
     public float positionY;
 
-    public SavePlayer(  float velH, bool movingR,
-                        bool g, int j,
-                        float posX, float posY
+    public SavePlayer(  bool movingR, bool g,
+                        int j, float posX, 
+                        float posY
                      )
     {
-        velHorz = velH;
         movingRight = movingR;
 
         grounded = g;
