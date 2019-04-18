@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using Serial;
 
-
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, ISerializable
 {
     public float jumpHeight;
     public float moveSpeed;
@@ -148,5 +148,51 @@ public class Player : MonoBehaviour
     {
         grounded = true;
         jumps = maxJumps;
+    }
+
+    ///  Serial Methods
+    public ISerialDataStore GetCurrentState()
+    {
+        return new SavePlayer(velHorz, movingRight, grounded, jumps, transform.position.x, transform.position.y);
+    }
+
+    public void SetState(ISerialDataStore state)
+    {
+        SavePlayer past = (SavePlayer)state;
+
+        velHorz = past.velHorz;
+        movingRight = past.movingRight;
+        grounded = past.grounded;
+        jumps = past.jumps;
+
+        transform.position = new Vector3(past.positionX, past.positionY, 0);
+        rb.velocity = Vector2.zero; // Needed becasue velocity isn't conserved
+    }
+}
+
+internal class SavePlayer : ISerialDataStore
+{
+    public float velHorz { get; private set; }
+    public bool movingRight { get; private set; }
+
+    public bool grounded { get; private set; }
+    public int jumps { get; private set; }
+
+    public float positionX;
+    public float positionY;
+
+    public SavePlayer(  float velH, bool movingR,
+                        bool g, int j,
+                        float posX, float posY
+                     )
+    {
+        velHorz = velH;
+        movingRight = movingR;
+
+        grounded = g;
+        jumps = j;
+
+        positionX = posX;
+        positionY = posY;
     }
 }
