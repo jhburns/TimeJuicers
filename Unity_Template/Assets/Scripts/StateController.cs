@@ -47,7 +47,7 @@ public class StateController : MonoBehaviour
     {
 
         // https://docs.unity3d.com/ScriptReference/Input.GetKeyDown.html
-        if (Input.GetKey(KeyCode.Space) && pastStates.Count > 1) // Check for greater than 1 to prevent initialization issues
+        if (Input.GetKey(KeyCode.G) && pastStates.Count > 1) // Check for greater than 1 to prevent initialization issues
         {
             RevetState();
         }
@@ -57,12 +57,12 @@ public class StateController : MonoBehaviour
         }
 
         // Prevents input when rewinding
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.G))
         {
             ToggleBehaviourSerializable(false);
         }
 
-        if (Input.GetKeyUp(KeyCode.Space))
+        if (Input.GetKeyUp(KeyCode.G))
         {
             ToggleBehaviourSerializable(true);
         }
