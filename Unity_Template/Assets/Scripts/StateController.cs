@@ -15,6 +15,7 @@ public class StateController : MonoBehaviour
     public int frameCount; // About 60 frames per second so 'frameCount = 3600' means the you can rewind for 1 minute
 
     public Image RewindIcon;
+    public Image FilterImg;
 
     /*
      * Start - finds serializable objects and initalizes stack  
@@ -49,6 +50,7 @@ public class StateController : MonoBehaviour
     private void InitUI()
     {
         RewindIcon.enabled = false;
+        FilterImg.enabled = false;
     }
 
     /*
@@ -125,6 +127,7 @@ public class StateController : MonoBehaviour
     private void ToggleRewindIcon(bool turnOn)
     {
         RewindIcon.enabled = turnOn;
+        FilterImg.enabled = turnOn;
     }
 
 }
