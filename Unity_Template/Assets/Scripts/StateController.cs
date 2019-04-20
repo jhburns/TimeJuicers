@@ -4,6 +4,8 @@ using UnityEngine;
 using System.Linq;
 using Serial;
 using System;
+using UnityEngine.UI;
+
 
 public class StateController : MonoBehaviour
 {
@@ -12,6 +14,8 @@ public class StateController : MonoBehaviour
     FixedStack<ISerialDataStore[]> pastStates;
     public int frameCount; // About 60 frames per second so 'frameCount = 3600' means the you can rewind for 1 minute
 
+    public Image RewindIcon;
+
     /*
      * Start - finds serializable objects and initalizes stack  
      */
@@ -19,6 +23,8 @@ public class StateController : MonoBehaviour
     {
         FindSerializable();
         InitStack();
+
+        InitUI();
     }
 
     /*
@@ -38,6 +44,11 @@ public class StateController : MonoBehaviour
     void InitStack()
     {
         pastStates = new FixedStack<ISerialDataStore[]>(frameCount);
+    }
+
+    private void InitUI()
+    {
+        RewindIcon.enabled = false;
     }
 
     /*
@@ -60,11 +71,13 @@ public class StateController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.G))
         {
             ToggleBehaviourSerializable(false);
+            ToggleRewindIcon(true);
         }
 
         if (Input.GetKeyUp(KeyCode.G))
         {
             ToggleBehaviourSerializable(true);
+            ToggleRewindIcon(false);
         }
     }
 
@@ -107,6 +120,11 @@ public class StateController : MonoBehaviour
         {
             ((MonoBehaviour) allSerialObjects[i]).enabled = toggle;
         }
+    }
+
+    private void ToggleRewindIcon(bool turnOn)
+    {
+        RewindIcon.enabled = turnOn;
     }
 
 }
