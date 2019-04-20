@@ -511,7 +511,7 @@ Canvas:
   m_GameObject: {fileID: 549037714}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 1
+  m_RenderMode: 0
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
@@ -1557,7 +1557,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38591f8497964fb438cbaf2c1c2bf998, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FollowSpeed: 2
   Target: {fileID: 849689629}
   minHeight: -3
 --- !u!1 &1553573706

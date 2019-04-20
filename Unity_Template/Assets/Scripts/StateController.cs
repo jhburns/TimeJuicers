@@ -120,7 +120,7 @@ public class StateController : MonoBehaviour
     {
         for (int i = 0; i < allSerialObjects.Length; i++)
         {
-            ((MonoBehaviour) allSerialObjects[i]).enabled = toggle;
+            ((MonoBehaviour)allSerialObjects[i]).enabled = toggle;
         }
     }
 
@@ -182,7 +182,8 @@ internal class FixedStack<T>
         if (currentIndex < 1)
         {
             currentIndex = maxSize - 1;
-        } else
+        }
+        else
         {
             currentIndex--;
         }

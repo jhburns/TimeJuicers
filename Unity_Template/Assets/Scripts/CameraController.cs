@@ -15,7 +15,7 @@ public class CameraController : MonoBehaviour, ISerializable
         Vector3 newPosition = Target.position;
         newPosition.z = -10;
         newPosition.y = Mathf.Clamp(newPosition.y, minHeight , float.PositiveInfinity);
-        transform.position = Vector3.Slerp(transform.position, newPosition, 0.1f);
+        transform.position = Vector3.Slerp(transform.position, newPosition, 0.05f);
     }
 
 
