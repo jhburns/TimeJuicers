@@ -66,7 +66,8 @@ public class Player : MonoBehaviour, ISerializable
 
     private void Jump()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && jumps > 0)
+        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) 
+            && jumps > 0)
         {
             rb.velocity = Vector2.zero; // To allow for wall jumping
             rb.AddForce(new Vector2(0, jumpHeight), ForceMode2D.Impulse);
@@ -77,12 +78,12 @@ public class Player : MonoBehaviour, ISerializable
 
     private void InitialVelocitySet()
     {
-        if (Input.GetKeyDown(KeyCode.RightArrow))
+        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
         {
             velHorz = moveSpeed - 2.0f;
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
         {
             velHorz = -(moveSpeed - 2.0f);
         }
@@ -90,12 +91,12 @@ public class Player : MonoBehaviour, ISerializable
 
     private void MoveDirection()
     {
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.RightArrow) || Input.GetKey(KeyCode.D))
         {
             AccelerateDir(1);
             rb.velocity = new Vector2(velHorz, rb.velocity.y);
         }
-        else if (Input.GetKey(KeyCode.LeftArrow))
+        else if (Input.GetKey(KeyCode.LeftArrow) || Input.GetKey(KeyCode.A))
         {
             AccelerateDir(-1);
             rb.velocity = new Vector2(velHorz, rb.velocity.y);
@@ -158,7 +159,8 @@ public class Player : MonoBehaviour, ISerializable
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.collider.sharedMaterial.name == "GroundMaterial")
+        // Make sure to check if the object has a material first
+        if (col.collider.sharedMaterial != null && col.collider.sharedMaterial.name == "GroundMaterial")
         {
             grounded = true;
             jumps = maxJumps;
@@ -203,8 +205,8 @@ internal class SavePlayer : ISerialDataStore
     public float positionX;
     public float positionY;
 
-    public SavePlayer(  bool movingR, bool g,
-                        int j, float posX, 
+    public SavePlayer(bool movingR, bool g,
+                        int j, float posX,
                         float posY
                      )
     {
