@@ -6,7 +6,6 @@ using Serial;
 // https://www.salusgames.com/2016/12/28/smooth-2d-camera-follow-in-unity3d/
 public class CameraController : MonoBehaviour, ISerializable
 {
-    public float FollowSpeed = 2f; //IM
     public Transform Target; //IM
 
     public float minHeight; //IM
@@ -16,7 +15,7 @@ public class CameraController : MonoBehaviour, ISerializable
         Vector3 newPosition = Target.position;
         newPosition.z = -10;
         newPosition.y = Mathf.Clamp(newPosition.y, minHeight , float.PositiveInfinity);
-        transform.position = Vector3.Slerp(transform.position, newPosition, FollowSpeed * Time.deltaTime);
+        transform.position = Vector3.Slerp(transform.position, newPosition, 0.1f);
     }
 
 
