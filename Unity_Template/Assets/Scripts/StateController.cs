@@ -60,7 +60,7 @@ public class StateController : MonoBehaviour
     {
 
         // https://docs.unity3d.com/ScriptReference/Input.GetKeyDown.html
-        if (Input.GetKey(KeyCode.G) && pastStates.Count > 1) // Check for greater than 1 to prevent initialization issues
+        if ((Input.GetKey(KeyCode.K) || Input.GetKey(KeyCode.R)) && pastStates.Count > 1) // Check for greater than 1 to prevent initialization issues
         {
             RevetState();
         }
@@ -70,16 +70,18 @@ public class StateController : MonoBehaviour
         }
 
         // Prevents input when rewinding
-        if (Input.GetKeyDown(KeyCode.G))
-        {
+        if ((Input.GetKeyDown(KeyCode.K) || Input.GetKeyDown(KeyCode.R)) && pastStates.Count > 1)
+        { 
+            Debug.Log("ok");
             ToggleBehaviourSerializable(false);
-            ToggleRewindIcon(true);
+            ToggleRewindUI(true);
         }
 
-        if (Input.GetKeyUp(KeyCode.G))
+        if ((Input.GetKeyUp(KeyCode.K) || Input.GetKeyUp(KeyCode.R)) && pastStates.Count > 1)
         {
+            Debug.Log("k");
             ToggleBehaviourSerializable(true);
-            ToggleRewindIcon(false);
+            ToggleRewindUI(false);
         }
     }
 
@@ -124,7 +126,7 @@ public class StateController : MonoBehaviour
         }
     }
 
-    private void ToggleRewindIcon(bool turnOn)
+    private void ToggleRewindUI(bool turnOn)
     {
         RewindIcon.enabled = turnOn;
         FilterImg.enabled = turnOn;
