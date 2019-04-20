@@ -18,6 +18,11 @@ public class Player : MonoBehaviour, ISerializable
     private int jumps;
     private const int maxJumps = 1; //IM
 
+    public GameObject BulletToRight;
+    Vector2 bulletPos;
+    public float fireRate = 0.5f;
+    float nextFire = 0.0f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -50,6 +55,12 @@ public class Player : MonoBehaviour, ISerializable
         InitialVelocitySet();
 
         MoveDirection();
+
+        if(Input.GetKeyDown(KeyCode.F) && Time.time > nextFire)
+        {
+            nextFire = Time.time + fireRate;
+            fire();
+        }
 
     }
 
@@ -154,7 +165,6 @@ public class Player : MonoBehaviour, ISerializable
             grounded = true;
             jumps = maxJumps;
         }
-
     }
 
     ///  Serial Methods
@@ -175,6 +185,13 @@ public class Player : MonoBehaviour, ISerializable
 
         transform.position = new Vector3(past.positionX, past.positionY, 0);
         rb.velocity = Vector2.zero; // Needed becasue velocity isn't conserved
+    }
+
+    void fire()
+    {
+        bulletPos = transform.position;
+        bulletPos += new Vector2(+1f, 0.15f);
+        Instantiate(BulletToRight, bulletPos, Quaternion.identity);
     }
 }
 

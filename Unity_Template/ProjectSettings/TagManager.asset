@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Rewind
+  - blocks
+  - ground
+  - bullets
   layers:
   - Default
   - TransparentFX
