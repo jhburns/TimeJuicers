@@ -1,14 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Serial;
 
 // https://www.salusgames.com/2016/12/28/smooth-2d-camera-follow-in-unity3d/
-public class CameraController : MonoBehaviour
+public class CameraController : MonoBehaviour, ISerializable
 {
-    public float FollowSpeed = 2f;
-    public Transform Target;
+    public float FollowSpeed = 2f; //IM
+    public Transform Target; //IM
 
-    public float minHeight;
+    public float minHeight; //IM
 
     private void Update()
     {
@@ -17,4 +18,31 @@ public class CameraController : MonoBehaviour
         newPosition.y = Mathf.Clamp(newPosition.y, minHeight , float.PositiveInfinity);
         transform.position = Vector3.Slerp(transform.position, newPosition, FollowSpeed * Time.deltaTime);
     }
+
+
+    public ISerialDataStore GetCurrentState()
+    {
+        return new SaveCamera(transform.position.x, transform.position.y);
+    }
+
+    public void SetState(ISerialDataStore state)
+    {
+        SaveCamera past = (SaveCamera) state;
+
+        transform.position = new Vector3(past.positionX, past.positionY, -10);
+    }
+
 }
+
+internal class SaveCamera : ISerialDataStore
+{
+    public float positionX  { get; private set; }
+    public float positionY { get; private set; }
+
+    public SaveCamera(float posX, float posY)
+    {
+        positionX = posX;
+        positionY = posY;
+    }
+}
+

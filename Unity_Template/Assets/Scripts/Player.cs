@@ -110,7 +110,6 @@ public class Player : MonoBehaviour, ISerializable
 
         //Starting check
 
-
         velHorz = Mathf.Clamp(velHorz + acceleration * direction, -moveSpeed, moveSpeed);
     }
 
