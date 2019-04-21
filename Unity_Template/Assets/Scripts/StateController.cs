@@ -72,14 +72,12 @@ public class StateController : MonoBehaviour
         // Prevents input when rewinding
         if ((Input.GetKeyDown(KeyCode.K) || Input.GetKeyDown(KeyCode.R)) && pastStates.Count > 1)
         { 
-            Debug.Log("ok");
             ToggleBehaviourSerializable(false);
             ToggleRewindUI(true);
         }
 
         if ((Input.GetKeyUp(KeyCode.K) || Input.GetKeyUp(KeyCode.R)) && pastStates.Count > 1)
         {
-            Debug.Log("k");
             ToggleBehaviourSerializable(true);
             ToggleRewindUI(false);
         }

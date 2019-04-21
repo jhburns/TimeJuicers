@@ -10,18 +10,13 @@ public class Player : MonoBehaviour, ISerializable
     public float moveSpeed; //IM
     private float velHorz;  // Mutable, but not tracked
     private const float acceleration = 0.1f; //IM
-    private bool movingRight;
+    public bool MovingRight { get; private set; }
 
     private Rigidbody2D rb; // Mutable, but not tracked
 
     private bool grounded;
     private int jumps;
     private const int maxJumps = 1; //IM
-
-    public GameObject BulletToRight;
-    Vector2 bulletPos;
-    public float fireRate = 0.5f;
-    float nextFire = 0.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -43,6 +38,7 @@ public class Player : MonoBehaviour, ISerializable
     {
         velHorz = 0f;
         grounded = false;
+        MovingRight = true;
     }
 
     // Update is called once per frame
@@ -55,13 +51,6 @@ public class Player : MonoBehaviour, ISerializable
         InitialVelocitySet();
 
         MoveDirection();
-
-        if(Input.GetKeyDown(KeyCode.F) && Time.time > nextFire)
-        {
-            nextFire = Time.time + fireRate;
-            fire();
-        }
-
     }
 
     private void Jump()
@@ -81,11 +70,13 @@ public class Player : MonoBehaviour, ISerializable
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
         {
             velHorz = moveSpeed - 2.0f;
+            MovingRight = true;
         }
 
         if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
         {
             velHorz = -(moveSpeed - 2.0f);
+            MovingRight = false;
         }
     }
 
@@ -109,19 +100,6 @@ public class Player : MonoBehaviour, ISerializable
 
     private void AccelerateDir(int direction)
     {
-        // Turn around checking
-        if (velHorz > 0 && direction < 0)
-        {
-            velHorz = -(moveSpeed - 2.0f);
-        }
-
-        if (velHorz < 0 && direction > 0)
-        {
-            velHorz = moveSpeed - 2.0f;
-        }
-
-        //Starting check
-
         velHorz = Mathf.Clamp(velHorz + acceleration * direction, -moveSpeed, moveSpeed);
     }
 
@@ -148,7 +126,7 @@ public class Player : MonoBehaviour, ISerializable
 
     private float RoundToZero(float num)
     {
-        if (velHorz < acceleration && velHorz > -acceleration)
+        if (velHorz < acceleration * 2 && velHorz > -acceleration * 2) // Needs to be twice to fix an edge case, player was still moving a little
         {
             return 0f;
         }
@@ -170,7 +148,7 @@ public class Player : MonoBehaviour, ISerializable
     ///  Serial Methods
     public ISerialDataStore GetCurrentState()
     {
-        return new SavePlayer(movingRight, grounded, jumps, transform.position.x, transform.position.y);
+        return new SavePlayer(MovingRight, grounded, jumps, transform.position.x, transform.position.y);
     }
 
     public void SetState(ISerialDataStore state)
@@ -179,19 +157,12 @@ public class Player : MonoBehaviour, ISerializable
 
         velHorz = 0f;
 
-        movingRight = past.movingRight;
+        MovingRight = past.movingRight;
         grounded = past.grounded;
         jumps = past.jumps;
 
         transform.position = new Vector3(past.positionX, past.positionY, 0);
         rb.velocity = Vector2.zero; // Needed becasue velocity isn't conserved
-    }
-
-    void fire()
-    {
-        bulletPos = transform.position;
-        bulletPos += new Vector2(+1f, 0.15f);
-        Instantiate(BulletToRight, bulletPos, Quaternion.identity);
     }
 }
 

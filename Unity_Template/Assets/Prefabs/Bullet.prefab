@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8153144575601809558}
   - component: {fileID: 8153144575601809559}
   m_Layer: 0
-  m_Name: BulletToRight
+  m_Name: Bullet
   m_TagString: bullets
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -131,4 +131,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0decb52ae5f3e40d9806d73a23d725d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velX: 5
+  velX: 10
+  isMovingRight: 1
