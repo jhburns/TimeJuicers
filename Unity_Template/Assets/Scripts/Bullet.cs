@@ -13,11 +13,16 @@ public class Bullet : MonoBehaviour
     private float storageY; //IM
 
     private bool isInPlay;
+    private float timeLeftInPLay;
+    public float maxTime;
 
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        rb.interpolation = RigidbodyInterpolation2D.Interpolate; //Prevents jittery camera
+
+
         StoreStartingPos();
     }
 
@@ -31,30 +36,44 @@ public class Bullet : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (IsMovingRight && isInPlay)
-        {
-            rb.velocity = new Vector2(velX, velY);
-        }
-        else if (isInPlay)
-        {
-            rb.velocity = new Vector2(-velX, velY);
-        }
+
+        HasTimeEnded();
     }
 
     public void InPlay()
     {
         isInPlay = true;
+        timeLeftInPLay = maxTime;
+
+        if (IsMovingRight)
+        {
+            rb.velocity = new Vector2(velX, velY);
+        }
+        else
+        {
+            rb.velocity = new Vector2(-velX, velY);
+        }
     }
 
-    public void OutOfPlay()
+    private void HasTimeEnded()
     {
-        isInPlay = false;
+        if (timeLeftInPLay < 0)
+        {
+            Store();
+        } else
+        {
+            timeLeftInPLay -= Time.deltaTime;
+        }
     }
-
-
 
     void OnCollisionEnter2D(Collision2D col)
     {
+        Store();
+    }
+
+    private void Store()
+    {
         transform.position = new Vector2(storageX, storageY);
+        rb.velocity = new Vector2(0, 0);
     }
 }
