@@ -42,7 +42,7 @@ public class StateController : MonoBehaviour
     /*
      * InitStack - creates stack to store global state
      */
-    void InitStack()
+    private void InitStack()
     {
         pastStates = new FixedStack<ISerialDataStore[]>(frameCount);
     }
@@ -51,6 +51,12 @@ public class StateController : MonoBehaviour
     {
         RewindIcon.enabled = false;
         FilterImg.enabled = false;
+    }
+
+    public void CatchCreated()
+    {
+        var serialQuery = FindObjectsOfType<MonoBehaviour>().OfType<ISerializable>();
+        allSerialObjects = serialQuery.Cast<ISerializable>().ToArray();
     }
 
     /*

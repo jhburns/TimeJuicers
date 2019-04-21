@@ -1,17 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Serial;
 
-public class BulletManager : MonoBehaviour
+public class BulletManager : MonoBehaviour, ISerializable
 {
-    public Bullet bulletTemplate;
-    public Player player;
+    public Player player; //IM
 
-    public int maxBullets;
-    private List<Bullet> bullets; //https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1?view=netframework-4.8
-    private int bulletIndex;
+    public int maxBullets; //IM
+    //https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1?view=netframework-4.8
+    private List<Bullet> bullets; //IM
+    private int bulletIndex; //IM
 
-    public float fireRate;
+    public float fireRate; //IM
     private float nextFire;
 
     // Start is called before the first frame update
@@ -31,14 +32,13 @@ public class BulletManager : MonoBehaviour
     {
         bullets = new List<Bullet>();
 
-        for (int i = 0; i < maxBullets; i++) {
-            Vector3 startingPos = new Vector3(player.transform.position.x + i, -30f, 0); // i is used to offset bullets
+        Bullet[] tempBullets = FindObjectsOfType<Bullet>();
 
-            Bullet currentBul = Instantiate(bulletTemplate, startingPos, Quaternion.identity); //https://docs.unity3d.com/ScriptReference/Object.Instantiate.html
-            currentBul.transform.SetParent(gameObject.transform); //Puts bullet under manager
-
-            bullets.Add(currentBul);
+        for (int i = 0; i < tempBullets.Length; i++)
+        {
+            bullets.Add(tempBullets[i]);
         }
+
 
         bulletIndex = 0;
     }
@@ -69,9 +69,33 @@ public class BulletManager : MonoBehaviour
 
 
         currentBul.transform.position = new Vector2(xPos, player.transform.position.y);
-        currentBul.IsMovingRight = player.MovingRight;
-        currentBul.InPlay();
+        currentBul.InPlay(player.MovingRight);
 
         bulletIndex = (bulletIndex + 1) % maxBullets;
+    }
+
+    public ISerialDataStore GetCurrentState()
+    {
+        return new SaveBulletMan(bulletIndex, nextFire);
+    }
+
+    public void SetState(ISerialDataStore state)
+    {
+        SaveBulletMan past = (SaveBulletMan) state;
+        bulletIndex = past.bulletIndex;
+        nextFire = past.nextFire;
+    }
+}
+
+internal class SaveBulletMan : ISerialDataStore
+{
+    public int bulletIndex { get; private set; }
+
+    public float nextFire { get; private set; }
+
+    public SaveBulletMan(int bulletI, float nf)
+    {
+        bulletIndex = bulletI;
+        nextFire = nf;
     }
 }

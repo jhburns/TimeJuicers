@@ -1,20 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Serial;
 
-public class Bullet : MonoBehaviour
+public class Bullet : MonoBehaviour, ISerializable
 {
     public float velX; //IM
     private const float velY = 0f;
     private Rigidbody2D rb;
-    public bool IsMovingRight { get; set; }
 
     private float storageX; //IM
     private float storageY; //IM
 
     private bool isInPlay;
     private float timeLeftInPLay;
-    public float maxTime;
+    public float maxTime; //IM
 
     // Start is called before the first frame update
     void Start()
@@ -40,7 +40,7 @@ public class Bullet : MonoBehaviour
         HasTimeEnded();
     }
 
-    public void InPlay()
+    public void InPlay(bool IsMovingRight)
     {
         isInPlay = true;
         timeLeftInPLay = maxTime;
@@ -76,4 +76,41 @@ public class Bullet : MonoBehaviour
         transform.position = new Vector2(storageX, storageY);
         rb.velocity = new Vector2(0, 0);
     }
+
+    public ISerialDataStore GetCurrentState()
+    {
+        return new SaveBullet(  isInPlay, timeLeftInPLay,
+                                transform.position.x, transform.position.y
+                             );
+    }
+
+    public void SetState(ISerialDataStore state)
+    {
+        SaveBullet past = (SaveBullet) state;
+
+        isInPlay = past.isInPlay;
+        timeLeftInPLay = past.timeLeftInPLay;
+        transform.position = new Vector2(past.positionX, past.positionY);
+    }
+}
+
+internal class SaveBullet : ISerialDataStore
+{
+    public bool isInPlay { get; private set; }
+    public float timeLeftInPLay { get; private set; }
+
+    public float positionX { get; private set; }
+    public float positionY { get; private set; }
+
+    public SaveBullet(  bool play, float time,
+                        float velX, float velY,
+                        float posX, float posY
+                     )
+    {
+        isInPlay = play;
+        timeLeftInPLay = time;
+        positionX = posX;
+        positionY = posY;
+    }
+
 }

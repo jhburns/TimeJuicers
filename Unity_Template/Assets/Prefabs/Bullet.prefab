@@ -132,4 +132,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   velX: 10
-  maxTime: 5
+  maxTime: 1
