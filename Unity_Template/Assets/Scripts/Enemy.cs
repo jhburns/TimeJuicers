@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Serial;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, ISerializable
 {
     Rigidbody2D rb;
 
@@ -15,7 +16,7 @@ public class Enemy : MonoBehaviour
 
     private float storageX;
 
-    private float timeLeftInPLay;
+    private float timeLeftInPlay; //IM
 
     // Start is called before the first frame update
     void Start()
@@ -24,7 +25,7 @@ public class Enemy : MonoBehaviour
         InitMovement();
 
         isAlive = true;
-        timeLeftInPLay = 0f;
+        timeLeftInPlay = 0f;
     }
 
     private void InitRigid()
@@ -51,11 +52,11 @@ public class Enemy : MonoBehaviour
             rb.velocity = new Vector2(-speed, rb.velocity.y);
         }
 
-        if (timeLeftInPLay < 0 && !isAlive)
+        if (timeLeftInPlay < 0 && !isAlive)
         {
             Store();
         } else if (!isAlive) {
-            timeLeftInPLay -= Time.deltaTime;
+            timeLeftInPlay -= Time.deltaTime;
         }
     }
 
@@ -68,11 +69,10 @@ public class Enemy : MonoBehaviour
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.tag == "bullets" || col.gameObject.name == "DeathZone")
+        if (col.gameObject.tag == "bullets")
         {
             isAlive = false;
 
-            
             Bullet bul = col.gameObject.GetComponent<Bullet>();
             int direction = 1;
 
@@ -83,7 +83,12 @@ public class Enemy : MonoBehaviour
 
             rb.AddForce(new Vector2(10f * direction, 15f), ForceMode2D.Impulse);
 
-            timeLeftInPLay = 0.15f;
+            timeLeftInPlay = 0.15f;
+        }
+
+        if (col.gameObject.name == "DeathZone")
+        {
+            Store();
         }
 
         if (col.collider.sharedMaterial != null && col.collider.sharedMaterial.name == "GroundMaterial")
@@ -103,4 +108,59 @@ public class Enemy : MonoBehaviour
             isMovingRight = !isMovingRight;
         }
     }
+
+    public ISerialDataStore GetCurrentState()
+    {
+        return new SaveEnemy(   isMovingRight, isGrounded,
+                                isAlive, timeLeftInPlay,
+                                transform.position.x, transform.position.y,
+                                rb.isKinematic
+                            );
+    }
+
+    public void SetState(ISerialDataStore state)
+    {
+        SaveEnemy past = (SaveEnemy) state;
+
+        isMovingRight = past.isMovingRight;
+        isGrounded = past.isGrounded;
+        isAlive = past.isAlive;
+        timeLeftInPlay = past.timeLeftInPlay;
+
+        transform.position = new Vector2(past.positionX, past.positionY);
+        rb.velocity = Vector2.zero;
+
+        rb.isKinematic = past.isKinematic;
+    }
+}
+
+internal class SaveEnemy : ISerialDataStore
+{
+    public bool isMovingRight { get; private set; }
+    public bool isGrounded { get; private set; }
+
+    public bool isAlive { get; private set; }
+
+    public float timeLeftInPlay { get; private set; }
+
+    public float positionX { get; private set; }
+    public float positionY { get; private set; }
+
+    public bool isKinematic { get; private set; }
+
+    public SaveEnemy(   bool right, bool ground,
+                        bool alive, float time,
+                        float posX, float posY,
+                        bool kin
+                    )
+    {
+        isMovingRight = right;
+        isGrounded = ground;
+        isAlive = alive;
+        timeLeftInPlay = time;
+        positionX = posX;
+        positionY = posY;
+        isKinematic = kin;
+    }
+
 }
