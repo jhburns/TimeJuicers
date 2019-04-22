@@ -58,6 +58,8 @@ public class Enemy : MonoBehaviour, ISerializable
         } else if (!isAlive) {
             timeLeftInPlay -= Time.deltaTime;
         }
+
+        Debug.Log(rb.velocity);
     }
 
     private void Store()
