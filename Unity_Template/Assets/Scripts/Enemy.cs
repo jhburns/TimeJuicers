@@ -58,8 +58,6 @@ public class Enemy : MonoBehaviour, ISerializable
         } else if (!isAlive) {
             timeLeftInPlay -= Time.deltaTime;
         }
-
-        Debug.Log(rb.velocity);
     }
 
     private void Store()
@@ -96,9 +94,6 @@ public class Enemy : MonoBehaviour, ISerializable
         if (col.collider.sharedMaterial != null && col.collider.sharedMaterial.name == "GroundMaterial")
         {
             isGrounded = true;
-        } else
-        {
-            isMovingRight = !isMovingRight;
         }
 
     }
