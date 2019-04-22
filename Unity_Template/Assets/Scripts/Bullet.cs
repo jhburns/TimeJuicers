@@ -16,6 +16,8 @@ public class Bullet : MonoBehaviour, ISerializable
     private float timeLeftInPLay;
     public float maxTime; //IM
 
+    public bool IsMovingRight { get; private set; }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -40,12 +42,12 @@ public class Bullet : MonoBehaviour, ISerializable
         HasTimeEnded();
     }
 
-    public void InPlay(bool IsMovingRight)
+    public void InPlay(bool goRight)
     {
         isInPlay = true;
         timeLeftInPLay = maxTime;
 
-        if (IsMovingRight)
+        if (goRight)
         {
             rb.velocity = new Vector2(velX, velY);
         }
@@ -53,6 +55,8 @@ public class Bullet : MonoBehaviour, ISerializable
         {
             rb.velocity = new Vector2(-velX, velY);
         }
+
+        IsMovingRight = goRight;
     }
 
     private void HasTimeEnded()
