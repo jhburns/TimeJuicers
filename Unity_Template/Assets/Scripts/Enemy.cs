@@ -81,9 +81,10 @@ public class Enemy : MonoBehaviour, ISerializable
                 direction = -1;
             }
 
-            rb.AddForce(new Vector2(10f * direction, 15f), ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(3f * direction, 5f), ForceMode2D.Impulse);
+            rb.AddTorque(20f * direction, ForceMode2D.Force);
 
-            timeLeftInPlay = 0.15f;
+            timeLeftInPlay = 0.30f;
         }
 
         if (col.gameObject.name == "DeathZone")
@@ -111,7 +112,7 @@ public class Enemy : MonoBehaviour, ISerializable
         return new SaveEnemy(   isMovingRight, isGrounded,
                                 isAlive, timeLeftInPlay,
                                 transform.position.x, transform.position.y,
-                                rb.isKinematic
+                                rb.isKinematic, rb.rotation
                             );
     }
 
@@ -128,6 +129,8 @@ public class Enemy : MonoBehaviour, ISerializable
         rb.velocity = Vector2.zero;
 
         rb.isKinematic = past.isKinematic;
+        rb.angularVelocity = 0f;
+        rb.rotation = past.rotation;
     }
 }
 
@@ -144,11 +147,12 @@ internal class SaveEnemy : ISerialDataStore
     public float positionY { get; private set; }
 
     public bool isKinematic { get; private set; }
+    public float rotation { get; private set; }
 
     public SaveEnemy(   bool right, bool ground,
                         bool alive, float time,
                         float posX, float posY,
-                        bool kin
+                        bool kin, float rot
                     )
     {
         isMovingRight = right;
@@ -158,6 +162,7 @@ internal class SaveEnemy : ISerialDataStore
         positionX = posX;
         positionY = posY;
         isKinematic = kin;
+        rotation = rot;
     }
 
 }
