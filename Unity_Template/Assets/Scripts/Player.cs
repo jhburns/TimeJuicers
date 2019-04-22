@@ -30,7 +30,7 @@ public class Player : MonoBehaviour, ISerializable
         rb = GetComponent<Rigidbody2D>();
         rb.freezeRotation = true;
         rb.gravityScale = 3f;
-        jumps = maxJumps;
+        jumps = 0;
         rb.interpolation = RigidbodyInterpolation2D.Interpolate; //Prevents jittery camera
     }
 
