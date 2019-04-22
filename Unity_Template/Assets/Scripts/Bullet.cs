@@ -85,7 +85,8 @@ public class Bullet : MonoBehaviour, ISerializable
     {
         return new SaveBullet(  isInPlay, timeLeftInPLay,
                                 rb.velocity.x, rb.velocity.y,
-                                transform.position.x, transform.position.y
+                                transform.position.x, transform.position.y,
+                                IsMovingRight
                              );
     }
 
@@ -97,6 +98,7 @@ public class Bullet : MonoBehaviour, ISerializable
         timeLeftInPLay = past.timeLeftInPLay;
         rb.velocity = new Vector2(past.velocityX, past.velocityY);
         transform.position = new Vector2(past.positionX, past.positionY);
+        IsMovingRight = past.IsMovingRight;
     }
 }
 
@@ -111,9 +113,12 @@ internal class SaveBullet : ISerialDataStore
     public float positionX { get; private set; }
     public float positionY { get; private set; }
 
+    public bool IsMovingRight { get; private set; }
+
     public SaveBullet(  bool play, float time,
                         float velX, float velY,
-                        float posX, float posY
+                        float posX, float posY,
+                        bool right
                      )
     {
         isInPlay = play;
@@ -122,6 +127,7 @@ internal class SaveBullet : ISerialDataStore
         velocityY = velY;
         positionX = posX;
         positionY = posY;
+        IsMovingRight = right;
     }
 
 }

@@ -61,7 +61,7 @@ public class Enemy : MonoBehaviour
                 direction = -1;
             }
 
-            rb.AddForce(new Vector2(10f * direction, 1f), ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(10f * direction, 15f), ForceMode2D.Impulse);
         }
 
         if (col.collider.sharedMaterial != null && col.collider.sharedMaterial.name == "GroundMaterial")
