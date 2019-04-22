@@ -64,6 +64,7 @@ public class Enemy : MonoBehaviour, ISerializable
     {
         transform.position = new Vector2(storageX, -25f);
         rb.velocity = Vector3.zero;
+        rb.angularVelocity = 0f;
         rb.isKinematic = true;
     }
 
@@ -81,7 +82,7 @@ public class Enemy : MonoBehaviour, ISerializable
                 direction = -1;
             }
 
-            rb.AddForce(new Vector2(3f * direction, 5f), ForceMode2D.Impulse);
+            rb.AddForce(new Vector2(3f * direction, 9f), ForceMode2D.Impulse);
             rb.AddTorque(20f * direction, ForceMode2D.Force);
 
             timeLeftInPlay = 0.30f;
