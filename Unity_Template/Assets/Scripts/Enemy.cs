@@ -13,6 +13,10 @@ public class Enemy : MonoBehaviour
 
     public bool isAlive;
 
+    private float storageX;
+
+    private float timeLeftInPLay;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,6 +24,7 @@ public class Enemy : MonoBehaviour
         InitMovement();
 
         isAlive = true;
+        timeLeftInPLay = 0f;
     }
 
     private void InitRigid()
@@ -31,6 +36,7 @@ public class Enemy : MonoBehaviour
 
     private void InitMovement()
     {
+        storageX = transform.position.x;
         isGrounded = false;
     }
 
@@ -44,11 +50,25 @@ public class Enemy : MonoBehaviour
         {
             rb.velocity = new Vector2(-speed, rb.velocity.y);
         }
+
+        if (timeLeftInPLay < 0 && !isAlive)
+        {
+            Store();
+        } else if (!isAlive) {
+            timeLeftInPLay -= Time.deltaTime;
+        }
+    }
+
+    private void Store()
+    {
+        transform.position = new Vector2(storageX, -25f);
+        rb.velocity = Vector3.zero;
+        rb.isKinematic = true;
     }
 
     void OnCollisionEnter2D(Collision2D col)
     {
-        if (col.gameObject.tag == "bullets")
+        if (col.gameObject.tag == "bullets" || col.gameObject.name == "DeathZone")
         {
             isAlive = false;
 
@@ -62,6 +82,8 @@ public class Enemy : MonoBehaviour
             }
 
             rb.AddForce(new Vector2(10f * direction, 15f), ForceMode2D.Impulse);
+
+            timeLeftInPLay = 0.15f;
         }
 
         if (col.collider.sharedMaterial != null && col.collider.sharedMaterial.name == "GroundMaterial")
