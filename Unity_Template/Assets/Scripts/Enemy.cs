@@ -97,6 +97,10 @@ public class Enemy : MonoBehaviour, ISerializable
         {
             isGrounded = true;
         }
+        else
+        {
+            isMovingRight = !isMovingRight;
+        }
 
     }
 
