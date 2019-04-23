@@ -138,10 +138,19 @@ public class Player : MonoBehaviour, ISerializable
     void OnCollisionEnter2D(Collision2D col)
     {
         // Make sure to check if the object has a material first
-        if (col.collider.sharedMaterial != null && col.collider.sharedMaterial.name == "GroundMaterial")
+        if (col.collider.sharedMaterial != null)
         {
-            grounded = true;
-            jumps = maxJumps;
+            if (col.collider.sharedMaterial.name == "GroundMaterial")
+            {
+                grounded = true;
+                jumps = maxJumps;
+            }
+
+            if (col.collider.sharedMaterial.name == "BouncyMaterial") {
+                jumps = maxJumps;
+                rb.velocity = Vector2.zero; // To allow for wall jumping
+                rb.AddForce(new Vector2(0, jumpHeight * 0.9f), ForceMode2D.Impulse);
+            }
         }
     }
 

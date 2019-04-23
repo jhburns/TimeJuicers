@@ -16,7 +16,7 @@ public class Enemy : MonoBehaviour, ISerializable
 
     private float storageX;
 
-    private float timeLeftInPlay; //IM
+    private float timeLeftInPlay; 
 
     // Start is called before the first frame update
     void Start()
