@@ -18,6 +18,8 @@ public class Player : MonoBehaviour, ISerializable
     private int jumps;
     private const int maxJumps = 1; //IM
 
+    private float axisBounds;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -39,6 +41,7 @@ public class Player : MonoBehaviour, ISerializable
         velHorz = 0f;
         grounded = false;
         MovingRight = true;
+        axisBounds = 0.01f;
     }
 
     // Update is called once per frame
@@ -51,11 +54,19 @@ public class Player : MonoBehaviour, ISerializable
         InitialVelocitySet();
 
         MoveDirection();
+
+        //ffDebug.Log(Input.GetAxis("Horizontal"));
     }
 
     private void Jump()
     {
-        if ((Input.GetKeyDown(KeyCode.Space) || Input.GetKeyDown(KeyCode.W) || Input.GetKeyDown(KeyCode.UpArrow)) 
+        if ((Input.GetKeyDown(KeyCode.Space) || 
+             Input.GetKeyDown(KeyCode.W) ||
+             Input.GetKeyDown(KeyCode.UpArrow) ||
+             Input.GetKeyDown(KeyCode.Joystick1Button0) || // A button on xbox 360 controller
+             Input.GetKeyDown(KeyCode.Joystick1Button2) || // X button on xbox 360 controller
+             Input.GetAxis("Vertical") > axisBounds
+            )
             && jumps > 0)
         {
             rb.velocity = Vector2.zero; // To allow for wall jumping
@@ -69,13 +80,13 @@ public class Player : MonoBehaviour, ISerializable
     {
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
         {
-            velHorz = moveSpeed - 2.0f;
+            velHorz = moveSpeed- 2.0f;
             MovingRight = true;
         }
 
         if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
         {
-            velHorz = -(moveSpeed - 2.0f);
+            velHorz = -(moveSpeed- 2.0f);
             MovingRight = false;
         }
     }
@@ -148,7 +159,7 @@ public class Player : MonoBehaviour, ISerializable
 
             if (col.collider.sharedMaterial.name == "BouncyMaterial") {
                 jumps = maxJumps;
-                rb.velocity = Vector2.zero; // To allow for wall jumping
+                rb.velocity = Vector2.zero; // Prevents unlimited jump height
                 rb.AddForce(new Vector2(0, jumpHeight * 0.9f), ForceMode2D.Impulse);
             }
         }
@@ -162,7 +173,7 @@ public class Player : MonoBehaviour, ISerializable
 
     public void SetState(ISerialDataStore state)
     {
-        SavePlayer past = (SavePlayer)state;
+        SavePlayer past = (SavePlayer) state;
 
         velHorz = 0f;
 

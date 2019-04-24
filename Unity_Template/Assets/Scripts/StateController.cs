@@ -17,6 +17,8 @@ public class StateController : MonoBehaviour
     public Image RewindIcon;
     public Image FilterImg;
 
+    private float pastTrigger; // Needed to create ghetto KeyUp/KeyDown for trigger buttons
+
     /*
      * Start - finds serializable objects and initalizes stack  
      */
@@ -26,6 +28,8 @@ public class StateController : MonoBehaviour
         InitStack();
 
         InitUI();
+
+        pastTrigger = 0f;
     }
 
     /*
@@ -66,7 +70,12 @@ public class StateController : MonoBehaviour
     {
 
         // https://docs.unity3d.com/ScriptReference/Input.GetKeyDown.html
-        if ((Input.GetKey(KeyCode.K) || Input.GetKey(KeyCode.R)) && pastStates.Count > 1) // Check for greater than 1 to prevent initialization issues
+        if ((Input.GetKey(KeyCode.K) ||
+             Input.GetKey(KeyCode.R) ||
+             Input.GetKey(KeyCode.JoystickButton3) || // Y button on xbox 360 controller
+             Input.GetAxis("LeftTrigger") == 1
+            )
+            && pastStates.Count > 1) // Check for greater than 1 to prevent initialization issues
         {
             RevetState();
         }
@@ -76,17 +85,32 @@ public class StateController : MonoBehaviour
         }
 
         // Prevents input when rewinding
-        if ((Input.GetKeyDown(KeyCode.K) || Input.GetKeyDown(KeyCode.R)) && pastStates.Count > 1)
-        { 
+        if ((Input.GetKeyDown(KeyCode.K) ||
+             Input.GetKeyDown(KeyCode.R) ||
+             Input.GetKeyDown(KeyCode.JoystickButton3) || // Y button on xbox 360 controller
+             (Input.GetAxis("LeftTrigger") == 1 && pastTrigger !=1)
+            )
+             && pastStates.Count > 1)
+        {
             ToggleBehaviourSerializable(false);
             ToggleRewindUI(true);
+
+            pastTrigger = Input.GetAxis("LeftTrigger");
         }
 
-        if ((Input.GetKeyUp(KeyCode.K) || Input.GetKeyUp(KeyCode.R)) && pastStates.Count > 1)
+        if ((Input.GetKeyUp(KeyCode.K) ||
+             Input.GetKeyUp(KeyCode.R) ||
+             Input.GetKeyUp(KeyCode.JoystickButton3) ||
+             (Input.GetAxis("LeftTrigger") == 0 && pastTrigger != 0)
+            )
+             && pastStates.Count > 1)
         {
             ToggleBehaviourSerializable(true);
             ToggleRewindUI(false);
+
+            pastTrigger = Input.GetAxis("LeftTrigger");
         }
+
     }
 
     /*

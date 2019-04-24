@@ -47,13 +47,21 @@ public class BulletManager : MonoBehaviour, ISerializable
     // Update is called once per frame
     void Update()
     {
-        if ((Input.GetKey(KeyCode.F) || Input.GetKey(KeyCode.J)) && Time.time > nextFire)
+        // http://wiki.unity3d.com/index.php?title=Xbox360Controller
+        if ((Input.GetKey(KeyCode.F) ||
+             Input.GetKey(KeyCode.J) ||
+             Input.GetKey(KeyCode.JoystickButton1) || // B button on xbox 360 controller
+             Input.GetAxis("RightTrigger") == 1
+            )  
+
+             && Time.time > nextFire)
         {
             nextFire = Time.time + fireRate;
             Fire();
         }
+
     }
-    
+
     void Fire()
     {
         Bullet currentBul = bullets[bulletIndex];
