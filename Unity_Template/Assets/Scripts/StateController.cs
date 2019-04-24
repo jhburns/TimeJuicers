@@ -73,7 +73,7 @@ public class StateController : MonoBehaviour
         if ((Input.GetKey(KeyCode.K) ||
              Input.GetKey(KeyCode.R) ||
              Input.GetKey(KeyCode.JoystickButton3) || // Y button on xbox 360 controller
-             Input.GetAxis("LeftTrigger") == 1
+             Input.GetAxisRaw("LeftTrigger") == 1
             )
             && pastStates.Count > 1) // Check for greater than 1 to prevent initialization issues
         {
@@ -88,27 +88,27 @@ public class StateController : MonoBehaviour
         if ((Input.GetKeyDown(KeyCode.K) ||
              Input.GetKeyDown(KeyCode.R) ||
              Input.GetKeyDown(KeyCode.JoystickButton3) || // Y button on xbox 360 controller
-             (Input.GetAxis("LeftTrigger") == 1 && pastTrigger !=1)
+             (Input.GetAxisRaw("LeftTrigger") == 1 && pastTrigger !=1)
             )
              && pastStates.Count > 1)
         {
             ToggleBehaviourSerializable(false);
             ToggleRewindUI(true);
 
-            pastTrigger = Input.GetAxis("LeftTrigger");
+            pastTrigger = Input.GetAxisRaw("LeftTrigger");
         }
 
         if ((Input.GetKeyUp(KeyCode.K) ||
              Input.GetKeyUp(KeyCode.R) ||
              Input.GetKeyUp(KeyCode.JoystickButton3) ||
-             (Input.GetAxis("LeftTrigger") == 0 && pastTrigger != 0)
+             (Input.GetAxisRaw("LeftTrigger") == 0 && pastTrigger != 0)
             )
              && pastStates.Count > 1)
         {
             ToggleBehaviourSerializable(true);
             ToggleRewindUI(false);
 
-            pastTrigger = Input.GetAxis("LeftTrigger");
+            pastTrigger = Input.GetAxisRaw("LeftTrigger");
         }
 
     }

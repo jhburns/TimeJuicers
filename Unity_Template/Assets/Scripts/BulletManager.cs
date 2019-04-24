@@ -51,7 +51,7 @@ public class BulletManager : MonoBehaviour, ISerializable
         if ((Input.GetKey(KeyCode.F) ||
              Input.GetKey(KeyCode.J) ||
              Input.GetKey(KeyCode.JoystickButton1) || // B button on xbox 360 controller
-             Input.GetAxis("RightTrigger") == 1
+             Input.GetAxisRaw("RightTrigger") == 1
             )  
 
              && Time.time > nextFire)
