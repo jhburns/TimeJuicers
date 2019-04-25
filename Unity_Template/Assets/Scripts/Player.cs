@@ -23,6 +23,8 @@ public class Player : MonoBehaviour, ISerializable
     private bool leftHorizontalAxisDown; // These vars are used to act as a keydown for stick controls
     private bool rightHorizontalAxisDown;
 
+    public GlobalUI deathHandler; //IM
+
     // Start is called before the first frame update
     void Start()
     {
@@ -47,6 +49,7 @@ public class Player : MonoBehaviour, ISerializable
 
         leftHorizontalAxisDown = true;
         rightHorizontalAxisDown = true;
+
     }
 
     // Update is called once per frame
@@ -54,11 +57,14 @@ public class Player : MonoBehaviour, ISerializable
     {
         // bascially everywhere: https://docs.unity3d.com/ScriptReference/Rigidbody2D.html
 
-        Jump();
+        if (deathHandler.IsAlive)
+        {
+            Jump();
 
-        InitialVelocitySet();
+            InitialVelocitySet();
 
-        MoveDirection();
+            MoveDirection();
+        }
 
     }
 
@@ -221,6 +227,11 @@ public class Player : MonoBehaviour, ISerializable
                 rb.AddForce(new Vector2(0, jumpHeight * 0.9f), ForceMode2D.Impulse);
             }
         }
+
+        if (col.gameObject.GetComponent<Enemy>() != null || col.gameObject.name == "DeathZone")
+        {
+            deathHandler.OnDeath();
+        }
     }
 
     ///  Serial Methods
@@ -262,6 +273,8 @@ internal class SavePlayer : ISerialDataStore
 
     public bool leftHorizontalAxisDown { get; private set; }
     public bool rightHorizontalAxisDown { get; private set; }
+
+    public bool isDead { get; private set; }
 
     public SavePlayer(bool movingR, bool g,
                         int j, float posX,

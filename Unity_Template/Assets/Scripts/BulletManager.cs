@@ -15,6 +15,8 @@ public class BulletManager : MonoBehaviour, ISerializable
     public float fireRate; //IM
     private float nextFire;
 
+    public GlobalUI deathHandler; //IM
+
     // Start is called before the first frame update
     void Start()
     {
@@ -54,7 +56,9 @@ public class BulletManager : MonoBehaviour, ISerializable
              Input.GetAxisRaw("RightTrigger") == 1
             )  
 
-             && Time.time > nextFire)
+             && Time.time > nextFire
+             && deathHandler.IsAlive
+           )
         {
             nextFire = Time.time + fireRate;
             Fire();
