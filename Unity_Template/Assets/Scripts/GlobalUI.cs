@@ -50,8 +50,6 @@ public class GlobalUI : MonoBehaviour, ISerializable
             {
                 deathTextShow -= Time.deltaTime;
             }
-
-            Debug.Log(deathTextShow);
         }
     }
 
