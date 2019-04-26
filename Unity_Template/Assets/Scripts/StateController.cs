@@ -17,6 +17,8 @@ public class StateController : MonoBehaviour
     public Image RewindIcon;
     public Image FilterImg;
 
+    private float pastTrigger; // Needed to create ghetto KeyUp/KeyDown for trigger buttons
+
     /*
      * Start - finds serializable objects and initalizes stack  
      */
@@ -26,6 +28,8 @@ public class StateController : MonoBehaviour
         InitStack();
 
         InitUI();
+
+        pastTrigger = 0f;
     }
 
     /*
@@ -64,9 +68,23 @@ public class StateController : MonoBehaviour
      */
     void Update()
     {
+        RewindTime();
 
+        StartRewindUI();
+
+        StopRewindUI();
+
+    }
+
+    private void RewindTime()
+    {
         // https://docs.unity3d.com/ScriptReference/Input.GetKeyDown.html
-        if ((Input.GetKey(KeyCode.K) || Input.GetKey(KeyCode.R)) && pastStates.Count > 1) // Check for greater than 1 to prevent initialization issues
+        if ((Input.GetKey(KeyCode.K) ||
+             Input.GetKey(KeyCode.R) ||
+             Input.GetKey(KeyCode.JoystickButton3) || // Y button on xbox 360 controller
+             Input.GetAxisRaw("LeftTrigger") == 1
+            )
+            && pastStates.Count > 1) // Check for greater than 1 to prevent initialization issues
         {
             RevetState();
         }
@@ -74,18 +92,38 @@ public class StateController : MonoBehaviour
         {
             pastStates.Push(CollectStates());
         }
+    }
 
+    private void StartRewindUI()
+    {
         // Prevents input when rewinding
-        if ((Input.GetKeyDown(KeyCode.K) || Input.GetKeyDown(KeyCode.R)) && pastStates.Count > 1)
-        { 
+        if ((Input.GetKeyDown(KeyCode.K) ||
+             Input.GetKeyDown(KeyCode.R) ||
+             Input.GetKeyDown(KeyCode.JoystickButton3) || // Y button on xbox 360 controller
+             (Input.GetAxisRaw("LeftTrigger") == 1 && pastTrigger != 1)
+            )
+             && pastStates.Count > 1)
+        {
             ToggleBehaviourSerializable(false);
             ToggleRewindUI(true);
-        }
 
-        if ((Input.GetKeyUp(KeyCode.K) || Input.GetKeyUp(KeyCode.R)) && pastStates.Count > 1)
+            pastTrigger = Input.GetAxisRaw("LeftTrigger");
+        }
+    }
+
+    private void StopRewindUI()
+    {
+        if ((Input.GetKeyUp(KeyCode.K) ||
+         Input.GetKeyUp(KeyCode.R) ||
+         Input.GetKeyUp(KeyCode.JoystickButton3) ||
+         (Input.GetAxisRaw("LeftTrigger") == 0 && pastTrigger != 0)
+        )
+         && pastStates.Count > 1)
         {
             ToggleBehaviourSerializable(true);
             ToggleRewindUI(false);
+
+            pastTrigger = Input.GetAxisRaw("LeftTrigger");
         }
     }
 
@@ -207,6 +245,28 @@ internal class FixedStack<T>
     {
         return elements[currentIndex];
     }
+
+    /*
+     * DeleteBottom
+     * Params:
+     *  - int numRemove: a positive number of the number of elements to remove from the bottom of the stack,
+     *                   meaning elements pushed first
+     * 
+     */
+    public void RemoveBottom(int numRemove)
+    {
+        if (numRemove < 0)
+        {
+            throw new IllegalRemoveStackException("Cannot remove a negative number of elements.");
+        }
+
+        if (numRemove > Count)
+        {
+            throw new IllegalRemoveStackException("The number of elements to remove is less than the current total count.");
+        }
+
+        Count -= numRemove;
+    }
 }
 
 
@@ -219,6 +279,20 @@ internal class EmptyStackException : Exception
 
     public EmptyStackException(string message)
         : base(String.Format("FixedArray Stack is Empty: {0}", message))
+    {
+
+    }
+}
+
+internal class IllegalRemoveStackException : Exception
+{
+    public IllegalRemoveStackException()
+    {
+
+    }
+
+    public IllegalRemoveStackException(string message)
+        : base(String.Format("Trying to performn the following operation on the FixedArray Stack is illegal: {0}", message))
     {
 
     }
