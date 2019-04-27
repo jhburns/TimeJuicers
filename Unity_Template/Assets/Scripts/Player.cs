@@ -228,10 +228,10 @@ public class Player : MonoBehaviour, ISerializable
             }
         }
 
-        if (col.gameObject.GetComponent<Enemy>() != null || col.gameObject.name == "DeathZone")
+        if (col.gameObject.GetComponent<Enemy>() != null || col.gameObject.name == "DeathZone" && deathHandler.IsAlive)
         {
             deathHandler.OnDeath();
-        }
+         }
     }
 
     ///  Serial Methods

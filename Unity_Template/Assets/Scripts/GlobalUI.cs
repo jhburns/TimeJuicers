@@ -38,7 +38,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
         deathAnimationTrigger = 0f;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (!IsAlive)
         {
@@ -55,15 +55,13 @@ public class GlobalUI : MonoBehaviour, ISerializable
 
     private void AnimateDeath()
     {
-
-        Debug.Log(deathAnimationTrigger);
-        if (deathAnimationTrigger < 4.8f)
+        if (deathAnimationTrigger < 9.8f)
         {
             float nextAlphaText = Mathf.Lerp(deathText.color.a, startingAlphaText, 0.03f);
             deathText.color = GetAlphaChange(deathText, nextAlphaText);
         }
 
-        if (deathAnimationTrigger < 4.0f)
+        if (deathAnimationTrigger < 9.0f)
         {
             float newX = Mathf.Lerp(timeBar.transform.position.x, 580, 0.1f);
             float newY = Mathf.Lerp(timeBar.transform.position.y, 347, 0.1f);
@@ -71,6 +69,12 @@ public class GlobalUI : MonoBehaviour, ISerializable
 
             float newScale = Mathf.Lerp(timeBar.transform.localScale.x, barIncreaseScale, 0.03f);
             timeBar.transform.localScale = new Vector2(newScale, newScale);
+        }
+
+        if (deathAnimationTrigger < 7f)
+        {
+            //Time.timeScale = 0f;
+            
         }
     }
 
@@ -81,7 +85,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
         filterImg.enabled = true;
         deathText.enabled = true;
 
-        deathAnimationTrigger = 5f;
+        deathAnimationTrigger = 10f;
     }
 
     public ISerialDataStore GetCurrentState()
