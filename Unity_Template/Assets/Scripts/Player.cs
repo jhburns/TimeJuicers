@@ -228,7 +228,7 @@ public class Player : MonoBehaviour, ISerializable
             }
         }
 
-        if (col.gameObject.GetComponent<Enemy>() != null || col.gameObject.name == "DeathZone" && deathHandler.IsAlive)
+        if (col.gameObject.GetComponent<Enemy>() != null || col.gameObject.name == "DeathZone" && deathHandler.IsAlive) // Can only die once
         {
             deathHandler.OnDeath();
          }

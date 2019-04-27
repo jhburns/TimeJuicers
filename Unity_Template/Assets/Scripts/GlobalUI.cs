@@ -63,11 +63,29 @@ public class GlobalUI : MonoBehaviour, ISerializable
 
         if (deathAnimationTrigger < 9.0f)
         {
-            float newX = Mathf.Lerp(timeBar.transform.position.x, 580, 0.1f);
-            float newY = Mathf.Lerp(timeBar.transform.position.y, 347, 0.1f);
+            float minChange = 2f;
+
+            float newX = Mathf.Lerp(timeBar.transform.position.x, 580, 0.2f);
+            float newY = Mathf.Lerp(timeBar.transform.position.y, 347, 0.2f);
+            
+            if (Mathf.Abs(580 - newX) < minChange)
+            {
+                newX = Mathf.Clamp(timeBar.transform.position.x + minChange, timeBar.transform.position.x, 580);
+            }
+
+            if (Mathf.Abs(580 - newY) < minChange)
+            {
+                newX = Mathf.Clamp(timeBar.transform.position.y + minChange, timeBar.transform.position.y, 347);
+            }
+
+
             timeBar.transform.position = new Vector2(newX, newY);
 
-            float newScale = Mathf.Lerp(timeBar.transform.localScale.x, barIncreaseScale, 0.03f);
+
+
+            float newScale = Mathf.Clamp(timeBar.transform.localScale.x + 0.05f, timeBar.transform.localScale.x, barIncreaseScale);
+
+
             timeBar.transform.localScale = new Vector2(newScale, newScale);
         }
 
