@@ -19,6 +19,8 @@ public class GlobalUI : MonoBehaviour, ISerializable
     public Slider timeBar;
     public float barIncreaseScale; //IM
 
+    public StateController pastStates;
+
     void Start()
     {
         Init();
@@ -81,18 +83,15 @@ public class GlobalUI : MonoBehaviour, ISerializable
 
             timeBar.transform.position = new Vector2(newX, newY);
 
-
-
             float newScale = Mathf.Clamp(timeBar.transform.localScale.x + 0.05f, timeBar.transform.localScale.x, barIncreaseScale);
-
 
             timeBar.transform.localScale = new Vector2(newScale, newScale);
         }
 
-        if (deathAnimationTrigger < 7f)
+        if (deathAnimationTrigger < 8.5f)
         {
-            //Time.timeScale = 0f;
-            
+            Time.timeScale = 0f;
+            pastStates.IsPaused = true;
         }
     }
 
@@ -112,7 +111,8 @@ public class GlobalUI : MonoBehaviour, ISerializable
                             filterImg.color.a, deathText.enabled,
                             deathText.color.a, deathAnimationTrigger,
                             timeBar.transform.position.x, timeBar.transform.position.y,
-                            timeBar.transform.localScale.x
+                            timeBar.transform.localScale.x, Time.timeScale,
+                            pastStates.IsPaused
                          );
     }
 
@@ -130,6 +130,8 @@ public class GlobalUI : MonoBehaviour, ISerializable
         timeBar.transform.position = new Vector2(past.timeBarPositionX, past.timeBarPositionY);
         timeBar.transform.localScale = new Vector2(past.timeBarScale, past.timeBarScale);
 
+        Time.timeScale = past.timeScale;
+        pastStates.IsPaused = past.isPaused;
     }
 
     private Color GetAlphaChange(MaskableGraphic ui, float alpha)
@@ -153,11 +155,16 @@ internal class SaveUI : ISerialDataStore
     public float timeBarPositionY { get; private set; }
     public float timeBarScale { get; private set; }
 
+    public float timeScale { get; private set; }
+
+    public bool isPaused { get; private set; }
+
     public SaveUI(  bool alive, bool filter,
                     float aFilter, bool deathTxt,
                     float aText, float show,
                     float barX, float barY,
-                    float barScale
+                    float barScale, float time,
+                    bool pause
                  )
     {
         IsAlive = alive;
@@ -169,5 +176,7 @@ internal class SaveUI : ISerialDataStore
         timeBarPositionX = barX;
         timeBarPositionY = barY;
         timeBarScale = barScale;
+        timeScale = time;
+        isPaused = pause;
     }
 }

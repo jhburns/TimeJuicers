@@ -19,6 +19,7 @@ public class StateController : MonoBehaviour
 
     private float pastTrigger; // Needed to create ghetto KeyUp/KeyDown for trigger buttons
 
+    public bool IsPaused { get; set; }
 
     /*
      * Start - finds serializable objects and initalizes stack  
@@ -56,6 +57,8 @@ public class StateController : MonoBehaviour
     {
         RewindIcon.enabled = false;
         FilterImg.enabled = false;
+
+        IsPaused = false;
     }
 
     public void CatchCreated()
@@ -69,12 +72,12 @@ public class StateController : MonoBehaviour
      */
     void Update()
     {
+
         RewindTime();
 
         StartRewindUI();
 
         StopRewindUI();
-
     }
 
     private void RewindTime()
@@ -89,7 +92,7 @@ public class StateController : MonoBehaviour
         {
             RevetState();
         }
-        else
+        else if (!IsPaused)
         {
             pastStates.Push(CollectStates());
         }
@@ -109,6 +112,8 @@ public class StateController : MonoBehaviour
             ToggleRewindUI(true);
 
             pastTrigger = Input.GetAxisRaw("LeftTrigger");
+
+            IsPaused = false;
         }
     }
 
