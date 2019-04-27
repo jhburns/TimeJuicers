@@ -14,7 +14,10 @@ public class GlobalUI : MonoBehaviour, ISerializable
 
     public Text deathText;
     private float startingAlphaText;
-    private float deathTextShow;
+    private float deathAnimationTrigger;
+
+    public Slider timeBar;
+    public float barIncreaseScale; //IM
 
     void Start()
     {
@@ -32,7 +35,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
         deathText.enabled = false;
         startingAlphaText = deathText.color.a;
         deathText.color = GetAlphaChange(deathText, 0f);
-        deathTextShow = 0f;
+        deathAnimationTrigger = 0f;
     }
 
     void Update()
@@ -42,14 +45,32 @@ public class GlobalUI : MonoBehaviour, ISerializable
             float nextAlphaFilter = Mathf.Lerp(filterImg.color.a, startingAlphaFilter, 0.08f);
             filterImg.color = GetAlphaChange(filterImg, nextAlphaFilter);
 
-            if (deathTextShow < 0)
+            if (deathAnimationTrigger > 0)
             {
-                float nextAlphaText = Mathf.Lerp(deathText.color.a, startingAlphaText, 0.03f);
-                deathText.color = GetAlphaChange(deathText, nextAlphaText);
-            } else
-            {
-                deathTextShow -= Time.deltaTime;
+                AnimateDeath();
+                deathAnimationTrigger -= Time.deltaTime;
             }
+        }
+    }
+
+    private void AnimateDeath()
+    {
+
+        Debug.Log(deathAnimationTrigger);
+        if (deathAnimationTrigger < 4.8f)
+        {
+            float nextAlphaText = Mathf.Lerp(deathText.color.a, startingAlphaText, 0.03f);
+            deathText.color = GetAlphaChange(deathText, nextAlphaText);
+        }
+
+        if (deathAnimationTrigger < 4.0f)
+        {
+            float newX = Mathf.Lerp(timeBar.transform.position.x, 580, 0.1f);
+            float newY = Mathf.Lerp(timeBar.transform.position.y, 347, 0.1f);
+            timeBar.transform.position = new Vector2(newX, newY);
+
+            float newScale = Mathf.Lerp(timeBar.transform.localScale.x, barIncreaseScale, 0.03f);
+            timeBar.transform.localScale = new Vector2(newScale, newScale);
         }
     }
 
@@ -60,14 +81,16 @@ public class GlobalUI : MonoBehaviour, ISerializable
         filterImg.enabled = true;
         deathText.enabled = true;
 
-        deathTextShow = 0.2f;
+        deathAnimationTrigger = 5f;
     }
 
     public ISerialDataStore GetCurrentState()
     {
         return new SaveUI(  IsAlive, filterImg.enabled, 
                             filterImg.color.a, deathText.enabled,
-                            deathText.color.a, deathTextShow
+                            deathText.color.a, deathAnimationTrigger,
+                            timeBar.transform.position.x, timeBar.transform.position.y,
+                            timeBar.transform.localScale.x
                          );
     }
 
@@ -80,7 +103,11 @@ public class GlobalUI : MonoBehaviour, ISerializable
         filterImg.color = GetAlphaChange(filterImg, past.alphaFilter);
         deathText.enabled = past.deathTextEnabled;
         deathText.color = GetAlphaChange(deathText, past.alphaText);
-        deathTextShow = past.deathTextShow;
+        deathAnimationTrigger = past.deathAnimationTrigger;
+
+        timeBar.transform.position = new Vector2(past.timeBarPositionX, past.timeBarPositionY);
+        timeBar.transform.localScale = new Vector2(past.timeBarScale, past.timeBarScale);
+
     }
 
     private Color GetAlphaChange(MaskableGraphic ui, float alpha)
@@ -98,11 +125,17 @@ internal class SaveUI : ISerialDataStore
 
     public bool deathTextEnabled { get; private set; }
     public float alphaText { get; private set; }
-    public float deathTextShow { get; private set; }
+    public float deathAnimationTrigger { get; private set; }
+
+    public float timeBarPositionX { get; private set; }
+    public float timeBarPositionY { get; private set; }
+    public float timeBarScale { get; private set; }
 
     public SaveUI(  bool alive, bool filter,
                     float aFilter, bool deathTxt,
-                    float aText, float show
+                    float aText, float show,
+                    float barX, float barY,
+                    float barScale
                  )
     {
         IsAlive = alive;
@@ -110,6 +143,9 @@ internal class SaveUI : ISerialDataStore
         alphaFilter = aFilter;
         deathTextEnabled = deathTxt;
         alphaText = aText;
-        deathTextShow = show;
+        deathAnimationTrigger = show;
+        timeBarPositionX = barX;
+        timeBarPositionY = barY;
+        timeBarScale = barScale;
     }
 }

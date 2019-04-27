@@ -2031,7 +2031,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 549037718}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2560,7 +2560,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d81568a6ab846e4a83d230c9271600b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frameCount: 600
+  frameCount: 10000
   RewindIcon: {fileID: 1769633017}
   FilterImg: {fileID: 319211869}
 --- !u!4 &532999571
@@ -2842,10 +2842,10 @@ RectTransform:
   m_Children:
   - {fileID: 1701169147}
   - {fileID: 319211868}
+  - {fileID: 621295544}
   - {fileID: 1769633016}
   - {fileID: 485162636}
   - {fileID: 644784436}
-  - {fileID: 621295544}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3199,7 +3199,7 @@ RectTransform:
   - {fileID: 569264347}
   - {fileID: 2104113632}
   m_Father: {fileID: 549037718}
-  m_RootOrder: 5
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4936,7 +4936,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 22451668, guid: 0abab5bb77339e4428787a870eb31bd3, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 22451668, guid: 0abab5bb77339e4428787a870eb31bd3, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -7552,6 +7552,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   filterImg: {fileID: 1701169148}
   deathText: {fileID: 485162637}
+  timeBar: {fileID: 621295545}
+  barIncreaseScale: 2
 --- !u!4 &1283012050
 Transform:
   m_ObjectHideFlags: 0
@@ -10493,7 +10495,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 549037718}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
