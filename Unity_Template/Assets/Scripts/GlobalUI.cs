@@ -21,6 +21,8 @@ public class GlobalUI : MonoBehaviour, ISerializable
 
     public StateController pastStates;
 
+    private bool hasDied; //NOT serialized
+
     void Start()
     {
         Init();
@@ -40,7 +42,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
         deathAnimationTrigger = 0f;
     }
 
-    void FixedUpdate()
+    void Update()
     {
         if (!IsAlive)
         {
@@ -53,6 +55,8 @@ public class GlobalUI : MonoBehaviour, ISerializable
                 deathAnimationTrigger -= Time.deltaTime;
             }
         }
+
+        CheckResurrected();
     }
 
     private void AnimateDeath()
@@ -90,8 +94,27 @@ public class GlobalUI : MonoBehaviour, ISerializable
 
         if (deathAnimationTrigger < 8.5f)
         {
-            Time.timeScale = 0f;
-            pastStates.IsPaused = true;
+            PauseGame();
+        }
+    }
+
+    private void PauseGame()
+    {
+        Time.timeScale = 0f;
+        pastStates.IsPaused = true;
+
+        if (!hasDied)
+        {
+
+            hasDied = true;
+        }
+    }
+
+    private void CheckResurrected()
+    {
+        if (IsAlive)
+        {
+            hasDied = false;
         }
     }
 
