@@ -11,13 +11,14 @@ public class StateController : MonoBehaviour
 {
     ISerializable[] allSerialObjects; // Are also of the MonoBehaviour class, so can be cast to
     // https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.stack-1?view=netframework-4.7.2
-    FixedStack<ISerialDataStore[]> pastStates;
+    private FixedStack<ISerialDataStore[]> pastStates;
     public int frameCount; // About 60 frames per second so 'frameCount = 3600' means the you can rewind for 1 minute
 
     public Image RewindIcon;
     public Image FilterImg;
 
     private float pastTrigger; // Needed to create ghetto KeyUp/KeyDown for trigger buttons
+
 
     /*
      * Start - finds serializable objects and initalizes stack  
@@ -172,6 +173,11 @@ public class StateController : MonoBehaviour
     {
         RewindIcon.enabled = turnOn;
         FilterImg.enabled = turnOn;
+    }
+
+    public int GetSavedFrameCount()
+    {
+        return pastStates.Count;
     }
 
 }
