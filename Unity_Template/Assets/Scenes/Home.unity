@@ -5257,6 +5257,7 @@ MonoBehaviour:
   globalState: {fileID: 532999570}
   deathPenaltyFrames: 100
   deathBarColor: {r: 1, g: 0.19345687, b: 0, a: 1}
+  fadeRate: 0.007
 --- !u!4 &953955708
 Transform:
   m_ObjectHideFlags: 0

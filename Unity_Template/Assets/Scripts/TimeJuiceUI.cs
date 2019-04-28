@@ -12,6 +12,7 @@ public class TimeJuiceUI : MonoBehaviour
 
     public int deathPenaltyFrames;
     public Color deathBarColor;
+    public float fadeRate;
 
     void Start()
     {
@@ -43,6 +44,26 @@ public class TimeJuiceUI : MonoBehaviour
 
         globalState.DeleteStates(deathPenaltyFrames);
 
+        StartCoroutine(FadeBar(removedJuice, fadeRate));
+
         yield return 0;
+    }
+
+    // http://www.theappguruz.com/blog/how-to-use-coroutines-in-unity
+    private IEnumerator FadeBar(RectTransform bar, float rate)
+    {
+        float i = 1;
+
+        while (i >= 0)
+        {
+            Color barColor = bar.GetComponent<Image>().color;
+            bar.GetComponent<Image>().color = new Color(barColor.r, barColor.g, barColor.b, i);
+            i -= rate;
+            yield return 0;
+        }
+
+
+        Destroy(bar.gameObject);
+        
     }
 }
