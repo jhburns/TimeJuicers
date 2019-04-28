@@ -109,6 +109,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
         {
             StartCoroutine(timeBarController.DecreaseBar());
             hasDied = true;
+            pastStates.RewindInputDisabled = false;
         }
     }
 
@@ -126,6 +127,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
 
         filterImg.enabled = true;
         deathText.enabled = true;
+        pastStates.RewindInputDisabled = true;
 
         deathAnimationTrigger = 10f;
     }

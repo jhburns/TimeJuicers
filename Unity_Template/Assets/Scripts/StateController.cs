@@ -20,6 +20,8 @@ public class StateController : MonoBehaviour
     private float pastTrigger; // Needed to create ghetto KeyUp/KeyDown for trigger buttons
 
     public bool IsPaused { get; set; }
+    public bool RewindInputDisabled { get; set; }
+    private bool allowRewindTime; // Used to make sure that the user has to reinput rewind time when it was disabled
 
     /*
      * Start - finds serializable objects and initalizes stack  
@@ -59,6 +61,8 @@ public class StateController : MonoBehaviour
         FilterImg.enabled = false;
 
         IsPaused = false;
+        RewindInputDisabled = false;
+        allowRewindTime = true;
     }
 
     public void CatchCreated()
@@ -72,7 +76,6 @@ public class StateController : MonoBehaviour
      */
     void Update()
     {
-
         RewindTime();
 
         StartRewindUI();
@@ -88,7 +91,8 @@ public class StateController : MonoBehaviour
              Input.GetKey(KeyCode.JoystickButton3) || // Y button on xbox 360 controller
              Input.GetAxisRaw("LeftTrigger") == 1
             )
-            && pastStates.Count > 1) // Check for greater than 1 to prevent initialization issues
+            && pastStates.Count > 1 // Check for greater than 1 to prevent initialization issues
+            && allowRewindTime) 
         {
             RevetState();
         }
@@ -108,13 +112,24 @@ public class StateController : MonoBehaviour
             )
              && pastStates.Count > 1)
         {
-            ToggleBehaviourSerializable(false);
-            ToggleRewindUI(true);
+            if (!RewindInputDisabled)
+            {
+                Debug.Log("ok");
+                ToggleBehaviourSerializable(false);
+                ToggleRewindUI(true);
 
-            pastTrigger = Input.GetAxisRaw("LeftTrigger");
+                pastTrigger = Input.GetAxisRaw("LeftTrigger");
 
-            IsPaused = false;
+                IsPaused = false;
+
+                allowRewindTime = true;
+            } else
+            {
+                allowRewindTime = false;
+            }
         }
+
+        // Prevents asyncing the GetKey and GetKeyDown inputs while inputting is disabled
     }
 
     private void StopRewindUI()
@@ -187,7 +202,7 @@ public class StateController : MonoBehaviour
 
     public void DeleteStates(int frameCount)
     {
-        pastStates.RemoveBottom(frameCount);
+        pastStates.RemoveBottom(Mathf.Clamp(frameCount, 0, pastStates.Count));
     }
 
 }
