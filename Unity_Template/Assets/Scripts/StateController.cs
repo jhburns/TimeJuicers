@@ -185,6 +185,11 @@ public class StateController : MonoBehaviour
         return pastStates.Count;
     }
 
+    public void DeleteStates(int frameCount)
+    {
+        pastStates.RemoveBottom(frameCount);
+    }
+
 }
 
 internal class FixedStack<T>
