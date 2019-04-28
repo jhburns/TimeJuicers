@@ -2560,7 +2560,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d81568a6ab846e4a83d230c9271600b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frameCount: 10000
+  frameCount: 6000
   RewindIcon: {fileID: 1769633017}
   FilterImg: {fileID: 319211869}
 --- !u!4 &532999571
@@ -7554,6 +7554,7 @@ MonoBehaviour:
   deathText: {fileID: 485162637}
   timeBar: {fileID: 621295545}
   barIncreaseScale: 2
+  pastStates: {fileID: 532999570}
 --- !u!4 &1283012050
 Transform:
   m_ObjectHideFlags: 0
