@@ -20,4 +20,10 @@ public class TimeJuiceUI : MonoBehaviour
         timeBar.value = globalState.GetSavedFrameCount();
 
     }
+
+    public IEnumerator DecreaseBar()
+    {
+        Debug.Log("test");
+        yield return 0;
+    }
 }

@@ -23,6 +23,8 @@ public class GlobalUI : MonoBehaviour, ISerializable
 
     private bool hasDied; //NOT serialized
 
+    public TimeJuiceUI timeBarController;
+
     void Start()
     {
         Init();
@@ -105,7 +107,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
 
         if (!hasDied)
         {
-
+            StartCoroutine(timeBarController.DecreaseBar());
             hasDied = true;
         }
     }
