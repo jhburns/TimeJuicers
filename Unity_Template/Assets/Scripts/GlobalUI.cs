@@ -25,8 +25,17 @@ public class GlobalUI : MonoBehaviour, ISerializable
 
     public TimeJuiceUI timeBarController;
 
+    public Text rewindPrompt;
+    public Text restartPrompt;
+    private bool fadeInWhichPrompt; // true mean rewind, false restart
+    private float startingAlphaPromt;
+
+    public SceneController scene;
+
     void Start()
     {
+        Time.timeScale = 1f; // Prevents the game from being frozen when restarting
+
         Init();
     }
 
@@ -42,6 +51,12 @@ public class GlobalUI : MonoBehaviour, ISerializable
         startingAlphaText = deathText.color.a;
         deathText.color = GetAlphaChange(deathText, 0f);
         deathAnimationTrigger = 0f;
+
+        rewindPrompt.enabled = false;
+        restartPrompt.enabled = false;
+        startingAlphaPromt = rewindPrompt.color.a; //Lazy, starting alpha is only dependant on rewind
+        rewindPrompt.color = GetAlphaChange(rewindPrompt, 0f);
+        restartPrompt.color = GetAlphaChange(restartPrompt, 0f);
     }
 
     void Update()
@@ -75,7 +90,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
 
             float newX = Mathf.Lerp(timeBar.transform.position.x, 580, 0.2f);
             float newY = Mathf.Lerp(timeBar.transform.position.y, 347, 0.2f);
-            
+
             if (Mathf.Abs(580 - newX) < minChange)
             {
                 newX = Mathf.Clamp(timeBar.transform.position.x + minChange, timeBar.transform.position.x, 580);
@@ -92,12 +107,17 @@ public class GlobalUI : MonoBehaviour, ISerializable
             float newScale = Mathf.Clamp(timeBar.transform.localScale.x + 0.05f, timeBar.transform.localScale.x, barIncreaseScale);
 
             timeBar.transform.localScale = new Vector2(newScale, newScale);
+
+            PromptOnDeath();
         }
 
         if (deathAnimationTrigger < 8.5f)
         {
+            scene.AllowRestart();
+
             PauseGame();
         }
+
     }
 
     private void PauseGame()
@@ -110,6 +130,19 @@ public class GlobalUI : MonoBehaviour, ISerializable
             StartCoroutine(timeBarController.DecreaseBar());
             hasDied = true;
             pastStates.RewindInputDisabled = false;
+        }
+    }
+
+    private void PromptOnDeath() {
+        if (fadeInWhichPrompt)
+        {
+            float nextAlphaText = Mathf.Lerp(rewindPrompt.color.a, startingAlphaPromt, 0.05f);
+            rewindPrompt.color = GetAlphaChange(rewindPrompt, nextAlphaText);
+        }
+        else
+        {
+            float nextAlphaText = Mathf.Lerp(restartPrompt.color.a, startingAlphaPromt, 0.05f);
+            restartPrompt.color = GetAlphaChange(restartPrompt, nextAlphaText);
         }
     }
 
@@ -129,6 +162,10 @@ public class GlobalUI : MonoBehaviour, ISerializable
         deathText.enabled = true;
         pastStates.RewindInputDisabled = true;
 
+        rewindPrompt.enabled = true;
+        restartPrompt.enabled = true;
+        fadeInWhichPrompt = (pastStates.GetSavedFrameCount() - timeBarController.DeathPenaltyFrames > 0);
+
         deathAnimationTrigger = 10f;
     }
 
@@ -139,7 +176,9 @@ public class GlobalUI : MonoBehaviour, ISerializable
                             deathText.color.a, deathAnimationTrigger,
                             timeBar.transform.position.x, timeBar.transform.position.y,
                             timeBar.transform.localScale.x, Time.timeScale,
-                            pastStates.IsPaused
+                            pastStates.IsPaused, rewindPrompt.enabled,
+                            restartPrompt.enabled, rewindPrompt.color.a,
+                            restartPrompt.color.a
                          );
     }
 
@@ -159,6 +198,11 @@ public class GlobalUI : MonoBehaviour, ISerializable
 
         Time.timeScale = past.timeScale;
         pastStates.IsPaused = past.isPaused;
+
+        rewindPrompt.enabled = past.rewindPrompting;
+        restartPrompt.enabled = past.restartPrompting;
+        rewindPrompt.color = GetAlphaChange(rewindPrompt, past.rewindPromptAlpha);
+        restartPrompt.color = GetAlphaChange(restartPrompt, past.restartPromptAlpha);
     }
 
     private Color GetAlphaChange(MaskableGraphic ui, float alpha)
@@ -186,12 +230,21 @@ internal class SaveUI : ISerialDataStore
 
     public bool isPaused { get; private set; }
 
+    public bool rewindPrompting { get; private set; }
+    public bool restartPrompting { get; private set; }
+
+    public float rewindPromptAlpha { get; private set; }
+    public float restartPromptAlpha { get; private set; }
+
+
     public SaveUI(  bool alive, bool filter,
                     float aFilter, bool deathTxt,
                     float aText, float show,
                     float barX, float barY,
                     float barScale, float time,
-                    bool pause
+                    bool pause, bool rewindP,
+                    bool restartP, float rewindA,
+                    float restartA
                  )
     {
         IsAlive = alive;
@@ -205,5 +258,9 @@ internal class SaveUI : ISerialDataStore
         timeBarScale = barScale;
         timeScale = time;
         isPaused = pause;
+        rewindPrompting = rewindP;
+        restartPrompting = restartP;
+        rewindPromptAlpha = rewindA;
+        restartPromptAlpha = restartA;
     }
 }

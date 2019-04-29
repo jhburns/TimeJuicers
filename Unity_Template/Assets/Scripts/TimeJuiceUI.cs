@@ -10,7 +10,7 @@ public class TimeJuiceUI : MonoBehaviour
 
     public StateController globalState;
 
-    public int deathPenaltyFrames;
+    public int DeathPenaltyFrames;
     public Color deathBarColor;
     public float fadeRate;
 
@@ -42,7 +42,7 @@ public class TimeJuiceUI : MonoBehaviour
 
         removedJuice.GetComponent<Image>().color = deathBarColor;
 
-        globalState.DeleteStates(deathPenaltyFrames);
+        globalState.DeleteStates(DeathPenaltyFrames);
 
         StartCoroutine(FadeBar(removedJuice, fadeRate));
 

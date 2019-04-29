@@ -114,7 +114,6 @@ public class StateController : MonoBehaviour
         {
             if (!RewindInputDisabled)
             {
-                Debug.Log("ok");
                 ToggleBehaviourSerializable(false);
                 ToggleRewindUI(true);
 
@@ -123,7 +122,8 @@ public class StateController : MonoBehaviour
                 IsPaused = false;
 
                 allowRewindTime = true;
-            } else
+            }
+            else
             {
                 allowRewindTime = false;
             }
