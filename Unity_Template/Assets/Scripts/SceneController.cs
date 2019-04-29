@@ -9,6 +9,7 @@ public class SceneController : MonoBehaviour, ISerializable
     private bool jumpTriggersRestart;
     public float axisBounds; // likely should be the same as on play, but doesn't have to be, IM
 
+    public string nextSceneName;
 
     void Start()
     {
@@ -47,6 +48,11 @@ public class SceneController : MonoBehaviour, ISerializable
     public void AllowRestart()
     {
         jumpTriggersRestart = true;
+    }
+
+    public void NextLevel()
+    {
+        SceneManager.LoadScene(nextSceneName);
     }
 
     public ISerialDataStore GetCurrentState()
