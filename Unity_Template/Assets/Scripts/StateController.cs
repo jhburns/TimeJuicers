@@ -92,7 +92,7 @@ public class StateController : MonoBehaviour
              Input.GetAxisRaw("LeftTrigger") == 1
             )
             && pastStates.Count > 1 // Check for greater than 1 to prevent initialization issues
-            && allowRewindTime) 
+            && allowRewindTime)
         {
             RevetState();
         }
