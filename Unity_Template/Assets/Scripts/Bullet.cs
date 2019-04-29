@@ -24,7 +24,6 @@ public class Bullet : MonoBehaviour, ISerializable
         rb = GetComponent<Rigidbody2D>();
         rb.interpolation = RigidbodyInterpolation2D.Interpolate; //Prevents jittery camera
 
-
         StoreStartingPos();
     }
 
@@ -39,7 +38,7 @@ public class Bullet : MonoBehaviour, ISerializable
     void Update()
     {
 
-        HasTimeEnded();
+        //HasTimeEnded();
     }
 
     public void InPlay(bool goRight)

@@ -11,13 +11,17 @@ public class StateController : MonoBehaviour
 {
     ISerializable[] allSerialObjects; // Are also of the MonoBehaviour class, so can be cast to
     // https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.stack-1?view=netframework-4.7.2
-    FixedStack<ISerialDataStore[]> pastStates;
+    private FixedStack<ISerialDataStore[]> pastStates;
     public int frameCount; // About 60 frames per second so 'frameCount = 3600' means the you can rewind for 1 minute
 
     public Image RewindIcon;
     public Image FilterImg;
 
     private float pastTrigger; // Needed to create ghetto KeyUp/KeyDown for trigger buttons
+
+    public bool IsPaused { get; set; }
+    public bool RewindInputDisabled { get; set; }
+    private bool allowRewindTime; // Used to make sure that the user has to reinput rewind time when it was disabled
 
     /*
      * Start - finds serializable objects and initalizes stack  
@@ -55,6 +59,10 @@ public class StateController : MonoBehaviour
     {
         RewindIcon.enabled = false;
         FilterImg.enabled = false;
+
+        IsPaused = false;
+        RewindInputDisabled = false;
+        allowRewindTime = true;
     }
 
     public void CatchCreated()
@@ -73,7 +81,6 @@ public class StateController : MonoBehaviour
         StartRewindUI();
 
         StopRewindUI();
-
     }
 
     private void RewindTime()
@@ -84,11 +91,12 @@ public class StateController : MonoBehaviour
              Input.GetKey(KeyCode.JoystickButton3) || // Y button on xbox 360 controller
              Input.GetAxisRaw("LeftTrigger") == 1
             )
-            && pastStates.Count > 1) // Check for greater than 1 to prevent initialization issues
+            && pastStates.Count > 1 // Check for greater than 1 to prevent initialization issues
+            && allowRewindTime)
         {
             RevetState();
         }
-        else
+        else if (!IsPaused)
         {
             pastStates.Push(CollectStates());
         }
@@ -104,11 +112,24 @@ public class StateController : MonoBehaviour
             )
              && pastStates.Count > 1)
         {
-            ToggleBehaviourSerializable(false);
-            ToggleRewindUI(true);
+            if (!RewindInputDisabled)
+            {
+                ToggleBehaviourSerializable(false);
+                ToggleRewindUI(true);
 
-            pastTrigger = Input.GetAxisRaw("LeftTrigger");
+                pastTrigger = Input.GetAxisRaw("LeftTrigger");
+
+                IsPaused = false;
+
+                allowRewindTime = true;
+            }
+            else
+            {
+                allowRewindTime = false;
+            }
         }
+
+        // Prevents asyncing the GetKey and GetKeyDown inputs while inputting is disabled
     }
 
     private void StopRewindUI()
@@ -172,6 +193,16 @@ public class StateController : MonoBehaviour
     {
         RewindIcon.enabled = turnOn;
         FilterImg.enabled = turnOn;
+    }
+
+    public int GetSavedFrameCount()
+    {
+        return pastStates.Count;
+    }
+
+    public void DeleteStates(int frameCount)
+    {
+        pastStates.RemoveBottom(Mathf.Clamp(frameCount, 0, pastStates.Count));
     }
 
 }
