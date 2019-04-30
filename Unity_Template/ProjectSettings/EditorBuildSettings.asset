@@ -10,14 +10,17 @@ EditorBuildSettings:
     guid: 00000000000000000000000000000000
   - enabled: 0
     path: 
-    guid: 633c4c40e3e961c45b58876f467df2b7
+    guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
+  - enabled: 0
+    path: Assets/Scenes/Home.unity
+    guid: cd02e1f2fb23a436fb4b207e3189c35d
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/Home.unity
-    guid: cd02e1f2fb23a436fb4b207e3189c35d
-  - enabled: 1
-    path: Assets/Scenes/TestingNext.unity
-    guid: 90b48e296d0d7994e89f283e02e89c50
+    path: Assets/Scenes/1Tutorial.unity
+    guid: 7921a9d02ab763f499865a4a3ebbca14
   m_configObjects: {}

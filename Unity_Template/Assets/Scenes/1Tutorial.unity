@@ -806,7 +806,7 @@ PrefabInstance:
     - target: {fileID: 5838745161858251427, guid: b71197004e579b2478a16e6fdc2a155c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 0.073
       objectReference: {fileID: 0}
     - target: {fileID: 5838745161858251427, guid: b71197004e579b2478a16e6fdc2a155c,
         type: 3}
@@ -831,7 +831,7 @@ PrefabInstance:
     - target: {fileID: 5838745161858251427, guid: b71197004e579b2478a16e6fdc2a155c,
         type: 3}
       propertyPath: m_RootOrder
-      value: 35
+      value: 36
       objectReference: {fileID: 0}
     - target: {fileID: 5838745161858251427, guid: b71197004e579b2478a16e6fdc2a155c,
         type: 3}
@@ -1864,8 +1864,8 @@ Transform:
   - {fileID: 1709132087}
   - {fileID: 142914496}
   - {fileID: 2034645155}
-  - {fileID: 411037634}
   - {fileID: 172483717}
+  - {fileID: 411037634}
   - {fileID: 520952387}
   - {fileID: 322376719}
   - {fileID: 47293272}
@@ -2493,7 +2493,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d81568a6ab846e4a83d230c9271600b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  frameCount: 600
+  frameCount: 900
   RewindIcon: {fileID: 1769633017}
   FilterImg: {fileID: 319211869}
 --- !u!4 &532999571
@@ -3539,7 +3539,7 @@ PrefabInstance:
     - target: {fileID: 5838745161858251427, guid: b71197004e579b2478a16e6fdc2a155c,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -0.217
       objectReference: {fileID: 0}
     - target: {fileID: 5838745161858251427, guid: b71197004e579b2478a16e6fdc2a155c,
         type: 3}
@@ -3564,7 +3564,7 @@ PrefabInstance:
     - target: {fileID: 5838745161858251427, guid: b71197004e579b2478a16e6fdc2a155c,
         type: 3}
       propertyPath: m_RootOrder
-      value: 36
+      value: 35
       objectReference: {fileID: 0}
     - target: {fileID: 5838745161858251427, guid: b71197004e579b2478a16e6fdc2a155c,
         type: 3}
@@ -4695,7 +4695,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeBar: {fileID: 621295545}
   globalState: {fileID: 532999570}
-  DeathPenaltyFrames: 100
+  DeathPenaltyFrames: 250
   deathBarColor: {r: 1, g: 0.19345687, b: 0, a: 1}
   fadeRate: 0.007
 --- !u!4 &953955708
