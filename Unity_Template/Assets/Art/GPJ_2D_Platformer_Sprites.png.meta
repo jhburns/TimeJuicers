@@ -6,6 +6,7 @@ TextureImporter:
     21300002: player
     21300004: enermy
     21300006: blocks
+    21300008: GPJ_2D_Platformer_Sprites_0
   externalObjects: {}
   serializedVersion: 7
   mipmaps:
@@ -156,13 +157,33 @@ TextureImporter:
         width: 14
         height: 12
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
       spriteID: 4ae4b472157b144ec8e8b1968adec3d4
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: GPJ_2D_Platformer_Sprites_0
+      rect:
+        serializedVersion: 2
+        x: 79
+        y: 48
+        width: 19
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eda2e2c566d3b4d0eb9baedf47d6c68b
       vertices: []
       indices: 
       edges: []
