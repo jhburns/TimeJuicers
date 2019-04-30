@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2410321481894875221}
   - component: {fileID: 175630989015544201}
   m_Layer: 0
-  m_Name: Enemy (1)
+  m_Name: Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -118,6 +118,7 @@ MonoBehaviour:
   isMovingRight: 1
   speed: 2.3
   isAlive: 0
+  spinRate: 170
 --- !u!58 &175630989015544201
 CircleCollider2D:
   m_ObjectHideFlags: 0
