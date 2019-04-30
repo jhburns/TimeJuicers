@@ -92,7 +92,7 @@ public class StateController : MonoBehaviour
              Input.GetAxisRaw("LeftTrigger") == 1
             )
             && pastStates.Count > 1 // Check for greater than 1 to prevent initialization issues
-            && allowRewindTime) 
+            && allowRewindTime)
         {
             RevetState();
         }
@@ -105,16 +105,42 @@ public class StateController : MonoBehaviour
     private void StartRewindUI()
     {
         // Prevents input when rewinding
-        if ((Input.GetKeyDown(KeyCode.K) || Input.GetKeyDown(KeyCode.R)) && pastStates.Count > 1)
-        { 
-            Debug.Log("ok");
-            ToggleBehaviourSerializable(false);
-            ToggleRewindUI(true);
+        if ((Input.GetKeyDown(KeyCode.K) ||
+             Input.GetKeyDown(KeyCode.R) ||
+             Input.GetKeyDown(KeyCode.JoystickButton3) || // Y button on xbox 360 controller
+             (Input.GetAxisRaw("LeftTrigger") == 1 && pastTrigger != 1)
+            )
+             && pastStates.Count > 1)
+        {
+            if (!RewindInputDisabled)
+            {
+                ToggleBehaviourSerializable(false);
+                ToggleRewindUI(true);
+
+                pastTrigger = Input.GetAxisRaw("LeftTrigger");
+
+                IsPaused = false;
+
+                allowRewindTime = true;
+            }
+            else
+            {
+                allowRewindTime = false;
+            }
         }
 
-        if ((Input.GetKeyUp(KeyCode.K) || Input.GetKeyUp(KeyCode.R)) && pastStates.Count > 1)
+        // Prevents asyncing the GetKey and GetKeyDown inputs while inputting is disabled
+    }
+
+    private void StopRewindUI()
+    {
+        if ((Input.GetKeyUp(KeyCode.K) ||
+         Input.GetKeyUp(KeyCode.R) ||
+         Input.GetKeyUp(KeyCode.JoystickButton3) ||
+         (Input.GetAxisRaw("LeftTrigger") == 0 && pastTrigger != 0)
+        )
+         && pastStates.Count > 1)
         {
-            Debug.Log("k");
             ToggleBehaviourSerializable(true);
             ToggleRewindUI(false);
 
