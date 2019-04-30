@@ -11,11 +11,17 @@ public class StateController : MonoBehaviour
 {
     ISerializable[] allSerialObjects; // Are also of the MonoBehaviour class, so can be cast to
     // https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.stack-1?view=netframework-4.7.2
-    FixedStack<ISerialDataStore[]> pastStates;
+    private FixedStack<ISerialDataStore[]> pastStates;
     public int frameCount; // About 60 frames per second so 'frameCount = 3600' means the you can rewind for 1 minute
 
     public Image RewindIcon;
     public Image FilterImg;
+
+    private float pastTrigger; // Needed to create ghetto KeyUp/KeyDown for trigger buttons
+
+    public bool IsPaused { get; set; }
+    public bool RewindInputDisabled { get; set; }
+    private bool allowRewindTime; // Used to make sure that the user has to reinput rewind time when it was disabled
 
     /*
      * Start - finds serializable objects and initalizes stack  
@@ -26,6 +32,8 @@ public class StateController : MonoBehaviour
         InitStack();
 
         InitUI();
+
+        pastTrigger = 0f;
     }
 
     /*
@@ -42,7 +50,7 @@ public class StateController : MonoBehaviour
     /*
      * InitStack - creates stack to store global state
      */
-    void InitStack()
+    private void InitStack()
     {
         pastStates = new FixedStack<ISerialDataStore[]>(frameCount);
     }
@@ -51,6 +59,16 @@ public class StateController : MonoBehaviour
     {
         RewindIcon.enabled = false;
         FilterImg.enabled = false;
+
+        IsPaused = false;
+        RewindInputDisabled = false;
+        allowRewindTime = true;
+    }
+
+    public void CatchCreated()
+    {
+        var serialQuery = FindObjectsOfType<MonoBehaviour>().OfType<ISerializable>();
+        allSerialObjects = serialQuery.Cast<ISerializable>().ToArray();
     }
 
     /*
@@ -58,28 +76,49 @@ public class StateController : MonoBehaviour
      */
     void Update()
     {
+        RewindTime();
 
+        StartRewindUI();
+
+        StopRewindUI();
+    }
+
+    private void RewindTime()
+    {
         // https://docs.unity3d.com/ScriptReference/Input.GetKeyDown.html
-        if ((Input.GetKey(KeyCode.K) || Input.GetKey(KeyCode.R)) && pastStates.Count > 1) // Check for greater than 1 to prevent initialization issues
+        if ((Input.GetKey(KeyCode.K) ||
+             Input.GetKey(KeyCode.R) ||
+             Input.GetKey(KeyCode.JoystickButton3) || // Y button on xbox 360 controller
+             Input.GetAxisRaw("LeftTrigger") == 1
+            )
+            && pastStates.Count > 1 // Check for greater than 1 to prevent initialization issues
+            && allowRewindTime) 
         {
             RevetState();
         }
-        else
+        else if (!IsPaused)
         {
             pastStates.Push(CollectStates());
         }
+    }
 
+    private void StartRewindUI()
+    {
         // Prevents input when rewinding
         if ((Input.GetKeyDown(KeyCode.K) || Input.GetKeyDown(KeyCode.R)) && pastStates.Count > 1)
         { 
+            Debug.Log("ok");
             ToggleBehaviourSerializable(false);
             ToggleRewindUI(true);
         }
 
         if ((Input.GetKeyUp(KeyCode.K) || Input.GetKeyUp(KeyCode.R)) && pastStates.Count > 1)
         {
+            Debug.Log("k");
             ToggleBehaviourSerializable(true);
             ToggleRewindUI(false);
+
+            pastTrigger = Input.GetAxisRaw("LeftTrigger");
         }
     }
 
@@ -128,6 +167,16 @@ public class StateController : MonoBehaviour
     {
         RewindIcon.enabled = turnOn;
         FilterImg.enabled = turnOn;
+    }
+
+    public int GetSavedFrameCount()
+    {
+        return pastStates.Count;
+    }
+
+    public void DeleteStates(int frameCount)
+    {
+        pastStates.RemoveBottom(Mathf.Clamp(frameCount, 0, pastStates.Count));
     }
 
 }
@@ -201,6 +250,28 @@ internal class FixedStack<T>
     {
         return elements[currentIndex];
     }
+
+    /*
+     * DeleteBottom
+     * Params:
+     *  - int numRemove: a positive number of the number of elements to remove from the bottom of the stack,
+     *                   meaning elements pushed first
+     * 
+     */
+    public void RemoveBottom(int numRemove)
+    {
+        if (numRemove < 0)
+        {
+            throw new IllegalRemoveStackException("Cannot remove a negative number of elements.");
+        }
+
+        if (numRemove > Count)
+        {
+            throw new IllegalRemoveStackException("The number of elements to remove is less than the current total count.");
+        }
+
+        Count -= numRemove;
+    }
 }
 
 
@@ -213,6 +284,20 @@ internal class EmptyStackException : Exception
 
     public EmptyStackException(string message)
         : base(String.Format("FixedArray Stack is Empty: {0}", message))
+    {
+
+    }
+}
+
+internal class IllegalRemoveStackException : Exception
+{
+    public IllegalRemoveStackException()
+    {
+
+    }
+
+    public IllegalRemoveStackException(string message)
+        : base(String.Format("Trying to performn the following operation on the FixedArray Stack is illegal: {0}", message))
     {
 
     }

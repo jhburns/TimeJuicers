@@ -8,6 +8,7 @@ TagManager:
   - blocks
   - ground
   - bullets
+  - enemy wall
   layers:
   - Default
   - TransparentFX
