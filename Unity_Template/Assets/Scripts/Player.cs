@@ -302,7 +302,7 @@ public class Player : MonoBehaviour, ISerializable
         grounded = past.grounded;
         jumps = past.jumps;
 
-        transform.position = new Vector3(past.positionX, past.positionY, 0);
+        transform.position = new Vector3(past.positionX, past.positionY, transform.position.z);
         rb.velocity = Vector2.zero; // Needed becasue velocity isn't conserved
 
         rightHorizontalAxisDown = past.rightHorizontalAxisDown;
