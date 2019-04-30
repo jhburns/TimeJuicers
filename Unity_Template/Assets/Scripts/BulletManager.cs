@@ -17,7 +17,9 @@ public class BulletManager : MonoBehaviour, ISerializable
 
     public GlobalUI deathHandler; //IM
 
-    // Start is called before the first frame update
+    /* Start is called before the first frame update,
+     * Initializes time variables and bullet array
+     */
     void Start()
     {
         InitTime();
@@ -25,11 +27,17 @@ public class BulletManager : MonoBehaviour, ISerializable
         InitBullets();
     }
 
+    /*
+     * InitTime - sets nextFire
+     */
     private void InitTime()
     {
         nextFire = Time.time;
     }
 
+    /*
+     * InitBullets - adds all the existing bullets to an array
+     */
     private void InitBullets()
     {
         bullets = new List<Bullet>();
@@ -46,7 +54,9 @@ public class BulletManager : MonoBehaviour, ISerializable
     }
 
 
-    // Update is called once per frame
+    /* Update - is called once per frame,
+     * Checks to see if player is shooting
+     */
     void Update()
     {
         // http://wiki.unity3d.com/index.php?title=Xbox360Controller
@@ -66,6 +76,9 @@ public class BulletManager : MonoBehaviour, ISerializable
 
     }
 
+    /*
+     * Fire - starts a new bullet in the player world, moving in the correct direction
+     */
     void Fire()
     {
         Bullet currentBul = bullets[bulletIndex];
@@ -86,6 +99,7 @@ public class BulletManager : MonoBehaviour, ISerializable
         bulletIndex = (bulletIndex + 1) % maxBullets;
     }
 
+    /// Serial Methods, see Serial Namespace 
     public ISerialDataStore GetCurrentState()
     {
         return new SaveBulletMan(bulletIndex, nextFire);

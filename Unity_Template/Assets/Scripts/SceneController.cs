@@ -11,16 +11,26 @@ public class SceneController : MonoBehaviour, ISerializable
 
     public string nextSceneName;
 
+    /*
+     * Start - is called before the first frame update
+     */
     void Start()
     {
         Init();
     }
 
+    /*
+     * Init - sets up vars
+     */
     private void Init()
     {
         jumpTriggersRestart = false;
     }
 
+    /*
+     * Update - is called once per frame,
+     * Checks for jump input only if dead
+     */
     void Update()
     {
         if (jumpTriggersRestart)
@@ -29,6 +39,9 @@ public class SceneController : MonoBehaviour, ISerializable
         }
     }
 
+    /*
+     * CheckAndRestart - reloads scene on trigger inputs
+     */
     private void CheckAndRestart()
     {
         if (Input.GetKeyDown(KeyCode.Space) ||
@@ -45,16 +58,23 @@ public class SceneController : MonoBehaviour, ISerializable
         }
     }
 
+    /*
+     * AllowRestart - called by other object, lets jump restart the level
+     */
     public void AllowRestart()
     {
         jumpTriggersRestart = true;
     }
 
+    /*
+     * NextLevel - loads the next scene, defined in nextSceneName
+     */
     public void NextLevel()
     {
         SceneManager.LoadScene(nextSceneName);
     }
 
+    /// Serial Methods, see Serial Namespace 
     public ISerialDataStore GetCurrentState()
     {
         return new SaveSceneController(jumpTriggersRestart);

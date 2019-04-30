@@ -19,6 +19,26 @@ namespace Serial
 
     public interface ISerialDataStore
     {
-        // Empty for now, only used as an identifier 
+        // Empty for now, only used as an identifier
+
+        // Recommended to call the class implementing this 'Save[Class Name implementing ISerializable]' 
+        // And should be internal, for safety
+
+
+        // Example: 
+
+        /*
+            internal class SaveCamera : ISerialDataStore
+            {
+                public float positionX { get; private set; }
+                public float positionY { get; private set; }
+
+                public SaveCamera(float posX, float posY)
+                {
+                    positionX = posX;
+                    positionY = posY;
+                }
+            }
+        */
     }
 }

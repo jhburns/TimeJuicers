@@ -25,13 +25,18 @@ public class Player : MonoBehaviour, ISerializable
 
     public GlobalUI deathHandler; //IM
 
-    // Start is called before the first frame update
+    /* Start - is called before the first frame update
+     * Initializes variables
+     */
     void Start()
     {
         InitRigid();
         InitPlayer();
     }
 
+    /*
+     * InitRigid - starts physics on the player
+     */
     private void InitRigid()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -41,6 +46,9 @@ public class Player : MonoBehaviour, ISerializable
         rb.interpolation = RigidbodyInterpolation2D.Interpolate; //Prevents jittery camera
     }
 
+    /*
+     * InitPlayer - sets up starting point for player variables 
+     */
     private void InitPlayer()
     {
         velHorz = 0f;
@@ -52,7 +60,9 @@ public class Player : MonoBehaviour, ISerializable
 
     }
 
-    // Update is called once per frame
+    /* Update is called once per frame,
+     * Handles input for player
+     */
     void Update()
     {
         // bascially everywhere: https://docs.unity3d.com/ScriptReference/Rigidbody2D.html
@@ -68,6 +78,9 @@ public class Player : MonoBehaviour, ISerializable
 
     }
 
+    /*
+     * Jump - player moves like a normal platformer jump
+     */
     private void Jump()
     {
         if ((Input.GetKeyDown(KeyCode.Space) || 
@@ -86,6 +99,9 @@ public class Player : MonoBehaviour, ISerializable
         }
     }
 
+    /*
+     * InitialVelocitySet - sets initial values to move move player left/right
+     */
     private void InitialVelocitySet()
     {
         if (Input.GetKeyDown(KeyCode.RightArrow) ||
@@ -105,6 +121,10 @@ public class Player : MonoBehaviour, ISerializable
         ControllerInitVelSet();
     }
 
+    /*
+     * ControllerInitVelSet - moves player left/right based on controller input,
+     * Works like ghetto GetKeyDown for axis inputs
+     */
     private void ControllerInitVelSet()
     {
         // https://www.reddit.com/r/Unity3D/comments/61hjiy/can_you_get_axis_input_like_getbuttondown/
@@ -137,18 +157,27 @@ public class Player : MonoBehaviour, ISerializable
         }
     }
 
+    /*
+     * SetRightInitialVel - sets move right
+     */
     private void SetRightInitialVel()
     {
         velHorz = moveSpeed - 2.0f;
         MovingRight = true;
     }
 
+    /*
+     * SetLeftInitialVel - sets move left 
+     */
     private void SetLeftInitialVel()
     {
         velHorz = -(moveSpeed - 2.0f);
         MovingRight = false;
     }
 
+    /*
+     * MoveDirection - moves the player, or stops it with air resistance/friction
+     */
     private void MoveDirection()
     {
         if (Input.GetKey(KeyCode.RightArrow) || 
@@ -173,11 +202,17 @@ public class Player : MonoBehaviour, ISerializable
         }
     }
 
+    /*
+     * AccelerateDir - sets velHorz to an increase in the current direction 
+     */
     private void AccelerateDir(int direction)
     {
         velHorz = Mathf.Clamp(velHorz + acceleration * direction, -moveSpeed, moveSpeed);
     }
 
+    /*
+     * StopMoving - applies ground friction and air resistance 
+     */
     private void StopMoving()
     {
         float accScale = 0.5f; // Air resistence
@@ -199,6 +234,12 @@ public class Player : MonoBehaviour, ISerializable
         rb.velocity = new Vector2(velHorz, rb.velocity.y);
     }
 
+    /*
+     * RoundToZero - prevents player from ossilating back and forth
+     * Params:
+     *  - float num: the number to be rounded down
+     * Returns: float number that is either itself of zero, if near zero
+     */
     private float RoundToZero(float num)
     {
         if (velHorz < acceleration * 2 && velHorz > -acceleration * 2) // Needs to be twice to fix an edge case, player was still moving a little
@@ -210,6 +251,11 @@ public class Player : MonoBehaviour, ISerializable
 
     }
 
+    /*
+     * OnCollisionEnter2D - manages many player collisions
+     * Params:
+     *  - Collision2D col: the other object being collided with
+     */
     void OnCollisionEnter2D(Collision2D col)
     {
         // Make sure to check if the object has a material first
@@ -228,13 +274,16 @@ public class Player : MonoBehaviour, ISerializable
             }
         }
 
-        if ((col.gameObject.GetComponent<Enemy>() != null || col.gameObject.name == "DeathZone") && deathHandler.IsAlive) // Can only die once
+        if ((col.gameObject.GetComponent<Enemy>() != null ||
+             col.gameObject.name == "DeathZone"
+            ) 
+            && deathHandler.IsAlive) // Can only die once, or states will break
         {
             deathHandler.OnDeath();
          }
     }
 
-    ///  Serial Methods
+    /// Serial Methods, see Serial Namespace 
     public ISerialDataStore GetCurrentState()
     {
         return new SavePlayer(  MovingRight, grounded, 

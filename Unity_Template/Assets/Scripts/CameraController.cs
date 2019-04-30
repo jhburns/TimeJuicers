@@ -10,6 +10,10 @@ public class CameraController : MonoBehaviour, ISerializable
 
     public float minHeight; //IM
 
+    /*
+     * Update - called once per frame,
+     * moves camera to new position, based on player position
+     */
     private void Update()
     {
         
@@ -20,7 +24,7 @@ public class CameraController : MonoBehaviour, ISerializable
         
     }
 
-
+    /// Serial Methods, see Serial Namespace 
     public ISerialDataStore GetCurrentState()
     {
         return new SaveCamera(transform.position.x, transform.position.y);

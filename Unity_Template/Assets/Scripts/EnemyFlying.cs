@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using Serial;
 
+
+////////////// WIP
+
 public class EnemyFlying : MonoBehaviour, ISerializable
 {
     Rigidbody2D rb;

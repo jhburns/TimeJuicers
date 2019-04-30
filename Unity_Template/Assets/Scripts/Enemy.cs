@@ -18,7 +18,10 @@ public class Enemy : MonoBehaviour, ISerializable
 
     private float timeLeftInPlay; 
 
-    // Start is called before the first frame update
+    /* 
+     * Start - is called before the first frame update,
+     * Initalizes many global variables 
+     */
     void Start()
     {
         InitRigid();
@@ -28,6 +31,9 @@ public class Enemy : MonoBehaviour, ISerializable
         timeLeftInPlay = 0f;
     }
 
+    /*
+     * InitRigid - starts the physics on the enemy
+     */
     private void InitRigid()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -35,13 +41,20 @@ public class Enemy : MonoBehaviour, ISerializable
         rb.interpolation = RigidbodyInterpolation2D.Interpolate; //Prevents jittery camera
     }
 
+    /*
+     * InitMovement - stores the starting x position for later, and sets up other vars
+     */
     private void InitMovement()
     {
         storageX = transform.position.x;
         isGrounded = false;
     }
 
-    // Update is called once per frame
+    /* 
+     * Update - is called once per frame,
+     * Moves enemy based on current direction,
+     * Stores enemy after timeout 
+     */
     void Update()
     {
         if (isMovingRight && isGrounded && isAlive)
@@ -60,6 +73,9 @@ public class Enemy : MonoBehaviour, ISerializable
         }
     }
 
+    /*
+     * Store - moves enemy to below stage, and stops physics 
+     */
     private void Store()
     {
         transform.position = new Vector2(storageX, -25f);
@@ -68,6 +84,11 @@ public class Enemy : MonoBehaviour, ISerializable
         rb.isKinematic = true;
     }
 
+    /*
+     * OnCollisionEnter2D - handles physics collisions
+     * Params:
+     *  - Collision2D col: the other object being collided with
+     */
     void OnCollisionEnter2D(Collision2D col)
     {
         if (col.gameObject.tag == "bullets")
@@ -104,6 +125,11 @@ public class Enemy : MonoBehaviour, ISerializable
 
     }
 
+    /*
+     * OnTriggerEnter2D - collisions, but only used for non-physics objects
+     * Params:
+     *  - Collision2D col: the other object being collided with
+     */
     void OnTriggerEnter2D(Collider2D col)
     {
         if (col.GetComponent<Collider2D>().name != "GroundMaterial")
@@ -112,6 +138,7 @@ public class Enemy : MonoBehaviour, ISerializable
         }
     }
 
+    /// Serial Methods, see Serial Namespace 
     public ISerialDataStore GetCurrentState()
     {
         return new SaveEnemy(   isMovingRight, isGrounded,

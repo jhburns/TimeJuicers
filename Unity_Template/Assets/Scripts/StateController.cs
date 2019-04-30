@@ -83,6 +83,9 @@ public class StateController : MonoBehaviour
         StopRewindUI();
     }
 
+    /*
+     * RewindTime - checks wheter player is trying to rewind or saves current game state
+     */
     private void RewindTime()
     {
         // https://docs.unity3d.com/ScriptReference/Input.GetKeyDown.html
@@ -102,6 +105,9 @@ public class StateController : MonoBehaviour
         }
     }
 
+    /*
+     * StartRewindUI - displays rewind graphics on press
+     */
     private void StartRewindUI()
     {
         // Prevents input when rewinding
@@ -128,10 +134,11 @@ public class StateController : MonoBehaviour
                 allowRewindTime = false;
             }
         }
-
-        // Prevents asyncing the GetKey and GetKeyDown inputs while inputting is disabled
     }
 
+    /*
+     * StopRewindUI - removes rewind graphics on let go
+     */
     private void StopRewindUI()
     {
         if ((Input.GetKeyUp(KeyCode.K) ||
@@ -189,17 +196,31 @@ public class StateController : MonoBehaviour
         }
     }
 
+    /*
+     * ToggleRewindUI - turns on/off graphics
+     * Params:
+     *  - bool turnOn: if true then graphics are enabled
+     */
     private void ToggleRewindUI(bool turnOn)
     {
         RewindIcon.enabled = turnOn;
         FilterImg.enabled = turnOn;
     }
 
+    /*
+     * GetSavedFrameCount - getter for pastStates count
+     * Returns: int of the size of pastStates stack
+     */
     public int GetSavedFrameCount()
     {
         return pastStates.Count;
     }
 
+    /*
+     * DeleteStates - removes the amount of frames from the bottom of the stack
+     * Params:
+     *  - int frameCount: number of frames to try and remove, capped at current number of saved frames
+     */
     public void DeleteStates(int frameCount)
     {
         pastStates.RemoveBottom(Mathf.Clamp(frameCount, 0, pastStates.Count));
