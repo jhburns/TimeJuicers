@@ -76,7 +76,7 @@ public class TimeJuiceUI : MonoBehaviour
         {
             Color barColor = bar.GetComponent<Image>().color;
             bar.GetComponent<Image>().color = new Color(barColor.r, barColor.g, barColor.b, i);
-            i -= rate;
+            i -= rate; //Not based on time due to the game likely being paused
             yield return 0;
         }
 

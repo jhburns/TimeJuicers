@@ -16,7 +16,9 @@ public class Enemy : MonoBehaviour, ISerializable
 
     private float storageX;
 
-    private float timeLeftInPlay; 
+    private float timeLeftInPlay;
+
+    public float spinRate; //IM
 
     /* 
      * Start - is called before the first frame update,
@@ -60,9 +62,11 @@ public class Enemy : MonoBehaviour, ISerializable
         if (isMovingRight && isGrounded && isAlive)
         {
             rb.velocity = new Vector2(speed, rb.velocity.y);
+            rb.MoveRotation( -(Time.deltaTime * spinRate) + rb.rotation);
         } else if (isGrounded && isAlive)
         {
             rb.velocity = new Vector2(-speed, rb.velocity.y);
+            rb.MoveRotation((Time.deltaTime * spinRate) + rb.rotation);
         }
 
         if (timeLeftInPlay < 0 && !isAlive)
@@ -71,6 +75,7 @@ public class Enemy : MonoBehaviour, ISerializable
         } else if (!isAlive) {
             timeLeftInPlay -= Time.deltaTime;
         }
+
     }
 
     /*
@@ -157,12 +162,19 @@ public class Enemy : MonoBehaviour, ISerializable
         isAlive = past.isAlive;
         timeLeftInPlay = past.timeLeftInPlay;
 
-        transform.position = new Vector2(past.positionX, past.positionY);
+        transform.position = new Vector3(past.positionX, past.positionY, 0); // Don't use rigid body to update or it will be jitters
         rb.velocity = Vector2.zero;
 
         rb.isKinematic = past.isKinematic;
         rb.angularVelocity = 0f;
-        rb.rotation = past.rotation;
+
+        // Can't use rb.rotation due to it causing jittery movement
+        // Have to convert normal 2d rotation to 3d to use transform.rotation
+        // The 2D rotation value is actually along the Z-Axis
+        Vector3 currentRot = transform.rotation.eulerAngles;
+        Vector3 newRot = new Vector3(currentRot.x, currentRot.y, past.rotation);
+        transform.rotation = Quaternion.Euler(newRot);
+
     }
 }
 
