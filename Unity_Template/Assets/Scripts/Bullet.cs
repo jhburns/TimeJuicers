@@ -16,9 +16,13 @@ public class Bullet : MonoBehaviour, ISerializable
     private float timeLeftInPLay;
     public float maxTime; //IM
 
-    public bool IsMovingRight { get; private set; }
+    public bool IsMovingRight { get; private set; } // Used by other objects to know where the bullet is headed
 
-    // Start is called before the first frame update
+    /*
+     * Start - called before the first frame,
+     * Sets up rigidbody physics,
+     * Saves the starting position of the enemy so it can be stored latter
+     */
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -27,6 +31,9 @@ public class Bullet : MonoBehaviour, ISerializable
         StoreStartingPos();
     }
 
+    /*
+     * StoreStartingPos - initalizes storage vars and isInPlay
+     */
     private void StoreStartingPos()
     {
         storageX = transform.position.x;
@@ -34,13 +41,20 @@ public class Bullet : MonoBehaviour, ISerializable
         isInPlay = false;
     }
 
-    // Update is called once per frame
+    /*
+     * Update - is called once per frame,
+     * checks to see if bullet has expired in the scene
+     */
     void Update()
     {
-
-        //HasTimeEnded();
+        HasTimeEnded();
     }
 
+    /*
+     * InPlay - 
+     * Params:
+     *  - bool goRight: direction the bullet is heading in, true when heading right
+     */
     public void InPlay(bool goRight)
     {
         isInPlay = true;
@@ -58,6 +72,9 @@ public class Bullet : MonoBehaviour, ISerializable
         IsMovingRight = goRight;
     }
 
+    /*
+     * HasTimeEnded - stores the bullets after a period of time, so it doesn't move forever
+     */
     private void HasTimeEnded()
     {
         if (timeLeftInPLay < 0)
@@ -69,17 +86,26 @@ public class Bullet : MonoBehaviour, ISerializable
         }
     }
 
+    /*
+     * OnCollisionEnter2D - prevents bullet from traveling through enemies, walls
+     * Param:
+     *  - Collision2D col: the other object being collided with
+     */
     void OnCollisionEnter2D(Collision2D col)
     {
         Store();
     }
 
+    /*
+     * Store - moves bullet bellow stage and stops it from moving
+     */
     private void Store()
     {
         transform.position = new Vector2(storageX, storageY);
         rb.velocity = new Vector2(0, 0);
     }
 
+    /// Serial Methods, see Serial Namespace 
     public ISerialDataStore GetCurrentState()
     {
         return new SaveBullet(  isInPlay, timeLeftInPLay,

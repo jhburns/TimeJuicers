@@ -27,11 +27,14 @@ public class GlobalUI : MonoBehaviour, ISerializable
 
     public Text rewindPrompt;
     public Text restartPrompt;
-    private bool fadeInWhichPrompt; // true mean rewind, false restart
+    private bool fadeInWhichPrompt; // true means rewind, false restart
     private float startingAlphaPromt;
 
     public SceneController scene;
 
+    /*
+     * Start - sets up vars
+     */
     void Start()
     {
         Time.timeScale = 1f; // Prevents the game from being frozen when restarting
@@ -39,6 +42,9 @@ public class GlobalUI : MonoBehaviour, ISerializable
         Init();
     }
 
+    /*
+     * Init - sets up many of the interface variables
+     */
     private void Init()
     {
         IsAlive = true;
@@ -59,6 +65,10 @@ public class GlobalUI : MonoBehaviour, ISerializable
         restartPrompt.color = GetAlphaChange(restartPrompt, 0f);
     }
 
+    /*
+    * Update - is called once per frame,
+    * Checks every frame if death interface animations should be done
+    */
     void Update()
     {
         if (!IsAlive)
@@ -76,6 +86,9 @@ public class GlobalUI : MonoBehaviour, ISerializable
         CheckResurrected();
     }
 
+    /*
+     * AnimateDeath - triggers animations for death interface 
+     */
     private void AnimateDeath()
     {
         if (deathAnimationTrigger < 9.8f)
@@ -120,6 +133,10 @@ public class GlobalUI : MonoBehaviour, ISerializable
 
     }
 
+    /*
+     * PauseGame - stops time, and state controller,
+     * Starts a couroutine to animate the time juice loss
+     */
     private void PauseGame()
     {
         Time.timeScale = 0f;
@@ -133,6 +150,9 @@ public class GlobalUI : MonoBehaviour, ISerializable
         }
     }
 
+    /*
+     * PromptOnDeath - determines, then displays, the correct text prompting the player for input
+     */
     private void PromptOnDeath() {
         if (fadeInWhichPrompt)
         {
@@ -146,6 +166,9 @@ public class GlobalUI : MonoBehaviour, ISerializable
         }
     }
 
+    /*
+     * CheckResurrected - needed to prevent player from rewwinding until death display is completed  
+     */
     private void CheckResurrected()
     {
         if (IsAlive)
@@ -154,6 +177,10 @@ public class GlobalUI : MonoBehaviour, ISerializable
         }
     }
 
+    /*
+     * OnDeath - called by player object when they collide with something that causes death,
+     * Sets a lot of vars to trigger death
+     */
     public void OnDeath()
     {
         IsAlive = false;
@@ -169,6 +196,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
         deathAnimationTrigger = 10f;
     }
 
+    /// Serial Methods, see Serial Namespace 
     public ISerialDataStore GetCurrentState()
     {
         return new SaveUI(  IsAlive, filterImg.enabled, 

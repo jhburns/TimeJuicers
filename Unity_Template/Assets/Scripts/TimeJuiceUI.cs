@@ -14,17 +14,28 @@ public class TimeJuiceUI : MonoBehaviour
     public Color deathBarColor;
     public float fadeRate;
 
+    /*
+    * Start - is called before the first frame update,
+    * Sets the max value
+    */
     void Start()
     {
         timeBar.maxValue = globalState.frameCount;
     }
 
+    /* 
+     * Update - is called once per frame,
+     * Animates the time bar based on the current number of saved frames
+     */
     void Update()
     {
         timeBar.value = globalState.GetSavedFrameCount();
-
     }
 
+    /*
+     * DecreaseBar - Animation for time bar losing time juice
+     * Returns: IEnumerator menaing this is an async function
+     */
     public IEnumerator DecreaseBar()
     {
         RectTransform removedJuice =  Instantiate(timeBar.fillRect, timeBar.fillRect.transform.position, timeBar.fillRect.transform.rotation, timeBar.fillRect.parent);
@@ -50,6 +61,13 @@ public class TimeJuiceUI : MonoBehaviour
     }
 
     // http://www.theappguruz.com/blog/how-to-use-coroutines-in-unity
+    /*
+     * FadeBar - fades out the lost juice bar
+     * Params:
+     *  - RectTransform bar: the shape to be animated
+     *  - float rate: change in opacity every frame
+     * Returns: IEnumerator meaning this is an async function
+     */
     private IEnumerator FadeBar(RectTransform bar, float rate)
     {
         float i = 1;
@@ -62,8 +80,6 @@ public class TimeJuiceUI : MonoBehaviour
             yield return 0;
         }
 
-
         Destroy(bar.gameObject);
-        
     }
 }
