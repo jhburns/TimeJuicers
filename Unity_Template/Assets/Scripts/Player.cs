@@ -109,6 +109,7 @@ public class Player : MonoBehaviour, ISerializable
            )
         {
             SetRightInitialVel();
+            transform.localScale = new Vector3(1, 1, 1);
         }
 
         if (Input.GetKeyDown(KeyCode.LeftArrow) || 
@@ -116,6 +117,7 @@ public class Player : MonoBehaviour, ISerializable
            )
         {
             SetLeftInitialVel();
+            transform.localScale = new Vector3(-1, 1, 1);
         }
 
         ControllerInitVelSet();
