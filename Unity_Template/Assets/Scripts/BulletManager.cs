@@ -95,6 +95,14 @@ public class BulletManager : MonoBehaviour, ISerializable
 
         currentBul.transform.position = new Vector2(xPos, player.transform.position.y);
         currentBul.InPlay(player.MovingRight);
+        
+        if (player.MovingRight)
+        {
+            currentBul.transform.localScale = new Vector3(1, 1, 1);
+        } else
+        {
+            currentBul.transform.localScale = new Vector3(-1, 1, 1);
+        }
 
         bulletIndex = (bulletIndex + 1) % maxBullets;
     }

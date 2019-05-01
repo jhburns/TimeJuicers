@@ -124,6 +124,15 @@ public class Bullet : MonoBehaviour, ISerializable
         rb.velocity = new Vector2(past.velocityX, past.velocityY);
         transform.position = new Vector2(past.positionX, past.positionY);
         IsMovingRight = past.IsMovingRight;
+
+        if (past.IsMovingRight)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+        else
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
     }
 }
 
