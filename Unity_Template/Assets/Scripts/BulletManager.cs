@@ -32,7 +32,7 @@ public class BulletManager : MonoBehaviour, ISerializable
      */
     private void InitTime()
     {
-        nextFire = Time.time;
+        nextFire = 0f;
     }
 
     /*
@@ -66,12 +66,15 @@ public class BulletManager : MonoBehaviour, ISerializable
              Input.GetAxisRaw("RightTrigger") == 1
             )  
 
-             && Time.time > nextFire
+             && nextFire < 0 
              && deathHandler.IsAlive
            )
         {
-            nextFire = Time.time + fireRate;
+            nextFire = fireRate;
             Fire();
+        } else
+        {
+            nextFire -= Time.deltaTime;
         }
 
     }
