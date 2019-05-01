@@ -118,7 +118,7 @@ MonoBehaviour:
   isMovingRight: 1
   speed: 2.3
   isAlive: 0
-  spinRate: 170
+  spinRate: 270
 --- !u!58 &175630989015544201
 CircleCollider2D:
   m_ObjectHideFlags: 0
