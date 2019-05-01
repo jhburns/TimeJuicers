@@ -57,7 +57,6 @@ public class Player : MonoBehaviour, ISerializable
 
         leftHorizontalAxisDown = true;
         rightHorizontalAxisDown = true;
-
     }
 
     /* Update is called once per frame,
@@ -76,7 +75,6 @@ public class Player : MonoBehaviour, ISerializable
             MoveDirection();
 
         }
-
     }
 
     /*
@@ -97,7 +95,6 @@ public class Player : MonoBehaviour, ISerializable
             rb.AddForce(new Vector2(0, jumpHeight), ForceMode2D.Impulse);
             grounded = false;
             jumps--;
-            Debug.Log("jump");
         }
     }
 
@@ -313,8 +310,14 @@ public class Player : MonoBehaviour, ISerializable
         rightHorizontalAxisDown = past.rightHorizontalAxisDown;
         leftHorizontalAxisDown = past.leftHorizontalAxisDown;
 
-        Debug.Log(jumps);
-
+        if (past.movingRight)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+        else
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
     }
 }
 
