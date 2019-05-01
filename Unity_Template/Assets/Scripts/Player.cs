@@ -74,6 +74,7 @@ public class Player : MonoBehaviour, ISerializable
             InitialVelocitySet();
 
             MoveDirection();
+
         }
 
     }
@@ -96,6 +97,7 @@ public class Player : MonoBehaviour, ISerializable
             rb.AddForce(new Vector2(0, jumpHeight), ForceMode2D.Impulse);
             grounded = false;
             jumps--;
+            Debug.Log("jump");
         }
     }
 
@@ -272,6 +274,7 @@ public class Player : MonoBehaviour, ISerializable
                 rb.velocity = Vector2.zero; // Prevents unlimited jump height
                 rb.AddForce(new Vector2(0, jumpHeight * 0.9f), ForceMode2D.Impulse);
             }
+
         }
 
         if ((col.gameObject.GetComponent<Enemy>() != null ||
@@ -307,6 +310,9 @@ public class Player : MonoBehaviour, ISerializable
 
         rightHorizontalAxisDown = past.rightHorizontalAxisDown;
         leftHorizontalAxisDown = past.leftHorizontalAxisDown;
+
+        Debug.Log(jumps);
+
     }
 }
 
