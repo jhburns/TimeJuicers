@@ -11065,12 +11065,12 @@ PrefabInstance:
     - target: {fileID: 2803580005169709630, guid: a0209279e1b0f4bb5b20d7ed77f9bf03,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 47.65
+      value: 47.55
       objectReference: {fileID: 0}
     - target: {fileID: 2803580005169709630, guid: a0209279e1b0f4bb5b20d7ed77f9bf03,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 25.23
+      value: 25.1
       objectReference: {fileID: 0}
     - target: {fileID: 2803580005169709630, guid: a0209279e1b0f4bb5b20d7ed77f9bf03,
         type: 3}
@@ -11090,12 +11090,12 @@ PrefabInstance:
     - target: {fileID: 2803580005169709630, guid: a0209279e1b0f4bb5b20d7ed77f9bf03,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: -0.0029590477
       objectReference: {fileID: 0}
     - target: {fileID: 2803580005169709630, guid: a0209279e1b0f4bb5b20d7ed77f9bf03,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.99999565
       objectReference: {fileID: 0}
     - target: {fileID: 2803580005169709630, guid: a0209279e1b0f4bb5b20d7ed77f9bf03,
         type: 3}
@@ -11115,13 +11115,19 @@ PrefabInstance:
     - target: {fileID: 2803580005169709630, guid: a0209279e1b0f4bb5b20d7ed77f9bf03,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: -0.33900002
       objectReference: {fileID: 0}
     - target: {fileID: 2803580005169709629, guid: a0209279e1b0f4bb5b20d7ed77f9bf03,
         type: 3}
       propertyPath: scene
       value: 
       objectReference: {fileID: 1056783426}
+    - target: {fileID: 2803580005169709628, guid: a0209279e1b0f4bb5b20d7ed77f9bf03,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 4277afd9031044e3abd5e5de0e146647,
+        type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a0209279e1b0f4bb5b20d7ed77f9bf03, type: 3}
 --- !u!4 &1351045501 stripped
@@ -12301,7 +12307,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.5294118, g: 0.80784315, b: 0.92156863, a: 0}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
