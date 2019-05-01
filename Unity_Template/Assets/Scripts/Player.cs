@@ -108,7 +108,6 @@ public class Player : MonoBehaviour, ISerializable
            )
         {
             SetRightInitialVel();
-            transform.localScale = new Vector3(1, 1, 1);
         }
 
         if (Input.GetKeyDown(KeyCode.LeftArrow) || 
@@ -116,7 +115,6 @@ public class Player : MonoBehaviour, ISerializable
            )
         {
             SetLeftInitialVel();
-            transform.localScale = new Vector3(-1, 1, 1);
         }
 
         ControllerInitVelSet();
@@ -188,6 +186,7 @@ public class Player : MonoBehaviour, ISerializable
         { 
             AccelerateDir(1);
             rb.velocity = new Vector2(velHorz, rb.velocity.y);
+            transform.localScale = new Vector3(1, 1, 1);
         }
         else if (Input.GetKey(KeyCode.LeftArrow) ||
                  Input.GetKey(KeyCode.A) ||
@@ -196,6 +195,7 @@ public class Player : MonoBehaviour, ISerializable
         {
             AccelerateDir(-1);
             rb.velocity = new Vector2(velHorz, rb.velocity.y);
+            transform.localScale = new Vector3(-1, 1, 1);
         }
         else
         {
