@@ -4852,7 +4852,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   axisBounds: 0.5
-  nextSceneName: TestingNext
+  nextSceneName: 3MoreTools
 --- !u!4 &1056783427
 Transform:
   m_ObjectHideFlags: 0
@@ -6001,6 +6001,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2803580005169709629, guid: a0209279e1b0f4bb5b20d7ed77f9bf03,
+        type: 3}
+      propertyPath: scene
+      value: 
+      objectReference: {fileID: 1056783426}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a0209279e1b0f4bb5b20d7ed77f9bf03, type: 3}
 --- !u!4 &1351045501 stripped
