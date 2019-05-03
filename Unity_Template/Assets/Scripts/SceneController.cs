@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Serial;
+using UnityEngine.UI;
 
 public class SceneController : MonoBehaviour, ISerializable
 {
@@ -10,6 +11,17 @@ public class SceneController : MonoBehaviour, ISerializable
     public float axisBounds; // likely should be the same as on play, but doesn't have to be, IM
 
     public string nextSceneName;
+    private AsyncOperation nextScene; // After the scene is loaded, it is put here
+                                      // Be careful not to reference it before it is guranteed to be safe
+    private bool mayProcceed;
+
+    public GlobalUI interfaceHandler;
+
+    public Image winFilter;
+    public Text winText;
+    public Text winTextShadow;
+    public Text nextLevelPrompt;
+    public float fadeInRate;
 
     /*
      * Start - is called before the first frame update
@@ -17,6 +29,7 @@ public class SceneController : MonoBehaviour, ISerializable
     void Start()
     {
         Init();
+        InitUI();
     }
 
     /*
@@ -25,6 +38,18 @@ public class SceneController : MonoBehaviour, ISerializable
     private void Init()
     {
         jumpTriggersRestart = false;
+        mayProcceed = false;
+    }
+
+    /*
+     * InitUI - disables UI elements on start
+     */
+    private void InitUI()
+    {
+        winFilter.enabled = false;
+        winText.enabled = false;
+        winTextShadow.enabled = false;
+        nextLevelPrompt.enabled = false;
     }
 
     /*
@@ -33,29 +58,29 @@ public class SceneController : MonoBehaviour, ISerializable
      */
     void Update()
     {
-        if (jumpTriggersRestart)
+        if (jumpTriggersRestart && CheckJumpDown())
         {
-            CheckAndRestart();
+            //https://answers.unity.com/questions/1422096/reload-current-scene-with-scene-manager.html
+            Scene scene = SceneManager.GetActiveScene();
+            SceneManager.LoadScene(scene.name);
+        } else if (mayProcceed && CheckJumpDown())
+        {
+            nextScene.allowSceneActivation = true;
         }
+
     }
 
     /*
      * CheckAndRestart - reloads scene on trigger inputs
      */
-    private void CheckAndRestart()
+    private bool CheckJumpDown()
     {
-        if (Input.GetKeyDown(KeyCode.Space) ||
-            Input.GetKeyDown(KeyCode.W) ||
-            Input.GetKeyDown(KeyCode.UpArrow) ||
-            Input.GetKeyDown(KeyCode.Joystick1Button0) || // A button on xbox 360 controller
-            Input.GetKeyDown(KeyCode.Joystick1Button2) || // X button on xbox 360 controller
-            Input.GetAxisRaw("Vertical") > axisBounds
-           )
-        {
-            //https://answers.unity.com/questions/1422096/reload-current-scene-with-scene-manager.html
-            Scene scene = SceneManager.GetActiveScene();
-            SceneManager.LoadScene(scene.name);
-        }
+        return  Input.GetKeyDown(KeyCode.Space) ||
+                Input.GetKeyDown(KeyCode.W) ||
+                Input.GetKeyDown(KeyCode.UpArrow) ||
+                Input.GetKeyDown(KeyCode.Joystick1Button0) || // A button on xbox 360 controller
+                Input.GetKeyDown(KeyCode.Joystick1Button2) || // X button on xbox 360 controller
+                Input.GetAxisRaw("Vertical") > axisBounds;
     }
 
     /*
@@ -71,7 +96,72 @@ public class SceneController : MonoBehaviour, ISerializable
      */
     public void NextLevel()
     {
-        SceneManager.LoadScene(nextSceneName);
+        if (interfaceHandler.IsAlive)
+        {
+            interfaceHandler.CannotDie();
+            StartCoroutine(LoadNextSceneAsync());
+
+            StartCoroutine(FadeInUI(fadeInRate));
+
+            winFilter.enabled = true;
+            winText.enabled = true;
+            winTextShadow.enabled = true;
+            nextLevelPrompt.enabled = true;
+        }
+    }
+
+    // https://docs.unity3d.com/ScriptReference/SceneManagement.SceneManager.LoadSceneAsync.html
+
+    /*
+     * LoadNextSceneAsync - loads the next scene in the background, based on the given nextSceneName,
+     * Put the loaded scene trigger into the global nextScene variable
+     * 
+     */
+    private IEnumerator LoadNextSceneAsync()
+    {
+        AsyncOperation asyncSceneLoad = SceneManager.LoadSceneAsync(nextSceneName);
+        asyncSceneLoad.allowSceneActivation = false;
+
+
+        // Wait until the asynchronous scene fully loads
+        while (!asyncSceneLoad.isDone)
+        {
+
+            // https://docs.unity3d.com/ScriptReference/AsyncOperation-allowSceneActivation.html
+            if (asyncSceneLoad.progress >= 0.9f)
+            {
+                nextScene = asyncSceneLoad;
+                mayProcceed = true;
+                yield break;
+            }
+
+            yield return null;
+        }
+    }
+
+    private IEnumerator FadeInUI(float rate)
+    {
+        float i = 0;
+
+        while (i < 1)
+        {
+            ChangeOpacityUI(i);
+            i += rate * Time.deltaTime; // uses deltaTime unlike FadeBar due to the game never being pausable on win
+            yield return 0;
+        }
+    }
+
+    private void ChangeOpacityUI(float alpha)
+    {
+        winFilter.color = SetOpacity(winFilter, Mathf.Clamp(alpha, 0, 0.5f));
+        winText.color = SetOpacity(winText, alpha);
+        winTextShadow.color = SetOpacity(winTextShadow, alpha);
+        nextLevelPrompt.color = SetOpacity(nextLevelPrompt, alpha);
+    }
+
+    private Color SetOpacity(MaskableGraphic UIElement, float alpha)
+    {
+        return new Color(UIElement.color.r, UIElement.color.g, UIElement.color.b, alpha);
     }
 
     /// Serial Methods, see Serial Namespace 

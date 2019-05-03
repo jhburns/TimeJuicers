@@ -22,6 +22,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
     public StateController pastStates;
 
     private bool hasDied; //NOT serialized
+    private bool immortal; //NOT serlialized
 
     public TimeJuiceUI timeBarController;
 
@@ -48,6 +49,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
     private void Init()
     {
         IsAlive = true;
+        immortal = false;
 
         filterImg.enabled = false;
         startingAlphaFilter = filterImg.color.a;
@@ -183,17 +185,25 @@ public class GlobalUI : MonoBehaviour, ISerializable
      */
     public void OnDeath()
     {
-        IsAlive = false;
+        if (!immortal)
+        {
+            IsAlive = false;
 
-        filterImg.enabled = true;
-        deathText.enabled = true;
-        pastStates.RewindInputDisabled = true;
+            filterImg.enabled = true;
+            deathText.enabled = true;
+            pastStates.RewindInputDisabled = true;
 
-        rewindPrompt.enabled = true;
-        restartPrompt.enabled = true;
-        fadeInWhichPrompt = (pastStates.GetSavedFrameCount() - timeBarController.DeathPenaltyFrames > 0);
+            rewindPrompt.enabled = true;
+            restartPrompt.enabled = true;
+            fadeInWhichPrompt = (pastStates.GetSavedFrameCount() - timeBarController.DeathPenaltyFrames > 0);
 
-        deathAnimationTrigger = 10f;
+            deathAnimationTrigger = 10f;
+        }
+    }
+
+    public void CannotDie()
+    {
+        immortal = true;
     }
 
     /// Serial Methods, see Serial Namespace 
