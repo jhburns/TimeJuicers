@@ -319,7 +319,7 @@ public class Player : MonoBehaviour, ISerializable
 
             flag.transform.Rotate(flag.transform.rotation.x, flag.transform.rotation.y, flightVel / 10);
 
-            flightVel = Mathf.Clamp(flightVel + 2f, 0, maxFlightSpeed);
+            flightVel = Mathf.Clamp(flightVel + 0.7f, 0, maxFlightSpeed);
 
             yield return null;
         }

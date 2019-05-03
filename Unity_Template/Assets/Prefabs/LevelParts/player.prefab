@@ -135,3 +135,6 @@ MonoBehaviour:
   moveSpeed: 5
   axisBounds: 0.5
   deathHandler: {fileID: 0}
+  sceneCamera: {fileID: 0}
+  flag: {fileID: 0}
+  maxFlightSpeed: 500
