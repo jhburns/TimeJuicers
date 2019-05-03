@@ -23,6 +23,8 @@ public class SceneController : MonoBehaviour, ISerializable
     public Text nextLevelPrompt;
     public float fadeInRate;
 
+    public Player winningPlayer;
+
     /*
      * Start - is called before the first frame update
      */
@@ -72,6 +74,7 @@ public class SceneController : MonoBehaviour, ISerializable
 
     /*
      * CheckAndRestart - reloads scene on trigger inputs
+     * Returns: bool true if the player pressed down space on this frame
      */
     private bool CheckJumpDown()
     {
@@ -107,6 +110,8 @@ public class SceneController : MonoBehaviour, ISerializable
             winText.enabled = true;
             winTextShadow.enabled = true;
             nextLevelPrompt.enabled = true;
+
+            winningPlayer.Fly();
         }
     }
 
@@ -139,6 +144,12 @@ public class SceneController : MonoBehaviour, ISerializable
         }
     }
 
+    /*
+     * FadeInUI - grandually animates the win UI becoming more opaque
+     * Params:
+     *  - float rate: the speed at which the animate is performed 
+     * Returns: IEnumerator meaning this function is async
+     */
     private IEnumerator FadeInUI(float rate)
     {
         float i = 0;
@@ -151,14 +162,26 @@ public class SceneController : MonoBehaviour, ISerializable
         }
     }
 
+    /*
+     * ChangeOpacityUI - sets the opacity for every element
+     * Params:
+     *  - float alpha: the transparency of the color, range 0-1
+     */
     private void ChangeOpacityUI(float alpha)
     {
-        winFilter.color = SetOpacity(winFilter, Mathf.Clamp(alpha, 0, 0.5f));
+        winFilter.color = SetOpacity(winFilter, Mathf.Clamp(alpha, 0, 0.5f)); // Filter shouldn't transition to all white
         winText.color = SetOpacity(winText, alpha);
         winTextShadow.color = SetOpacity(winTextShadow, alpha);
         nextLevelPrompt.color = SetOpacity(nextLevelPrompt, alpha);
     }
 
+    /*
+     * SetOpacity - only changes the alpha of a given color
+     * Params:
+     *  - MaskableGraphic UIElement: the object to have its opacity changes
+     *  - float alpha: the new transparency value, range 0-1
+     * Returns: Color for the object
+     */
     private Color SetOpacity(MaskableGraphic UIElement, float alpha)
     {
         return new Color(UIElement.color.r, UIElement.color.g, UIElement.color.b, alpha);

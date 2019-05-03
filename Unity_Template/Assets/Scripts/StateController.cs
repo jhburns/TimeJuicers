@@ -97,7 +97,7 @@ public class StateController : MonoBehaviour
             && pastStates.Count > 1 // Check for greater than 1 to prevent initialization issues
             && allowRewindTime)
         {
-            RevetState();
+            RevertState();
         }
         else if (!IsPaused)
         {
@@ -171,9 +171,9 @@ public class StateController : MonoBehaviour
     }
 
     /*
-     * RevetState - sends stored state back to object
+     * RevertState - sends stored state back to object
      */
-    void RevetState()
+    void RevertState()
     {
         ISerialDataStore[] lastState = pastStates.Pop();
 

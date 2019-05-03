@@ -10,19 +10,43 @@ public class CameraController : MonoBehaviour, ISerializable
 
     public float minHeight; //IM
 
+    private bool isExactMode; //NOT serialized
+
+    /*
+     * Start - called before first frame,
+     * Sets up vars
+     */
+    private void Start()
+    {
+        isExactMode = false;
+    }
+
     /*
      * Update - called once per frame,
      * moves camera to new position, based on player position
      */
     private void Update()
     {
-        
         Vector3 newPosition = Target.position;
         newPosition.z = -10;
 
-        newPosition.y = Mathf.Clamp(newPosition.y, minHeight , float.PositiveInfinity);
-        transform.position = Vector3.Slerp(transform.position, newPosition, 0.05f);
+        if (isExactMode)
+        {
+            transform.position = newPosition;
+        }
+        else
+        {
+            newPosition.y = Mathf.Clamp(newPosition.y, minHeight, float.PositiveInfinity);
+            transform.position = Vector3.Slerp(transform.position, newPosition, 0.05f);
+        }
+    }
 
+    /*
+     * ExactMode - sets the camera to follow the player exactly
+     */
+    public void ExactMode()
+    {
+        isExactMode = true;
     }
 
     /// Serial Methods, see Serial Namespace 

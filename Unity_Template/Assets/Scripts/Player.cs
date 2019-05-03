@@ -25,6 +25,11 @@ public class Player : MonoBehaviour, ISerializable
 
     public GlobalUI deathHandler; //IM
 
+    public CameraController sceneCamera;
+    public WinFlag flag;
+    public float maxFlightSpeed;
+    private float flightVel;
+
     /* Start - is called before the first frame update
      * Initializes variables
      */
@@ -57,6 +62,8 @@ public class Player : MonoBehaviour, ISerializable
 
         leftHorizontalAxisDown = true;
         rightHorizontalAxisDown = true;
+
+        flightVel = 0.1f;
     }
 
     /* Update is called once per frame,
@@ -283,6 +290,39 @@ public class Player : MonoBehaviour, ISerializable
         {
             deathHandler.OnDeath();
          }
+    }
+
+    /*
+     * Fly - animation for player when they beat the level
+     */
+    public void Fly()
+    {
+        sceneCamera.ExactMode();
+        Destroy(flag.GetComponent<BoxCollider2D>());
+
+        // Has to set to flag postion or else the z value won't change
+        // Not sure why, I believe Unity skips only z changes in 2D mode to save resources
+        transform.position = new Vector3(flag.transform.position.x, flag.transform.position.y, 20); // Move Behind the flag
+
+        StartCoroutine(AnimateFlight());
+    }
+
+    private IEnumerator AnimateFlight()
+    {
+        while (true)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, flightVel);
+
+            Vector3 currentPos = transform.position;
+            currentPos.z = 10; //Makes sure flag is in front of player
+            flag.transform.position = currentPos;
+
+            flag.transform.Rotate(flag.transform.rotation.x, flag.transform.rotation.y, flightVel / 10);
+
+            flightVel = Mathf.Clamp(flightVel + 2f, 0, maxFlightSpeed);
+
+            yield return null;
+        }
     }
 
     /// Serial Methods, see Serial Namespace 
