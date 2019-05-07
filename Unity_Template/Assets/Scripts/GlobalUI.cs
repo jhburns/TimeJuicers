@@ -81,7 +81,14 @@ public class GlobalUI : MonoBehaviour, ISerializable
             if (deathAnimationTrigger > 0)
             {
                 AnimateDeath();
-                deathAnimationTrigger -= Time.deltaTime;
+
+                if (Time.deltaTime > 0)
+                {
+                    deathAnimationTrigger -= Time.deltaTime;
+                } else
+                {
+                    deathAnimationTrigger -= 0.015f; // When time is paused, animations may not be timed perfectly
+                }
             }
         }
 
@@ -131,7 +138,9 @@ public class GlobalUI : MonoBehaviour, ISerializable
             PauseGame();
         }
 
-        if (deathAnimationTrigger < 8.5f)
+        // After here animation timing is now frame based, not time based
+
+        if (deathAnimationTrigger < 7.5f)
         {
             scene.AllowRestart();
         }
