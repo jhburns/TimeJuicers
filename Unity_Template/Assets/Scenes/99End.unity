@@ -774,6 +774,7 @@ RectTransform:
   - {fileID: 644784436}
   - {fileID: 126217847}
   - {fileID: 458158528}
+  - {fileID: 844928931}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1018,6 +1019,85 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 749774936}
   m_CullTransparentMesh: 0
+--- !u!1 &844928930
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 844928931}
+  - component: {fileID: 844928933}
+  - component: {fileID: 844928932}
+  m_Layer: 5
+  m_Name: OutOfJuiceText
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &844928931
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844928930}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 549037718}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 13, y: -155}
+  m_SizeDelta: {x: 513.7, y: 129.3}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &844928932
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844928930}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 0, b: 0.04705906, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+    m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
+      Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  m_FontData:
+    m_Font: {fileID: 12800000, guid: 0703c196302c26242902f8863ef585c7, type: 3}
+    m_FontSize: 40
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 1
+    m_MaxSize: 100
+    m_Alignment: 1
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 1
+    m_VerticalOverflow: 1
+    m_LineSpacing: 1
+  m_Text: Sorry, Out of Time Juice
+--- !u!222 &844928933
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844928930}
+  m_CullTransparentMesh: 1
 --- !u!4 &849689629 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7915029158167226345, guid: bad6f8321797e4643913cc5bbe01c8c6,
@@ -1318,6 +1398,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   axisBounds: 0.5
   nextSceneName: TestingNext
+  interfaceHandler: {fileID: 0}
+  winFilter: {fileID: 0}
+  winText: {fileID: 0}
+  winTextShadow: {fileID: 0}
+  nextLevelPrompt: {fileID: 0}
+  fadeInRate: 0
+  winningPlayer: {fileID: 0}
 --- !u!4 &1056783427
 Transform:
   m_ObjectHideFlags: 0
@@ -1443,6 +1530,7 @@ MonoBehaviour:
   timeBarController: {fileID: 953955707}
   rewindPrompt: {fileID: 126217848}
   restartPrompt: {fileID: 458158529}
+  outOfJuiceText: {fileID: 844928932}
   scene: {fileID: 1056783426}
 --- !u!4 &1283012050
 Transform:
