@@ -28,6 +28,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
 
     public Text rewindPrompt;
     public Text restartPrompt;
+    public Text outOfJuiceText;
     private bool fadeInWhichPrompt; // true means rewind, false restart
     private float startingAlphaPromt;
 
@@ -62,9 +63,11 @@ public class GlobalUI : MonoBehaviour, ISerializable
 
         rewindPrompt.enabled = false;
         restartPrompt.enabled = false;
+        outOfJuiceText.enabled = false;
         startingAlphaPromt = rewindPrompt.color.a; //Lazy, starting alpha is only dependant on rewind
         rewindPrompt.color = GetAlphaChange(rewindPrompt, 0f);
         restartPrompt.color = GetAlphaChange(restartPrompt, 0f);
+        outOfJuiceText.color = GetAlphaChange(outOfJuiceText, 0f);
     }
 
     /*
@@ -110,7 +113,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
         {
             float minChange = 2f;
 
-            float newX = Mathf.Lerp(timeBar.transform.position.x, 580, 0.2f);
+            float newX = Mathf.Lerp(timeBar.transform.position.x, 600, 0.2f);
             float newY = Mathf.Lerp(timeBar.transform.position.y, 347, 0.2f);
 
             if (Mathf.Abs(580 - newX) < minChange)
@@ -177,6 +180,8 @@ public class GlobalUI : MonoBehaviour, ISerializable
         {
             float nextAlphaText = Mathf.Lerp(restartPrompt.color.a, startingAlphaPromt, 0.05f);
             restartPrompt.color = GetAlphaChange(restartPrompt, nextAlphaText);
+
+            outOfJuiceText.color = GetAlphaChange(outOfJuiceText, nextAlphaText);
         }
     }
 
@@ -203,6 +208,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
 
             filterImg.enabled = true;
             deathText.enabled = true;
+            outOfJuiceText.enabled = true;
             pastStates.RewindInputDisabled = true;
 
             rewindPrompt.enabled = true;
@@ -227,8 +233,9 @@ public class GlobalUI : MonoBehaviour, ISerializable
                             timeBar.transform.position.x, timeBar.transform.position.y,
                             timeBar.transform.localScale.x, Time.timeScale,
                             pastStates.IsPaused, rewindPrompt.enabled,
-                            restartPrompt.enabled, rewindPrompt.color.a,
-                            restartPrompt.color.a
+                            restartPrompt.enabled, outOfJuiceText.enabled,
+                            rewindPrompt.color.a, restartPrompt.color.a, 
+                            outOfJuiceText.color.a
                          );
     }
 
@@ -251,8 +258,11 @@ public class GlobalUI : MonoBehaviour, ISerializable
 
         rewindPrompt.enabled = past.rewindPrompting;
         restartPrompt.enabled = past.restartPrompting;
+        outOfJuiceText.enabled = past.outOfJuicing;
+
         rewindPrompt.color = GetAlphaChange(rewindPrompt, past.rewindPromptAlpha);
         restartPrompt.color = GetAlphaChange(restartPrompt, past.restartPromptAlpha);
+        outOfJuiceText.color = GetAlphaChange(outOfJuiceText, past.outOfJuiceAlpha);
     }
 
     private Color GetAlphaChange(MaskableGraphic ui, float alpha)
@@ -282,9 +292,11 @@ internal class SaveUI : ISerialDataStore
 
     public bool rewindPrompting { get; private set; }
     public bool restartPrompting { get; private set; }
+    public bool outOfJuicing { get; private set; }
 
     public float rewindPromptAlpha { get; private set; }
     public float restartPromptAlpha { get; private set; }
+    public float outOfJuiceAlpha { get; private set; }
 
 
     public SaveUI(  bool alive, bool filter,
@@ -293,8 +305,9 @@ internal class SaveUI : ISerialDataStore
                     float barX, float barY,
                     float barScale, float time,
                     bool pause, bool rewindP,
-                    bool restartP, float rewindA,
-                    float restartA
+                    bool restartP, bool outJ,
+                    float rewindA, float restartA, 
+                    float outA
                  )
     {
         IsAlive = alive;
@@ -310,7 +323,9 @@ internal class SaveUI : ISerialDataStore
         isPaused = pause;
         rewindPrompting = rewindP;
         restartPrompting = restartP;
+        outOfJuicing = outJ;
         rewindPromptAlpha = rewindA;
         restartPromptAlpha = restartA;
+        outOfJuiceAlpha = outA;
     }
 }
