@@ -82,7 +82,6 @@ public class Player : MonoBehaviour, ISerializable
             InitialVelocitySet();
 
             MoveDirection();
-
         }
 
     }
