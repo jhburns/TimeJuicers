@@ -30,6 +30,8 @@ public class Player : MonoBehaviour, ISerializable
     public float maxFlightSpeed;
     private float flightVel;
 
+    public float deathShrinkRatio; // range 0-1 inclusive
+
     /* Start - is called before the first frame update
      * Initializes variables
      */
@@ -82,6 +84,7 @@ public class Player : MonoBehaviour, ISerializable
             MoveDirection();
 
         }
+
     }
 
     /*
@@ -289,7 +292,15 @@ public class Player : MonoBehaviour, ISerializable
             && deathHandler.IsAlive) // Can only die once, or states will break
         {
             deathHandler.OnDeath();
+            AnimateDeath();
          }
+    }
+
+    public void AnimateDeath()
+    {
+        rb.freezeRotation = false;
+        rb.rotation = 90f; // 90 degrees is on the side
+        transform.localScale = new Vector3(deathShrinkRatio, 1, 1);
     }
 
     /*
@@ -329,8 +340,10 @@ public class Player : MonoBehaviour, ISerializable
     public ISerialDataStore GetCurrentState()
     {
         return new SavePlayer(  MovingRight, grounded, 
-                                jumps, transform.position.x, transform.position.y,
-                                leftHorizontalAxisDown, rightHorizontalAxisDown
+                                jumps, transform.position.x, 
+                                transform.position.y, leftHorizontalAxisDown, 
+                                rightHorizontalAxisDown, rb.freezeRotation,
+                                rb.rotation, transform.localScale.x
                              );
     }
 
@@ -350,14 +363,10 @@ public class Player : MonoBehaviour, ISerializable
         rightHorizontalAxisDown = past.rightHorizontalAxisDown;
         leftHorizontalAxisDown = past.leftHorizontalAxisDown;
 
-        if (past.movingRight)
-        {
-            transform.localScale = new Vector3(1, 1, 1);
-        }
-        else
-        {
-            transform.localScale = new Vector3(-1, 1, 1);
-        }
+        rb.freezeRotation = past.freezeRotation;
+        rb.rotation = past.rotation;
+
+        transform.localScale = new Vector3(past.localXScale, 1, 1);
     }
 }
 
@@ -376,10 +385,16 @@ internal class SavePlayer : ISerialDataStore
 
     public bool isDead { get; private set; }
 
+    public bool freezeRotation { get; private set; }
+    public float rotation { get; private set; }
+
+    public float localXScale { get; private set; }
+
     public SavePlayer(bool movingR, bool g,
                         int j, float posX,
                         float posY, bool leftDown,
-                        bool rightDown
+                        bool rightDown, bool fRot,
+                        float rot, float lxScale
                      )
     {
         movingRight = movingR;
@@ -392,5 +407,10 @@ internal class SavePlayer : ISerialDataStore
 
         leftHorizontalAxisDown = leftDown;
         rightHorizontalAxisDown = rightHorizontalAxisDown;
+
+        freezeRotation = fRot;
+        rotation = rot;
+
+        localXScale = lxScale;
     }
 }

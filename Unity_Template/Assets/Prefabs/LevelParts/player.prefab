@@ -138,3 +138,4 @@ MonoBehaviour:
   sceneCamera: {fileID: 0}
   flag: {fileID: 0}
   maxFlightSpeed: 500
+  deathShrinkRatio: 0.8
