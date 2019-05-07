@@ -128,9 +128,12 @@ public class GlobalUI : MonoBehaviour, ISerializable
 
         if (deathAnimationTrigger < 8.5f)
         {
-            scene.AllowRestart();
-
             PauseGame();
+        }
+
+        if (deathAnimationTrigger < 8.5f)
+        {
+            scene.AllowRestart();
         }
 
     }
