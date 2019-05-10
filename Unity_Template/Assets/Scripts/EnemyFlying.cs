@@ -42,7 +42,6 @@ public class EnemyFlying : MonoBehaviour, ISerializable
         rb = GetComponent<Rigidbody2D>();
         rb.gravityScale = 0f;
         rb.interpolation = RigidbodyInterpolation2D.Interpolate; //Prevents jittery camera
-        rb.freezeRotation = true;
     }
 
     /*
