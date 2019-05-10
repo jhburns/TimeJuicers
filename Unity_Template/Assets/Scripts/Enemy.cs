@@ -39,8 +39,9 @@ public class Enemy : MonoBehaviour, ISerializable
     private void InitRigid()
     {
         rb = GetComponent<Rigidbody2D>();
-        rb.gravityScale = 3f;
         rb.interpolation = RigidbodyInterpolation2D.Interpolate; //Prevents jittery camera
+
+        rb.gravityScale = 3f;
     }
 
     /*
