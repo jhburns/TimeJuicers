@@ -121,25 +121,24 @@ public class EnemyFlying : MonoBehaviour, ISerializable
     {
         if (col.gameObject.tag == "bullets")
         {
-            isAlive = false;
 
             Bullet bul = col.gameObject.GetComponent<Bullet>();
             int direction = 1;
 
             rb.AddForce(new Vector2(3f * direction, 9f), ForceMode2D.Impulse);
             rb.AddTorque(100f * direction, ForceMode2D.Force);
-
-            timeLeftInPlay = 0.15f;
         }
 
         if (col.gameObject.name == "DeathZone")
         {
             Store();
         }
-
-        if (col.gameObject.name == "player")
+        else
         {
+            isAlive = false;
+
             isMoving = false;
+            timeLeftInPlay = 0.15f;
         }
 
     }
