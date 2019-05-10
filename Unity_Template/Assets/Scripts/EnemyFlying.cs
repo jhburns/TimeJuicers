@@ -17,7 +17,12 @@ public class EnemyFlying : MonoBehaviour, ISerializable
     private float timeLeftInPlay;
 
     public float maxRange;
-    public bool isHeadingUp;
+    private bool isHeadingUp;
+
+    private bool isMoving; // Prevents the enemy from having jittery movement after killing
+
+    public bool startOnTop; //IM
+                            //When true the enemy starts flying from the top of their cycle
 
     /* 
      * Start - is called before the first frame update,
@@ -50,6 +55,12 @@ public class EnemyFlying : MonoBehaviour, ISerializable
         storageX = transform.position.x;
         storageY = transform.position.y;
         isHeadingUp = true;
+        isMoving = true;
+
+        if (startOnTop)
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y + maxRange, transform.position.z);
+        }
     }
 
     /* 
@@ -59,26 +70,6 @@ public class EnemyFlying : MonoBehaviour, ISerializable
      */
     void Update()
     {
-        float newPositionY = (speed * Time.deltaTime);
-
-        if (transform.position.y + newPositionY > storageY + maxRange)
-        {
-            isHeadingUp = false;
-        }
-
-        // Enemy can only move up from orgin, range only reverses from height of flight
-        if (transform.position.y - newPositionY  < storageY)
-        {
-            isHeadingUp = true;
-        }
-
-        if (!isHeadingUp)
-        {
-            newPositionY *= -1f;
-        }
-
-        transform.position = new Vector3(transform.position.x, transform.position.y + newPositionY, transform.position.z);
-
 
         if (timeLeftInPlay < 0 && !isAlive)
         {
@@ -87,6 +78,10 @@ public class EnemyFlying : MonoBehaviour, ISerializable
         else if (!isAlive)
         {
             timeLeftInPlay -= Time.deltaTime;
+        }
+        else if (isMoving)
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y + GetVelocity(), transform.position.z);
         }
     }
 
@@ -103,6 +98,30 @@ public class EnemyFlying : MonoBehaviour, ISerializable
         rb.isKinematic = true;
     }
 
+    private float GetVelocity()
+    {
+        float newVelocityY = speed * Time.deltaTime;
+
+        if (transform.position.y + newVelocityY > storageY + maxRange)
+        {
+            isHeadingUp = false;
+        }
+
+
+        // Enemy can only move up from orgin, range only reverses from height of flight
+        if (transform.position.y - newVelocityY < storageY)
+        {
+            isHeadingUp = true;
+        }
+
+        if (!isHeadingUp)
+        {
+            newVelocityY *= -1f;
+        }
+
+        return newVelocityY;
+    }
+
     /*
      * OnCollisionEnter2D - handles physics collisions
      * Params:
@@ -112,23 +131,25 @@ public class EnemyFlying : MonoBehaviour, ISerializable
     {
         if (col.gameObject.tag == "bullets")
         {
-            isAlive = false;
 
             Bullet bul = col.gameObject.GetComponent<Bullet>();
             int direction = 1;
 
             rb.AddForce(new Vector2(3f * direction, 9f), ForceMode2D.Impulse);
             rb.AddTorque(100f * direction, ForceMode2D.Force);
-
-            timeLeftInPlay = 0.15f;
         }
 
         if (col.gameObject.name == "DeathZone")
         {
             Store();
         }
+        else
+        {
+            isAlive = false;
 
-
+            isMoving = false;
+            timeLeftInPlay = 0.15f;
+        }
 
     }
 
@@ -137,7 +158,8 @@ public class EnemyFlying : MonoBehaviour, ISerializable
     {
         return new SaveFlyingEnemy( isAlive, timeLeftInPlay,
                                     transform.position.x, transform.position.y,
-                                    rb.isKinematic, rb.rotation
+                                    rb.isKinematic, rb.rotation,
+                                    isHeadingUp, isMoving
                                   );
     }
 
@@ -161,6 +183,9 @@ public class EnemyFlying : MonoBehaviour, ISerializable
         Vector3 newRot = new Vector3(currentRot.x, currentRot.y, past.rotation);
         transform.rotation = Quaternion.Euler(newRot);
 
+        isHeadingUp = past.isHeadingUp;
+        isMoving = past.isMoving;
+
     }
 }
 
@@ -177,9 +202,13 @@ internal class SaveFlyingEnemy : ISerialDataStore
     public bool isKinematic { get; private set; }
     public float rotation { get; private set; }
 
+    public bool isHeadingUp { get; private set; }
+    public bool isMoving { get; private set; }
+
     public SaveFlyingEnemy( bool alive, float time,
                             float posX, float posY,
-                            bool kin, float rot
+                            bool kin, float rot,
+                            bool up, bool move
                           )
     {
         isAlive = alive;
@@ -188,6 +217,8 @@ internal class SaveFlyingEnemy : ISerialDataStore
         positionY = posY;
         isKinematic = kin;
         rotation = rot;
+        isHeadingUp = up;
+        isMoving = move;
     }
 
 }
