@@ -17,9 +17,12 @@ public class EnemyFlying : MonoBehaviour, ISerializable
     private float timeLeftInPlay;
 
     public float maxRange;
-    public bool isHeadingUp;
+    private bool isHeadingUp;
 
     private bool isMoving; // Prevents the enemy from having jittery movement after killing
+
+    public bool startOnTop; //IM
+                            //When true the enemy starts flying from the top of their cycle
 
     /* 
      * Start - is called before the first frame update,
@@ -53,6 +56,13 @@ public class EnemyFlying : MonoBehaviour, ISerializable
         storageY = transform.position.y;
         isHeadingUp = true;
         isMoving = true;
+
+        if (startOnTop)
+        {
+            transform.position = new Vector3(transform.position.x, transform.position.y + maxRange, transform.position.z);
+        }
+
+        Debug.Log(storageY);
     }
 
     /* 
@@ -70,7 +80,8 @@ public class EnemyFlying : MonoBehaviour, ISerializable
         else if (!isAlive)
         {
             timeLeftInPlay -= Time.deltaTime;
-        } else if (isMoving)
+        }
+        else if (isMoving)
         {
             transform.position = new Vector3(transform.position.x, transform.position.y + GetVelocity(), transform.position.z);
         }
@@ -97,6 +108,7 @@ public class EnemyFlying : MonoBehaviour, ISerializable
         {
             isHeadingUp = false;
         }
+
 
         // Enemy can only move up from orgin, range only reverses from height of flight
         if (transform.position.y - newVelocityY < storageY)
