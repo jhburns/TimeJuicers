@@ -61,8 +61,6 @@ public class EnemyFlying : MonoBehaviour, ISerializable
         {
             transform.position = new Vector3(transform.position.x, transform.position.y + maxRange, transform.position.z);
         }
-
-        Debug.Log(storageY);
     }
 
     /* 
