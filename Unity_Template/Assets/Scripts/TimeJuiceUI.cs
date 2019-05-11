@@ -16,11 +16,17 @@ public class TimeJuiceUI : MonoBehaviour
 
     /*
     * Start - is called before the first frame update,
-    * Sets the max value
+    * Sets the max value, and penalty frames
     */
     void Start()
     {
         timeBar.maxValue = globalState.frameCount;
+        DeathPenaltyFrames = FindDiff().FramePenalty;
+    }
+
+    public DifficultyPersister FindDiff()
+    {
+        return FindObjectsOfType<DifficultyPersister>()[0]; //There should only be one object in the scene
     }
 
     /* 

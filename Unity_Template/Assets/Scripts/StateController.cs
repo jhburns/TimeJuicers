@@ -52,6 +52,9 @@ public class StateController : MonoBehaviour
      */
     private void InitStack()
     {
+        DifficultyPersister diff = FindDiff();
+        frameCount = diff.MaxFrames;
+
         pastStates = new FixedStack<ISerialDataStore[]>(frameCount);
     }
 
@@ -69,6 +72,11 @@ public class StateController : MonoBehaviour
     {
         var serialQuery = FindObjectsOfType<MonoBehaviour>().OfType<ISerializable>();
         allSerialObjects = serialQuery.Cast<ISerializable>().ToArray();
+    }
+
+    public DifficultyPersister FindDiff()
+    {
+        return FindObjectsOfType<DifficultyPersister>()[0]; //There should only be one object in the scene
     }
 
     /*
