@@ -98,6 +98,10 @@ public class EnemyFlying : MonoBehaviour, ISerializable
         rb.isKinematic = true;
     }
 
+    /*
+     * GetVelocity - determines the velocity of this enemy
+     * Returns float: the velocity 
+     */
     private float GetVelocity()
     {
         float newVelocityY = speed * Time.deltaTime;
