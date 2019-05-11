@@ -5,7 +5,7 @@ using Serial;
 
 public class Cloud : MonoBehaviour, ISerializable
 {
-    public float speed;
+    public float speed; //IM
 
     private float leftXBound; //IM  
     private float rightXBound; //IM
