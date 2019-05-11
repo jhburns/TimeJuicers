@@ -286,7 +286,7 @@ public class Player : MonoBehaviour, ISerializable
         }
 
         if ((col.gameObject.GetComponent<Enemy>() != null ||
-             col.gameObject.GetComponent<EnemyFlying>() ||
+             col.gameObject.GetComponent<EnemyFlying>() != null ||
              col.gameObject.name == "DeathZone"
             ) 
             && deathHandler.IsAlive) // Can only die once, or states will break

@@ -143,12 +143,17 @@ public class EnemyFlying : MonoBehaviour, ISerializable
         {
             Store();
         }
-        else
+        else if (col.gameObject.GetComponent<Enemy>() != null ||
+                 col.gameObject.GetComponent<EnemyFlying>() != null)
         {
             isAlive = false;
 
             isMoving = false;
             timeLeftInPlay = 0.15f;
+        }
+        else
+        {
+            isMoving = false;
         }
 
     }
