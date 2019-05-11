@@ -8,16 +8,28 @@ public class CloudController : MonoBehaviour
     public GameObject leftMarker;
     public GameObject rightMarker;
 
+    /* Start - is called before the first frame update,
+    * Sets up each cloud
+    */
     void Start()
     {
         SetBoundsAllClouds(GetClouds());
     }
 
+    /*
+     * GetClouds - finds all object with Cloud script attached to it
+     * Returns CLoud[]: all of the moving clouds in the scene
+     */
     private Cloud[] GetClouds()
     {
         return FindObjectsOfType<Cloud>().ToArray<Cloud>();
     }
 
+    /*
+     * SetBoundsAllClouds - gives each cloud boundries to not cross
+     * Params:
+     *  - Cloud[] clouds: a group of cloud objects to have their bounds set
+     */
     private void SetBoundsAllClouds(Cloud[] clouds)
     {
         foreach (Cloud c in clouds)

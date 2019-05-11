@@ -7,9 +7,13 @@ public class Cloud : MonoBehaviour, ISerializable
 {
     public float speed;
 
-    private float leftXBound;
-    private float rightXBound;
+    private float leftXBound; //IM  
+    private float rightXBound; //IM
 
+    /* 
+     * Update is called once per frame,
+     * Moves the cloud to the right
+     */
     void Update()
     {
         transform.position = new Vector3(transform.position.x + speed * Time.deltaTime, transform.position.y, transform.position.z);        
@@ -20,12 +24,19 @@ public class Cloud : MonoBehaviour, ISerializable
         }
     }
 
+    /*
+     * SetBounds - sets both left and right x bounds coordinate 
+     * Params:
+     *  - float left: left x-axis bound
+     *  - float right: right x-axis bound
+     */
     public void SetBounds(float left, float right)
     {
         leftXBound = left;
         rightXBound = right;
     }
 
+    /// Serial Methods, see Serial Namespace 
     public ISerialDataStore GetCurrentState()
     {
         return new SaveCloud(transform.position.x);
