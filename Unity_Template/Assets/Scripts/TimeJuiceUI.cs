@@ -6,13 +6,13 @@ using UnityEngine.UI;
 
 public class TimeJuiceUI : MonoBehaviour
 {
-    public Slider timeBar;
+    public Slider timeBar; //IM
 
-    public StateController globalState;
+    public StateController globalState; 
 
-    public int DeathPenaltyFrames;
-    public Color deathBarColor;
-    public float fadeRate;
+    public int DeathPenaltyFrames; //IM
+    public Color deathBarColor; //IM
+    public float fadeRate; //IM
 
     /*
     * Start - is called before the first frame update,
@@ -21,12 +21,27 @@ public class TimeJuiceUI : MonoBehaviour
     void Start()
     {
         timeBar.maxValue = globalState.frameCount;
-        DeathPenaltyFrames = FindDiff().FramePenalty;
+
+        DifficultyPersister diff = FindDiff();
+
+        if (diff != null)
+        {
+            DeathPenaltyFrames = diff.FramePenalty;
+        }
     }
 
     public DifficultyPersister FindDiff()
     {
-        return FindObjectsOfType<DifficultyPersister>()[0]; //There should only be one object in the scene
+        DifficultyPersister[] diffs = FindObjectsOfType<DifficultyPersister>();
+
+        if (diffs.Length > 0)
+        {
+            return diffs[0];  //There should only be one object in the scene
+        }
+        else
+        {
+            return null;
+        }
     }
 
     /* 

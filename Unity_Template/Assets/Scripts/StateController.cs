@@ -53,7 +53,11 @@ public class StateController : MonoBehaviour
     private void InitStack()
     {
         DifficultyPersister diff = FindDiff();
-        frameCount = diff.MaxFrames;
+
+        if (diff != null)
+        {
+            frameCount = diff.MaxFrames;
+        }
 
         pastStates = new FixedStack<ISerialDataStore[]>(frameCount);
     }
@@ -76,7 +80,16 @@ public class StateController : MonoBehaviour
 
     public DifficultyPersister FindDiff()
     {
-        return FindObjectsOfType<DifficultyPersister>()[0]; //There should only be one object in the scene
+        DifficultyPersister[] diffs = FindObjectsOfType<DifficultyPersister>();
+
+        if (diffs.Length > 0)
+        {
+            return diffs[0];  //There should only be one object in the scene
+        }
+        else
+        {
+            return null;
+        }
     }
 
     /*
