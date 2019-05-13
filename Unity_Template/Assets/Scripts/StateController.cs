@@ -119,10 +119,12 @@ public class StateController : MonoBehaviour
             && allowRewindTime)
         {
             RevertState();
+            AudioListener.volume = 0;
         }
         else if (!IsPaused)
         {
             pastStates.Push(CollectStates());
+            AudioListener.volume = 1.0f;
         }
     }
 
@@ -154,6 +156,7 @@ public class StateController : MonoBehaviour
             {
                 allowRewindTime = false;
             }
+            AudioListener.volume = 0;
         }
     }
 
@@ -174,6 +177,7 @@ public class StateController : MonoBehaviour
 
             pastTrigger = Input.GetAxisRaw("LeftTrigger");
         }
+        //AudioListener.volume = 1.0f;
     }
 
     /*
