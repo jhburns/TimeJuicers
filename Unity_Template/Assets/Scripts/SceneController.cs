@@ -63,10 +63,18 @@ public class SceneController : MonoBehaviour, ISerializable
     {
         if (jumpTriggersRestart && CheckJumpDown())
         {
+            DifficultyPersister diff = FindDiff();
+
+            if (diff.modeName == "normal")
+            {
+                diff.MaxFrames += 90; //1.5 seconds
+            }
+
             //https://answers.unity.com/questions/1422096/reload-current-scene-with-scene-manager.html
             Scene scene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(scene.name);
-        } else if (mayProcceed && CheckJumpDown())
+        }
+        else if (mayProcceed && CheckJumpDown())
         {
             nextScene.allowSceneActivation = true;
         }
@@ -113,6 +121,24 @@ public class SceneController : MonoBehaviour, ISerializable
             nextLevelPrompt.enabled = true;
 
             winningPlayer.Fly();
+        }
+    }
+
+    /*
+     * FindDiff - Returns the first DifficultyPersister in the scene
+     * Returns DifficultyPersister: object that stores difficulty between scenes
+     */
+    public DifficultyPersister FindDiff()
+    {
+        DifficultyPersister[] diffs = FindObjectsOfType<DifficultyPersister>();
+
+        if (diffs.Length > 0)
+        {
+            return diffs[0];  //There should only be one object in the scene
+        }
+        else
+        {
+            return null;
         }
     }
 
