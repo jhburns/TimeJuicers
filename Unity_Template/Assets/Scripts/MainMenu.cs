@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
+    public Toggle loadFourth;
+
     // https://docs.unity3d.com/ScriptReference/SceneManagement.SceneManager.LoadScene.html
     public void StartNormalScene()
     {
@@ -40,6 +42,12 @@ public class MainMenu : MonoBehaviour
 
     private void FirstLevel()
     {
-        SceneManager.LoadScene("1Tutorial");
+        if (loadFourth.isOn)
+        {
+            SceneManager.LoadScene("4Guess");
+        } else
+        {
+            SceneManager.LoadScene("1Tutorial");
+        }
     }
 }
