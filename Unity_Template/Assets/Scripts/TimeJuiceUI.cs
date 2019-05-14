@@ -64,7 +64,7 @@ public class TimeJuiceUI : MonoBehaviour
         //https://forum.unity.com/threads/how-to-copy-a-recttransform.497791/
         // Because recttransform is deeply cloned, extra vars have to be set
         removedJuice.anchoredPosition = timeBar.fillRect.anchoredPosition;
-        //removedJuice.sizeDelta = timeBar.fillRect.sizeDelta;
+        removedJuice.sizeDelta = timeBar.fillRect.sizeDelta;
         removedJuice.anchorMin = timeBar.fillRect.anchorMin;
         removedJuice.anchorMax = timeBar.fillRect.anchorMax;
 
