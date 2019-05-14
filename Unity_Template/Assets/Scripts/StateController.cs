@@ -16,6 +16,7 @@ public class StateController : MonoBehaviour
 
     public Image RewindIcon;
     public Image FilterImg;
+    GameObject a;
 
     private float pastTrigger; // Needed to create ghetto KeyUp/KeyDown for trigger buttons
 
@@ -167,6 +168,8 @@ public class StateController : MonoBehaviour
                 allowRewindTime = false;
             }
             AudioListener.volume = 0;
+            //new SoundManager().PlaySound();
+            //a.AddComponent<SoundManager>().PlaySound();
         }
     }
 
