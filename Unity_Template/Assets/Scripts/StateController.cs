@@ -16,7 +16,6 @@ public class StateController : MonoBehaviour
 
     public Image RewindIcon;
     public Image FilterImg;
-    GameObject a;
 
     private float pastTrigger; // Needed to create ghetto KeyUp/KeyDown for trigger buttons
 
@@ -121,6 +120,7 @@ public class StateController : MonoBehaviour
     private void RewindTime()
     {
         // https://docs.unity3d.com/ScriptReference/Input.GetKeyDown.html
+        // https://wiki.unity3d.com/index.php/Xbox360Controller
         if ((Input.GetKey(KeyCode.K) ||
              Input.GetKey(KeyCode.R) ||
              Input.GetKey(KeyCode.JoystickButton3) || // Y button on xbox 360 controller
@@ -168,8 +168,6 @@ public class StateController : MonoBehaviour
                 allowRewindTime = false;
             }
             AudioListener.volume = 0;
-            //new SoundManager().PlaySound();
-            //a.AddComponent<SoundManager>().PlaySound();
         }
     }
 
@@ -190,7 +188,6 @@ public class StateController : MonoBehaviour
 
             pastTrigger = Input.GetAxisRaw("LeftTrigger");
         }
-        //AudioListener.volume = 1.0f;
     }
 
     /*
@@ -230,7 +227,7 @@ public class StateController : MonoBehaviour
     {
         for (int i = 0; i < allSerialObjects.Length; i++)
         {
-            ((MonoBehaviour)allSerialObjects[i]).enabled = toggle;
+            ((MonoBehaviour) allSerialObjects[i]).enabled = toggle;
         }
     }
 
