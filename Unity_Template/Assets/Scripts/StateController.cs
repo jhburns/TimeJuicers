@@ -62,6 +62,9 @@ public class StateController : MonoBehaviour
         pastStates = new FixedStack<ISerialDataStore[]>(frameCount);
     }
 
+    /*
+     * InitUI - sets up various UI elements 
+     */
     private void InitUI()
     {
         RewindIcon.enabled = false;
@@ -72,12 +75,19 @@ public class StateController : MonoBehaviour
         allowRewindTime = true;
     }
 
+    /*
+     * CatchCreated - finds all ISerializable objects in the scene, adds them to a global array
+     */
     public void CatchCreated()
     {
         var serialQuery = FindObjectsOfType<MonoBehaviour>().OfType<ISerializable>();
         allSerialObjects = serialQuery.Cast<ISerializable>().ToArray();
     }
 
+    /*
+    * FindDiff - Returns the first DifficultyPersister in the scene
+    * Returns DifficultyPersister: object that stores difficulty between scenes
+    */
     public DifficultyPersister FindDiff()
     {
         DifficultyPersister[] diffs = FindObjectsOfType<DifficultyPersister>();

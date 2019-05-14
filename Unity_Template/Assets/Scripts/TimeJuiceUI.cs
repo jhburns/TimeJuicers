@@ -30,6 +30,10 @@ public class TimeJuiceUI : MonoBehaviour
         }
     }
 
+    /*
+     * FindDiff - Returns the first DifficultyPersister in the scene
+     * Returns DifficultyPersister: object that stores difficulty between scenes
+     */
     public DifficultyPersister FindDiff()
     {
         DifficultyPersister[] diffs = FindObjectsOfType<DifficultyPersister>();
