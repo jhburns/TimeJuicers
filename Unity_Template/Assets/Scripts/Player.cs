@@ -32,7 +32,8 @@ public class Player : MonoBehaviour, ISerializable
 
     public float deathShrinkRatio; // range 0-1 inclusive
 
-    /* Start - is called before the first frame update
+    /* 
+     * Start - is called before the first frame update
      * Initializes variables
      */
     void Start()
@@ -68,7 +69,8 @@ public class Player : MonoBehaviour, ISerializable
         flightVel = 0.1f;
     }
 
-    /* Update is called once per frame,
+    /* 
+     * Update is called once per frame,
      * Handles input for player
      */
     void Update()
@@ -296,6 +298,9 @@ public class Player : MonoBehaviour, ISerializable
          }
     }
 
+    /*
+     * AnimateDeath - triggered when player dies, to a some small animations
+     */
     public void AnimateDeath()
     {
         rb.freezeRotation = false;
@@ -318,6 +323,10 @@ public class Player : MonoBehaviour, ISerializable
         StartCoroutine(AnimateFlight());
     }
 
+    /*
+     * AnimateFlight - moves the player upwards at an accelerating rate
+     * Returns IEnumerator: meaning this method is async
+     */
     private IEnumerator AnimateFlight()
     {
         while (true)

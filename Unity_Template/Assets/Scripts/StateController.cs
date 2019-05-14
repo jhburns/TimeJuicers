@@ -341,7 +341,6 @@ internal class FixedStack<T>
      * Params:
      *  - int numRemove: a positive number of the number of elements to remove from the bottom of the stack,
      *                   meaning elements pushed first
-     * 
      */
     public void RemoveBottom(int numRemove)
     {
