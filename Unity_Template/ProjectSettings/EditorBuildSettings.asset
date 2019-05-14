@@ -35,4 +35,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/4Guess.unity
     guid: 577b58914474c7c42835d7abe6625066
+  - enabled: 1
+    path: Assets/Scenes/5Fly.unity
+    guid: a81ebb79e62276c4380feac6de735b0e
   m_configObjects: {}

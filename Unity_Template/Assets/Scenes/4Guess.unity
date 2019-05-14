@@ -6954,7 +6954,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   axisBounds: 0.5
-  nextSceneName: 99End
+  nextSceneName: 5Fly
   interfaceHandler: {fileID: 1283012049}
   winFilter: {fileID: 961928123}
   winText: {fileID: 1363353473}
@@ -12719,16 +12719,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1098043692691605177, guid: ae8072cc3b46306438c88c6bb65d8229,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -10.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1098043692691605177, guid: ae8072cc3b46306438c88c6bb65d8229,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 6.8
-      objectReference: {fileID: 0}
     - target: {fileID: 1098043692337964305, guid: ae8072cc3b46306438c88c6bb65d8229,
         type: 3}
       propertyPath: m_LocalScale.x
@@ -12768,6 +12758,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalPosition.x
       value: 66.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 1098043692691605177, guid: ae8072cc3b46306438c88c6bb65d8229,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -10.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1098043692691605177, guid: ae8072cc3b46306438c88c6bb65d8229,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 6.8
       objectReference: {fileID: 0}
     - target: {fileID: 4567788924843225412, guid: ae8072cc3b46306438c88c6bb65d8229,
         type: 3}
