@@ -139,6 +139,9 @@ public class EnemyFlying : MonoBehaviour, ISerializable
             Bullet bul = col.gameObject.GetComponent<Bullet>();
             int direction = 1;
 
+            isAlive = false;
+            timeLeftInPlay = 0.15f;
+
             rb.AddForce(new Vector2(3f * direction, 9f), ForceMode2D.Impulse);
             rb.AddTorque(100f * direction, ForceMode2D.Force);
         }

@@ -666,6 +666,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24f6376741422ef4f99f5220a5097f27, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadFourth: {fileID: 385540412}
 --- !u!1 &259926454
 GameObject:
   m_ObjectHideFlags: 0
@@ -865,7 +866,7 @@ GameObject:
   - component: {fileID: 385540411}
   - component: {fileID: 385540412}
   m_Layer: 5
-  m_Name: Toggle
+  m_Name: SkipToggle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
