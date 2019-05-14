@@ -9,24 +9,45 @@ public class MainMenu : MonoBehaviour
     public Toggle loadFourth;
 
     // https://docs.unity3d.com/ScriptReference/SceneManagement.SceneManager.LoadScene.html
+
+    /*
+     * StartNormalScene - trigger the starting level to load,
+     * Creates Difficulty object with normal settings
+     */
     public void StartNormalScene()
     {
         CreateDifficultyPersister(600, 150, "normal");
         FirstLevel();
     }
 
+    /*
+     * StartHardScene - trigger the starting level to load,
+     * Creates Difficulty object with hard settings
+     */
     public void StartHardScene()
     {
         CreateDifficultyPersister(400, 200, "hard");
         FirstLevel();
     }
 
+    /*
+     * StartFreeScene - trigger the starting level to load,
+     * Creates Difficulty object with nearly unlimited settings
+     */
     public void StartFreeScene()
     {
         CreateDifficultyPersister(60000, 0, "free");
         FirstLevel();
     }
 
+    /*
+     * CreateDifficultyPersister - creates an DifficultyPersister object to store difficulty between scenes,
+     * Note it isn't destroyed on next scene 
+     * Params:
+     *  - int maxFrames: the stack size for the state controller
+     *  - int framePenalty: how many frames are removed with each death
+     *  - string modeName: the identifier of the difficulty, should only be 'normal', 'hard', or 'free'
+     */
     private void CreateDifficultyPersister(int maxFrames, int framePenalty, string modeName)
     {
         // https://answers.unity.com/questions/572852/how-do-you-create-an-empty-gameobject-in-code-and.html
@@ -40,6 +61,10 @@ public class MainMenu : MonoBehaviour
         GameObject.DontDestroyOnLoad(diffPersister);
     }
 
+    /*
+     * FirstLevel - loads into the game
+     * Loads the fourth level instead of first if toggled in UI
+     */
     private void FirstLevel()
     {
         if (loadFourth.isOn)

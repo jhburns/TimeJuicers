@@ -15,9 +15,9 @@ public class TimeJuiceUI : MonoBehaviour
     public float fadeRate; //IM
 
     /*
-    * Start - is called before the first frame update,
-    * Sets the max value, and penalty frames
-    */
+     * Start - is called before the first frame update,
+     * Sets the max value, and penalty frames
+     */
     void Start()
     {
         timeBar.maxValue = globalState.frameCount;
@@ -59,7 +59,7 @@ public class TimeJuiceUI : MonoBehaviour
 
     /*
      * DecreaseBar - Animation for time bar losing time juice
-     * Returns: IEnumerator menaing this is an async function
+     * Returns: IEnumerator menaing this is an async method
      */
     public IEnumerator DecreaseBar()
     {
@@ -91,7 +91,7 @@ public class TimeJuiceUI : MonoBehaviour
      * Params:
      *  - RectTransform bar: the shape to be animated
      *  - float rate: change in opacity every frame
-     * Returns: IEnumerator meaning this is an async function
+     * Returns: IEnumerator meaning this is an async method
      */
     private IEnumerator FadeBar(RectTransform bar, float rate)
     {

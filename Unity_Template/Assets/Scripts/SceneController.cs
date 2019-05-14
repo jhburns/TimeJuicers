@@ -147,7 +147,7 @@ public class SceneController : MonoBehaviour, ISerializable
     /*
      * LoadNextSceneAsync - loads the next scene in the background, based on the given nextSceneName,
      * Put the loaded scene trigger into the global nextScene variable
-     * 
+     * Returns IEnumerator: meaning this method is async
      */
     private IEnumerator LoadNextSceneAsync()
     {
@@ -175,7 +175,7 @@ public class SceneController : MonoBehaviour, ISerializable
      * FadeInUI - grandually animates the win UI becoming more opaque
      * Params:
      *  - float rate: the speed at which the animate is performed 
-     * Returns: IEnumerator meaning this function is async
+     * Returns: IEnumerator meaning this method is async
      */
     private IEnumerator FadeInUI(float rate)
     {

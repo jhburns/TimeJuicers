@@ -103,6 +103,8 @@ public class GlobalUI : MonoBehaviour, ISerializable
      */
     private void AnimateDeath()
     {
+        // https://docs.unity3d.com/ScriptReference/Mathf.html
+
         if (deathAnimationTrigger < 9.8f)
         {
             float nextAlphaText = Mathf.Lerp(deathText.color.a, startingAlphaText, 0.03f);
@@ -161,7 +163,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
 
         if (!hasDied)
         {
-            StartCoroutine(timeBarController.DecreaseBar());
+            StartCoroutine(timeBarController.DecreaseBar()); //https://docs.unity3d.com/ScriptReference/MonoBehaviour.StartCoroutine.html
             hasDied = true;
             pastStates.RewindInputDisabled = false;
         }
@@ -219,6 +221,10 @@ public class GlobalUI : MonoBehaviour, ISerializable
         }
     }
 
+    /*
+     * CannotDie - to prevent death after winning,
+     * Fun you can only live forever after living
+     */
     public void CannotDie()
     {
         immortal = true;
