@@ -65,7 +65,7 @@ public class SceneController : MonoBehaviour, ISerializable
         {
             DifficultyPersister diff = FindDiff();
 
-            if (diff.modeName == "normal")
+            if (diff != null && diff.modeName == "normal")
             {
                 diff.MaxFrames += 90; //1.5 seconds
             }

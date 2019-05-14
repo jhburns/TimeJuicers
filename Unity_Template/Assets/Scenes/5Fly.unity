@@ -4952,7 +4952,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   axisBounds: 0.5
-  nextSceneName: 99End
+  nextSceneName: 6Extreme
   interfaceHandler: {fileID: 1283012049}
   winFilter: {fileID: 961928123}
   winText: {fileID: 1363353473}
