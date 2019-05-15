@@ -32,7 +32,6 @@ public class SceneController : MonoBehaviour, ISerializable
     {
         Init();
         InitUI();
-        //AudioListener.volume = 1.0f;
     }
 
     /*
