@@ -3,6 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using Serial;
 
+/* 
+ * Full Name: Jonathan Burns
+ * Student ID: 2288851
+ * Chapman email: jburns@chapman.edu/
+ * Course number and section: 236-02
+ * Assignment Number: 5
+ */
+
+/*
+ * Purpose:
+ *  - EnemyFlying: controls each flying enemy physics and animations
+ */
+
 public class EnemyFlying : MonoBehaviour, ISerializable
 {
     Rigidbody2D rb;

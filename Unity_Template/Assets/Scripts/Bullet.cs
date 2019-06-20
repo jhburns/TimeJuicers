@@ -3,6 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using Serial;
 
+/* 
+ * Full Name: Jonathan Burns/Peter Chen
+ * Student ID: 2288851/2326305
+ * Chapman email: jburns@chapman.edu/haichen@chapman.edu
+ * Course number and section: 236-02
+ * Assignment Number: 5
+ */
+
+/*
+ * Purpose:
+ *  - Bullet: controls each bullet objects that are used to shoot enemies
+ */
+
+
 public class Bullet : MonoBehaviour, ISerializable
 {
     public float velX; //IM

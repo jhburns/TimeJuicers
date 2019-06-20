@@ -9984,9 +9984,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1483246472}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e9c33b0200c84cf2a138a11079a4798, type: 3}
+  m_Script: {fileID: 11500000, guid: 38591f8497964fb438cbaf2c1c2bf998, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Target: {fileID: 849689629}
+  minHeight: -3
 --- !u!82 &1483246478
 AudioSource:
   m_ObjectHideFlags: 0

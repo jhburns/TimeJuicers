@@ -4,6 +4,19 @@ using UnityEngine;
 using System;
 using Serial;
 
+/* 
+ * Full Name: Jonathan Burns
+ * Student ID: 2288851
+ * Chapman email: jburns@chapman.edu/
+ * Course number and section: 236-02
+ * Assignment Number: 5
+ */
+
+/*
+ * Purpose:
+ *  - Player: controls player input, physics, and animations
+ */
+
 public class Player : MonoBehaviour, ISerializable
 {
     public float jumpHeight; //IM = suppose to be immutable

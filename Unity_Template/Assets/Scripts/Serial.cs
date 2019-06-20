@@ -1,5 +1,20 @@
 ﻿// https://en.wikibooks.org/wiki/C_Sharp_Programming/Namespaces
 
+/* 
+ * Full Name: Jonathan Burns
+ * Student ID: 2288851
+ * Chapman email: jburns@chapman.edu/
+ * Course number and section: 236-02
+ * Assignment Number: 5
+ */
+
+/*
+ * Purpose:
+ *  - Serial: a namespace that is imported by any serial scipt
+ *  - ISerializable: an object to be serialized 
+ *  - ISerialDataStore: the data storage object, respective to each class
+ */
+
 namespace Serial
 {
     public interface ISerializable

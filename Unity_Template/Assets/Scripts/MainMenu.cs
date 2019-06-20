@@ -4,6 +4,20 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+/* 
+ * Full Name: Jonathan Burns
+ * Student ID: 2288851
+ * Chapman email: jburns@chapman.edu/
+ * Course number and section: 236-02
+ * Assignment Number: 5
+ */
+
+/*
+ * Purpose:
+ *  - MainMenu: loads the starting scene, and sets difficulty 
+ */
+
+
 public class MainMenu : MonoBehaviour
 {
     public Toggle loadFourth;
