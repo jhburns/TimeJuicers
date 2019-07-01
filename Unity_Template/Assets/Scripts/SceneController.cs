@@ -26,9 +26,6 @@ public class SceneController : MonoBehaviour, ISerializable
 
     public Player winningPlayer;
 
-    /*
-     * Start - is called before the first frame update
-     */
     void Start()
     {
         Init();
@@ -56,8 +53,7 @@ public class SceneController : MonoBehaviour, ISerializable
     }
 
     /*
-     * Update - is called once per frame,
-     * Checks for jump input only if dead
+     * Update - Checks for jump input only if dead
      */
     void Update()
     {

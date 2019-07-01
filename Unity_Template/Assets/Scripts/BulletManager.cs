@@ -18,9 +18,6 @@ public class BulletManager : MonoBehaviour, ISerializable
 
     public GlobalUI deathHandler; //IM
 
-    /* Start is called before the first frame update,
-     * Initializes time variables and bullet array
-     */
     void Start()
     {
         InitTime();
@@ -55,9 +52,6 @@ public class BulletManager : MonoBehaviour, ISerializable
     }
 
 
-    /* Update - is called once per frame,
-     * Checks to see if player is shooting
-     */
     void Update()
     {
         // http://wiki.unity3d.com/index.php?title=Xbox360Controller

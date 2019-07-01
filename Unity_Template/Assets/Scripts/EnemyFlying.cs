@@ -25,10 +25,6 @@ public class EnemyFlying : MonoBehaviour, ISerializable
     public bool startOnTop; //IM
                             //When true the enemy starts flying from the top of their cycle
 
-    /* 
-     * Start - is called before the first frame update,
-     * Initalizes many global variables 
-     */
     void Start()
     {
         InitRigid();
@@ -65,8 +61,7 @@ public class EnemyFlying : MonoBehaviour, ISerializable
     }
 
     /* 
-     * Update - is called once per frame,
-     * Moves enemy based on current direction,
+     * Update - Moves enemy based on current direction,
      * Stores enemy after timeout 
      */
     void Update()
@@ -129,8 +124,6 @@ public class EnemyFlying : MonoBehaviour, ISerializable
 
     /*
      * OnCollisionEnter2D - handles physics collisions
-     * Params:
-     *  - Collision2D col: the other object being collided with
      */
     void OnCollisionEnter2D(Collision2D col)
     {

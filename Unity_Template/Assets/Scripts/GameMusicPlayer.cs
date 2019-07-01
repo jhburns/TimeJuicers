@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+// TODO: redo this
 
 //https://answers.unity.com/questions/1260393/make-music-continue-playing-through-scenes.html
 public class GameMusicPlayer : MonoBehaviour

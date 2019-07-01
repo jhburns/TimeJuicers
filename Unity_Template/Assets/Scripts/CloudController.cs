@@ -9,9 +9,6 @@ public class CloudController : MonoBehaviour
     public GameObject leftMarker;
     public GameObject rightMarker;
 
-    /* Start - is called before the first frame update,
-    * Sets up each cloud
-    */
     void Start()
     {
         SetBoundsAllClouds(GetClouds());

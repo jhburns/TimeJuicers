@@ -19,11 +19,6 @@ public class Bullet : MonoBehaviour, ISerializable
 
     public bool IsMovingRight { get; private set; } // Used by other objects to know where the bullet is headed
 
-    /*
-     * Start - called before the first frame,
-     * Sets up rigidbody physics,
-     * Saves the starting position of the enemy so it can be stored latter
-     */
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -43,10 +38,6 @@ public class Bullet : MonoBehaviour, ISerializable
         isInPlay = false;
     }
 
-    /*
-     * Update - is called once per frame,
-     * checks to see if bullet has expired in the scene
-     */
     void Update()
     {
         HasTimeEnded();
@@ -90,8 +81,6 @@ public class Bullet : MonoBehaviour, ISerializable
 
     /*
      * OnCollisionEnter2D - prevents bullet from traveling through enemies, walls
-     * Param:
-     *  - Collision2D col: the other object being collided with
      */
     void OnCollisionEnter2D(Collision2D col)
     {

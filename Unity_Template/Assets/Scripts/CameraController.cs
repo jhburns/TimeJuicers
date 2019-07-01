@@ -13,18 +13,13 @@ public class CameraController : MonoBehaviour, ISerializable
 
     private bool isExactMode; //NOT serialized
 
-    /*
-     * Start - called before first frame,
-     * Sets up vars
-     */
     private void Start()
     {
         isExactMode = false;
     }
 
     /*
-     * Update - called once per frame,
-     * moves camera to new position, based on player position
+     * Update - moves camera to new position, based on player position
      */
     private void Update()
     {

@@ -33,10 +33,6 @@ public class Player : MonoBehaviour, ISerializable
 
     public float deathShrinkRatio; // range 0-1 inclusive
 
-    /* 
-     * Start - is called before the first frame update
-     * Initializes variables
-     */
     void Start()
     {
         InitRigid();
@@ -71,8 +67,7 @@ public class Player : MonoBehaviour, ISerializable
     }
 
     /* 
-     * Update is called once per frame,
-     * Handles input for player
+     * Update - Handles input for player
      */
     void Update()
     {
@@ -265,9 +260,7 @@ public class Player : MonoBehaviour, ISerializable
     }
 
     /*
-     * OnCollisionEnter2D - manages many player collisions
-     * Params:
-     *  - Collision2D col: the other object being collided with
+     * OnCollisionEnter2D - manages many player collision
      */
     void OnCollisionEnter2D(Collision2D col)
     {
@@ -368,7 +361,7 @@ public class Player : MonoBehaviour, ISerializable
         jumps = past.jumps;
 
         transform.position = new Vector3(past.positionX, past.positionY, transform.position.z);
-        rb.velocity = Vector2.zero; // Needed becasue velocity isn't conserved
+        rb.velocity = Vector2.zero; // Needed because velocity isn't conserved
 
         rightHorizontalAxisDown = past.rightHorizontalAxisDown;
         leftHorizontalAxisDown = past.leftHorizontalAxisDown;

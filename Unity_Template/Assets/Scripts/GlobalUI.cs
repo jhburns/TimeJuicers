@@ -34,9 +34,6 @@ public class GlobalUI : MonoBehaviour, ISerializable
 
     public SceneController scene;
 
-    /*
-     * Start - sets up vars
-     */
     void Start()
     {
         Time.timeScale = 1f; // Prevents the game from being frozen when restarting
@@ -71,8 +68,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
     }
 
     /*
-    * Update - is called once per frame,
-    * Checks every frame if death interface animations should be done
+    * Update - Checks every frame if death interface animations should be done
     */
     void Update()
     {

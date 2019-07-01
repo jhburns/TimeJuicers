@@ -12,8 +12,7 @@ public class Cloud : MonoBehaviour, ISerializable
     private float rightXBound; //IM
 
     /* 
-     * Update is called once per frame,
-     * Moves the cloud to the right
+     * Update - Moves the cloud to the right
      */
     void Update()
     {

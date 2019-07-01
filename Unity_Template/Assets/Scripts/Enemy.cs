@@ -21,10 +21,6 @@ public class Enemy : MonoBehaviour, ISerializable
 
     public float spinRate; //IM
 
-    /* 
-     * Start - is called before the first frame update,
-     * Initalizes many global variables 
-     */
     void Start()
     {
         InitRigid();
@@ -55,8 +51,7 @@ public class Enemy : MonoBehaviour, ISerializable
     }
 
     /* 
-     * Update - is called once per frame,
-     * Moves enemy based on current direction,
+     * Update - Moves enemy based on current direction,
      * Stores enemy after timeout 
      */
     void Update()
@@ -134,8 +129,6 @@ public class Enemy : MonoBehaviour, ISerializable
 
     /*
      * OnTriggerEnter2D - collisions, but only used for non-physics objects
-     * Params:
-     *  - Collision2D col: the other object being collided with
      */
     void OnTriggerEnter2D(Collider2D col)
     {

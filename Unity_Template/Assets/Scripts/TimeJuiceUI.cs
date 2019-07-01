@@ -15,8 +15,7 @@ public class TimeJuiceUI : MonoBehaviour
     public float fadeRate; //IM
 
     /*
-     * Start - is called before the first frame update,
-     * Sets the max value, and penalty frames
+     * Start - Sets the max value, and penalty frames
      */
     void Start()
     {
@@ -49,8 +48,7 @@ public class TimeJuiceUI : MonoBehaviour
     }
 
     /* 
-     * Update - is called once per frame,
-     * Animates the time bar based on the current number of saved frames
+     * Update - Animates the time bar based on the current number of saved frames
      */
     void Update()
     {
@@ -85,7 +83,6 @@ public class TimeJuiceUI : MonoBehaviour
         yield return 0;
     }
 
-    // http://www.theappguruz.com/blog/how-to-use-coroutines-in-unity
     /*
      * FadeBar - fades out the lost juice bar
      * Params:
@@ -95,6 +92,8 @@ public class TimeJuiceUI : MonoBehaviour
      */
     private IEnumerator FadeBar(RectTransform bar, float rate)
     {
+        // http://www.theappguruz.com/blog/how-to-use-coroutines-in-unity
+
         float i = 1;
 
         while (i >= 0)
