@@ -44,22 +44,25 @@ public class Bullet : MonoBehaviour, ISerializable
     }
 
     /*
-     * InPlay - 
+     * InPlay - when the bullet is fired by the player
      * Params:
      *  - bool goRight: direction the bullet is heading in, true when heading right
      */
-    public void InPlay(bool goRight)
+    public void InPlay(bool goRight, Vector2 location)
     {
         isInPlay = true;
         timeLeftInPLay = maxTime;
+        transform.position = location;
 
         if (goRight)
         {
             rb.velocity = new Vector2(velX, velY);
+            transform.localScale = new Vector3(1, 1, 1);
         }
         else
         {
             rb.velocity = new Vector2(-velX, velY);
+            transform.localScale = new Vector3(-1, 1, 1);
         }
 
         IsMovingRight = goRight;

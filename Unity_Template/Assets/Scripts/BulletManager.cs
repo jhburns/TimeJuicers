@@ -90,18 +90,8 @@ public class BulletManager : MonoBehaviour, ISerializable
 
         float xPos = player.transform.position.x + offset;
 
-
-        currentBul.transform.position = new Vector2(xPos, player.transform.position.y);
-        currentBul.InPlay(player.MovingRight);
+        currentBul.InPlay(player.MovingRight, new Vector2(xPos, player.transform.position.y));
         
-        if (player.MovingRight)
-        {
-            currentBul.transform.localScale = new Vector3(1, 1, 1);
-        } else
-        {
-            currentBul.transform.localScale = new Vector3(-1, 1, 1);
-        }
-
         bulletIndex = (bulletIndex + 1) % maxBullets;
     }
 
