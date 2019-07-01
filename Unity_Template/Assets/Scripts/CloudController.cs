@@ -6,8 +6,8 @@ using System.Linq;
 
 public class CloudController : MonoBehaviour
 {
-    public GameObject leftMarker;
-    public GameObject rightMarker;
+    public GameObject leftMarker; // Where the clouds teleport to
+    public GameObject rightMarker; // Triggers the clouds to loop
 
     void Start()
     {

@@ -20,15 +20,15 @@ public class BulletManager : MonoBehaviour, ISerializable
 
     void Start()
     {
-        InitTime();
+        Init();
 
         InitBullets();
     }
 
     /*
-     * InitTime - sets nextFire
+     * InitTime - setup non bullet vars
      */
-    private void InitTime()
+    private void Init()
     {
         nextFire = 0f;
     }
@@ -67,7 +67,8 @@ public class BulletManager : MonoBehaviour, ISerializable
         {
             nextFire = fireRate;
             Fire();
-        } else
+        }
+        else
         {
             nextFire -= Time.deltaTime;
         }
@@ -88,10 +89,11 @@ public class BulletManager : MonoBehaviour, ISerializable
             offset *= -1;
         }
 
-        float xPos = player.transform.position.x + offset;
+        float xPos = player.transform.position.x + offset; // offset used to place bullet in front, not inside, of player
 
         currentBul.InPlay(player.MovingRight, new Vector2(xPos, player.transform.position.y));
-        
+
+        // Looping through all bullets shouldn't be an issue even with a high fire rate, with about 20 right now
         bulletIndex = (bulletIndex + 1) % maxBullets;
     }
 
@@ -112,7 +114,6 @@ public class BulletManager : MonoBehaviour, ISerializable
 internal class SaveBulletMan : ISerialDataStore
 {
     public int bulletIndex { get; private set; }
-
     public float nextFire { get; private set; }
 
     public SaveBulletMan(int bulletI, float nf)

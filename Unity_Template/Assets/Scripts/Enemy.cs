@@ -60,7 +60,8 @@ public class Enemy : MonoBehaviour, ISerializable
         {
             rb.velocity = new Vector2(speed, rb.velocity.y);
             rb.MoveRotation( -(Time.deltaTime * spinRate) + rb.rotation);
-        } else if (isGrounded && isAlive)
+        }
+        else if (isGrounded && isAlive)
         {
             rb.velocity = new Vector2(-speed, rb.velocity.y);
             rb.MoveRotation((Time.deltaTime * spinRate) + rb.rotation);
@@ -69,7 +70,9 @@ public class Enemy : MonoBehaviour, ISerializable
         if (timeLeftInPlay < 0 && !isAlive)
         {
             Store();
-        } else if (!isAlive) {
+        }
+        else if (!isAlive)
+        {
             timeLeftInPlay -= Time.deltaTime;
         }
 

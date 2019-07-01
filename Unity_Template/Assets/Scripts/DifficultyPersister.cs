@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/*
+ * Purpose is to store selected difficulty between levels
+ */
 
 public class DifficultyPersister : MonoBehaviour
 {

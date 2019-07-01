@@ -29,7 +29,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
     public Text rewindPrompt;
     public Text restartPrompt;
     public Text outOfJuiceText;
-    private bool fadeInWhichPrompt; // true means rewind, false restart
+    private bool fadeInWhichPrompt; // true means display rewind text, false restart text
     private float startingAlphaPromt;
 
     public SceneController scene;
@@ -61,7 +61,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
         rewindPrompt.enabled = false;
         restartPrompt.enabled = false;
         outOfJuiceText.enabled = false;
-        startingAlphaPromt = rewindPrompt.color.a; //Lazy, starting alpha is only dependant on rewind
+        startingAlphaPromt = rewindPrompt.color.a; // Lazy, starting alpha is only dependant on rewind
         rewindPrompt.color = GetAlphaChange(rewindPrompt, 0f);
         restartPrompt.color = GetAlphaChange(restartPrompt, 0f);
         outOfJuiceText.color = GetAlphaChange(outOfJuiceText, 0f);
@@ -84,7 +84,8 @@ public class GlobalUI : MonoBehaviour, ISerializable
                 if (Time.deltaTime > 0)
                 {
                     deathAnimationTrigger -= Time.deltaTime;
-                } else
+                }
+                else
                 {
                     deathAnimationTrigger -= 0.015f; // When time is paused, animations may not be timed perfectly
                 }

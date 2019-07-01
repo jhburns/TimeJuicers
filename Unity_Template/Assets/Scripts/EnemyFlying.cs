@@ -22,8 +22,8 @@ public class EnemyFlying : MonoBehaviour, ISerializable
 
     private bool isMoving; // Prevents the enemy from having jittery movement after killing
 
+    // Enemy starts flying from the top of their cycle if true
     public bool startOnTop; //IM
-                            //When true the enemy starts flying from the top of their cycle
 
     void Start()
     {
@@ -87,7 +87,7 @@ public class EnemyFlying : MonoBehaviour, ISerializable
     private void Store()
     {
         // Just in case two enemies are on top of eachother vertically, also stores to a starting y
-        // Symmetric storageY around 0 so that a high enemy isn't stored above the death boundry
+        // Symmetric storage around y-axis so that a high enemy isn't stored above the death boundry
         transform.position = new Vector2(storageX, -25f - storageY); 
         rb.velocity = Vector3.zero;
         rb.angularVelocity = 0f;

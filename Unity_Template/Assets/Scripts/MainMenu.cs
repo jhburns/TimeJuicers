@@ -71,7 +71,8 @@ public class MainMenu : MonoBehaviour
         if (loadFourth.isOn)
         {
             SceneManager.LoadScene("4Guess");
-        } else
+        }
+        else
         {
             SceneManager.LoadScene("1Tutorial");
         }
