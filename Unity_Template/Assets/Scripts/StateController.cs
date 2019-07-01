@@ -19,8 +19,8 @@ public class StateController : MonoBehaviour
 
     private float pastTrigger; // Needed to create ghetto KeyUp/KeyDown for trigger buttons
 
-    public bool IsPaused { get; set; }
-    public bool RewindInputDisabled { get; set; }
+    private bool isPaused;
+    private bool rewindDisabled; 
     private bool allowRewindTime; // Used to make sure that the user has to reinput rewind time when it was disabled
 
     /*
@@ -70,8 +70,8 @@ public class StateController : MonoBehaviour
         RewindIcon.enabled = false;
         FilterImg.enabled = false;
 
-        IsPaused = false;
-        RewindInputDisabled = false;
+        isPaused = false;
+        rewindDisabled = false;
         allowRewindTime = true;
     }
 
@@ -132,7 +132,7 @@ public class StateController : MonoBehaviour
             RevertState();
             AudioListener.volume = 0;
         }
-        else if (!IsPaused)
+        else if (!isPaused)
         {
             pastStates.Push(CollectStates());
             AudioListener.volume = 1.0f;
@@ -152,14 +152,14 @@ public class StateController : MonoBehaviour
             )
              && pastStates.Count > 1)
         {
-            if (!RewindInputDisabled)
+            if (!rewindDisabled)
             {
                 ToggleBehaviourSerializable(false);
                 ToggleRewindUI(true);
 
                 pastTrigger = Input.GetAxisRaw("LeftTrigger");
 
-                IsPaused = false;
+                isPaused = false;
 
                 allowRewindTime = true;
             }
@@ -261,19 +261,56 @@ public class StateController : MonoBehaviour
         pastStates.RemoveBottom(Mathf.Clamp(frameCount, 0, pastStates.Count));
     }
 
+    /*
+     * GetPaused
+     * Returns: bool of whether this thinks the game is paused
+     */
+    public bool GetPaused()
+    {
+        return isPaused;
+    }
+
+    /*
+     * TogglePause - setter for isPaused
+     * Params:
+     *  - bool pause: tell this to treat the game as paused if true
+     */
+    public void TogglePause(bool pause)
+    {
+        isPaused = pause;
+    }
+
+    /*
+     * GetRewindDisabled
+     * Returns: bool if input to allow rewinding is currently disabled
+     */
+    public bool GetRewindDisabled()
+    {
+        return rewindDisabled;
+    }
+
+    /*
+     * ToggleRewindDisabled
+     * Params:
+     *  - bool rewindDis: tells this to disable rewinding input
+     */
+    public void ToggleRewindDisabled(bool dis)
+    {
+        rewindDisabled = dis;
+    }
 }
 
 internal class FixedStack<T>
 {
-    public int maxSize { get; private set; }
+    public int MaxSize { get; private set; }
     public int Count { get; private set; }
     private int currentIndex;
     private T[] elements;
 
     public FixedStack(int max)
     {
-        maxSize = max;
-        elements = new T[maxSize];
+        MaxSize = max;
+        elements = new T[MaxSize];
         currentIndex = -1;
         Count = 0;
     }
@@ -285,10 +322,10 @@ internal class FixedStack<T>
      */
     public void Push(T element)
     {
-        currentIndex = (currentIndex + 1) % maxSize;
+        currentIndex = (currentIndex + 1) % MaxSize;
         elements[currentIndex] = element;
 
-        if (Count < maxSize)
+        if (Count < MaxSize)
         {
             Count++;
         }
@@ -312,7 +349,7 @@ internal class FixedStack<T>
 
         if (currentIndex < 1)
         {
-            currentIndex = maxSize - 1;
+            currentIndex = MaxSize - 1;
         }
         else
         {

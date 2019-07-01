@@ -155,13 +155,13 @@ public class GlobalUI : MonoBehaviour, ISerializable
     private void PauseGame()
     {
         Time.timeScale = 0f;
-        pastStates.IsPaused = true;
+        pastStates.TogglePause(true);
 
         if (!hasDied)
         {
             StartCoroutine(timeBarController.DecreaseBar()); //https://docs.unity3d.com/ScriptReference/MonoBehaviour.StartCoroutine.html
             hasDied = true;
-            pastStates.RewindInputDisabled = false;
+            pastStates.ToggleRewindDisabled(false);
         }
     }
 
@@ -207,7 +207,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
             filterImg.enabled = true;
             deathText.enabled = true;
             outOfJuiceText.enabled = true;
-            pastStates.RewindInputDisabled = true;
+            pastStates.ToggleRewindDisabled(true);
 
             rewindPrompt.enabled = true;
             restartPrompt.enabled = true;
@@ -234,7 +234,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
                             deathText.color.a, deathAnimationTrigger,
                             timeBar.transform.position.x, timeBar.transform.position.y,
                             timeBar.transform.localScale.x, Time.timeScale,
-                            pastStates.IsPaused, rewindPrompt.enabled,
+                            pastStates.GetPaused(), rewindPrompt.enabled,
                             restartPrompt.enabled, outOfJuiceText.enabled,
                             rewindPrompt.color.a, restartPrompt.color.a, 
                             outOfJuiceText.color.a
@@ -256,7 +256,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
         timeBar.transform.localScale = new Vector2(past.timeBarScale, past.timeBarScale);
 
         Time.timeScale = past.timeScale;
-        pastStates.IsPaused = past.isPaused;
+        pastStates.TogglePause(past.isPaused);
 
         rewindPrompt.enabled = past.rewindPrompting;
         restartPrompt.enabled = past.restartPrompting;
