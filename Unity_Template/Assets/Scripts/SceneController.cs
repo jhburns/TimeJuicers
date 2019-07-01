@@ -5,19 +5,6 @@ using UnityEngine.SceneManagement;
 using Serial;
 using UnityEngine.UI;
 
-/* 
- * Full Name: Jonathan Burns
- * Student ID: 2288851
- * Chapman email: jburns@chapman.edu/
- * Course number and section: 236-02
- * Assignment Number: 5
- */
-
-/*
- * Purpose:
- *  - SceneController: handles some animations after winning, and allows,
- *  the player to restart or go to the next scene
- */
 
 public class SceneController : MonoBehaviour, ISerializable
 {

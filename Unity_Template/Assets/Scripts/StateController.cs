@@ -6,22 +6,6 @@ using Serial;
 using System;
 using UnityEngine.UI;
 
-/* 
- * Full Name: Jonathan Burns/Peter Chen
- * Student ID: 2288851/2326305
- * Chapman email: jburns@chapman.edu/haichen@chapman.edu
- * Course number and section: 236-02
- * Assignment Number: 5
- */
-
-/*
- * Purpose:
- *  - StateController: saves state of each object, and moves each player backwards through time
- *  - FixedStack: a fixed length stack implemented over an area, extra data is overwritten
- *  - EmptyStackException: should be thrown if elements are tried to be popped when empty
- *  - IllegalRemoveStackException: should be thrown if moved elements are removed if possible
- */
-
 
 public class StateController : MonoBehaviour
 {

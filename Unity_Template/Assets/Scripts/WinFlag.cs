@@ -2,18 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/* 
- * Full Name: Jonathan Burns
- * Student ID: 2288851
- * Chapman email: jburns@chapman.edu/
- * Course number and section: 236-02
- * Assignment Number: 5
- */
-
-/*
- * Purpose:
- *  - WinFlag: when the player collides, trigger the next scene to load
- */
 
 public class WinFlag : MonoBehaviour
 {

@@ -3,18 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Serial;
 
-/* 
- * Full Name: Jonathan Burns
- * Student ID: 2288851
- * Chapman email: jburns@chapman.edu/
- * Course number and section: 236-02
- * Assignment Number: 5
- */
-
-/*
- * Purpose:
- *  - Enemy: controls each ground enemy physics and animations
- */
 
 public class Enemy : MonoBehaviour, ISerializable
 {

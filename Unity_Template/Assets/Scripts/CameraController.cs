@@ -3,18 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Serial;
 
-/* 
- * Full Name: Jonathan Burns
- * Student ID: 2288851
- * Chapman email: jburns@chapman.edu/
- * Course number and section: 236-02
- * Assignment Number: 5
- */
-
-/*
- * Purpose:
- *  - CameraController: moves to follow the player
- */
 
 // https://www.salusgames.com/2016/12/28/smooth-2d-camera-follow-in-unity3d/
 public class CameraController : MonoBehaviour, ISerializable
