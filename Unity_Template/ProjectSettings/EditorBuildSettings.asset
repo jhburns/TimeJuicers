@@ -15,33 +15,33 @@ EditorBuildSettings:
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 0
-    path: Assets/Scenes/Home.unity
+    path: Assets/Scenes/ArchiveLevels/Home.unity
     guid: cd02e1f2fb23a436fb4b207e3189c35d
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Scenes/0MainMenu.unity
+    path: Assets/Scenes/ArchiveLevels/0MainMenu.unity
     guid: bb288633d84146b4b9b39afd98ef2c1c
   - enabled: 1
-    path: Assets/Scenes/1Tutorial.unity
+    path: Assets/Scenes/ArchiveLevels/1Tutorial.unity
     guid: 7921a9d02ab763f499865a4a3ebbca14
   - enabled: 1
-    path: Assets/Scenes/2Platforms.unity
+    path: Assets/Scenes/ArchiveLevels/2Platforms.unity
     guid: 908d5a666dfb1f64fbe1a2c516147037
   - enabled: 1
-    path: Assets/Scenes/3MoreTools.unity
+    path: Assets/Scenes/ArchiveLevels/3MoreTools.unity
     guid: 1beb6588b3900f14193bef6f0f4a5bb6
   - enabled: 1
-    path: Assets/Scenes/99End.unity
+    path: Assets/Scenes/ArchiveLevels/99End.unity
     guid: a7154d9aee1351f47a31d9b0e5cf1373
   - enabled: 1
-    path: Assets/Scenes/4Guess.unity
+    path: Assets/Scenes/ArchiveLevels/4Guess.unity
     guid: 577b58914474c7c42835d7abe6625066
   - enabled: 1
-    path: Assets/Scenes/5Fly.unity
+    path: Assets/Scenes/ArchiveLevels/5Fly.unity
     guid: a81ebb79e62276c4380feac6de735b0e
   - enabled: 1
-    path: Assets/Scenes/6Extreme.unity
+    path: Assets/Scenes/ArchiveLevels/6Extreme.unity
     guid: 67adddb8381f8554da20ee94511d2e29
   m_configObjects: {}
