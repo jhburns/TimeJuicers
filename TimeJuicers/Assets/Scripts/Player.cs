@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using Serial;
+using InputMapping;
 
 
 public class Player : MonoBehaviour, ISerializable
@@ -33,10 +34,13 @@ public class Player : MonoBehaviour, ISerializable
 
     public float deathShrinkRatio; // range 0-1 inclusive
 
+    private UserInput input;
+
     void Start()
     {
         InitRigid();
         InitPlayer();
+        InitInput();
     }
 
     /*
@@ -49,6 +53,11 @@ public class Player : MonoBehaviour, ISerializable
         rb.gravityScale = 3f;
         jumps = 0;
         rb.interpolation = RigidbodyInterpolation2D.Interpolate; //Prevents jittery camera
+    }
+
+    private void InitInput()
+    {
+        input = new UserInput(axisBounds);
     }
 
     /*
@@ -96,14 +105,7 @@ public class Player : MonoBehaviour, ISerializable
      */
     private void Jump()
     {
-        if ((Input.GetKeyDown(KeyCode.Space) || 
-             Input.GetKeyDown(KeyCode.W) ||
-             Input.GetKeyDown(KeyCode.UpArrow) ||
-             Input.GetKeyDown(KeyCode.Joystick1Button0) || // A button on xbox 360 controller
-             Input.GetKeyDown(KeyCode.Joystick1Button2) || // X button on xbox 360 controller
-             Input.GetAxisRaw("Vertical") > axisBounds
-            )
-            && jumps > 0)
+        if (input.JumpDown() && jumps > 0)
         {
             rb.velocity = Vector2.zero; // To allow for wall jumping
             rb.AddForce(new Vector2(0, jumpHeight), ForceMode2D.Impulse);
