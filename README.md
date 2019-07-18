@@ -4,7 +4,7 @@ TimeJuicers is an open source 2D platformer with a ~~lemon~~ twist of time rewin
 
 # Setup
 
-Only dependancy is Unity, Install from the link below, then open Unity > Open > Select this project folder.
+Only dependancy is Unity, Install from the link below, then open Unity > Open > Select this project folder and everything should import cleanly.
 
 https://unity3d.com/unity/whats-new/unity-2018.3.0
 
