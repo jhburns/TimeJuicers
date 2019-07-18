@@ -44,4 +44,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/ArchiveLevels/6Extreme.unity
     guid: 67adddb8381f8554da20ee94511d2e29
+  - enabled: 1
+    path: Assets/Scenes/999DevStage.unity
+    guid: a3795e8de77047c4c822943d368d6a08
   m_configObjects: {}

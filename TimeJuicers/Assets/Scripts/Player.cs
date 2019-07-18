@@ -73,6 +73,7 @@ public class Player : MonoBehaviour, ISerializable
     {
         // bascially everywhere: https://docs.unity3d.com/ScriptReference/Rigidbody2D.html
 
+        /* Disabling death for now, since it can get in the way of development
         if (deathHandler.IsAlive)
         {
             Jump();
@@ -81,7 +82,13 @@ public class Player : MonoBehaviour, ISerializable
 
             MoveDirection();
         }
+        */
 
+        Jump();
+
+        InitialVelocitySet();
+
+        MoveDirection();
     }
 
     /*
