@@ -29,7 +29,7 @@ public class Bullet : MonoBehaviour, ISerializable
     }
 
     /*
-     * StoreStartingPos - initalizes storage vars and isInPlay
+     * StoreStartingPos - initializes storage vars and isInPlay
      */
     private void StoreStartingPos()
     {
@@ -99,7 +99,7 @@ public class Bullet : MonoBehaviour, ISerializable
         rb.velocity = new Vector2(0, 0);
     }
 
-    /// Serial Methods, see Serial Namespace 
+    /// Serial Methods, see Serial namespace 
     public ISerialDataStore GetCurrentState()
     {
         return new SaveBullet(  isInPlay, timeLeftInPLay,

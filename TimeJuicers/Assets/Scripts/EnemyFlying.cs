@@ -86,8 +86,8 @@ public class EnemyFlying : MonoBehaviour, ISerializable
      */
     private void Store()
     {
-        // Just in case two enemies are on top of eachother vertically, also stores to a starting y
-        // Symmetric storage around y-axis so that a high enemy isn't stored above the death boundry
+        // Just in case two enemies are on top of each other vertically, also stores to a starting y
+        // Symmetric storage around y-axis so that a high enemy isn't stored above the death boundary
         transform.position = new Vector2(storageX, -25f - storageY); 
         rb.velocity = Vector3.zero;
         rb.angularVelocity = 0f;

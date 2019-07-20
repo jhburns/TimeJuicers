@@ -21,12 +21,12 @@ public class StateController : MonoBehaviour
 
     private bool isPaused;
     private bool rewindDisabled; 
-    private bool allowRewindTime; // Used to make sure that the user has to reinput rewind time when it was disabled
+    private bool allowRewindTime; // Used to make sure that the user has to re-input rewind time when it was disabled
 
     private UserInput input;
 
     /*
-     * Start - finds serializable objects and initalizes stack  
+     * Start - finds serializable objects and initializes stack  
      */
     void Start()
     {
@@ -122,7 +122,7 @@ public class StateController : MonoBehaviour
     }
 
     /*
-     * RewindTime - checks wheter player is trying to rewind or saves current game state
+     * RewindTime - checks whether player is trying to rewind or saves current game state
      */
     private void RewindTime()
     {
@@ -191,7 +191,7 @@ public class StateController : MonoBehaviour
     }
 
     /*
-     * CollectStates - gets the current state from each serializable object
+     * CollectStates - gets the current state from each serialize object
      */
     ISerialDataStore[] CollectStates()
     {
@@ -221,7 +221,7 @@ public class StateController : MonoBehaviour
     /*
      * ToggleBehaviourSerializable - allows revert to block other inputs
      * Params:
-     *  - bool toggle: sets the 'enable' state for all Serializable objects
+     *  - bool toggle: sets the 'enable' state for all ISerializable objects
      */
     private void ToggleBehaviourSerializable(bool toggle)
     {

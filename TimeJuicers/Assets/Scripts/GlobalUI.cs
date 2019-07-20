@@ -61,7 +61,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
         rewindPrompt.enabled = false;
         restartPrompt.enabled = false;
         outOfJuiceText.enabled = false;
-        startingAlphaPromt = rewindPrompt.color.a; // Lazy, starting alpha is only dependant on rewind
+        startingAlphaPromt = rewindPrompt.color.a; // Lazy, starting alpha is only dependent on rewind
         rewindPrompt.color = GetAlphaChange(rewindPrompt, 0f);
         restartPrompt.color = GetAlphaChange(restartPrompt, 0f);
         outOfJuiceText.color = GetAlphaChange(outOfJuiceText, 0f);
@@ -151,7 +151,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
 
     /*
      * PauseGame - stops time, and state controller,
-     * Starts a couroutine to animate the time juice loss
+     * Starts a coroutine to animate the time juice loss
      */
     private void PauseGame()
     {
@@ -185,7 +185,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
     }
 
     /*
-     * CheckResurrected - needed to prevent player from rewwinding until death display is completed  
+     * CheckResurrected - needed to prevent player from rewinding until death display is completed  
      */
     private void CheckResurrected()
     {

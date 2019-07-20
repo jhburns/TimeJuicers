@@ -57,7 +57,7 @@ public class TimeJuiceUI : MonoBehaviour
 
     /*
      * DecreaseBar - Animation for time bar losing time juice
-     * Returns: IEnumerator menaing this is an async method
+     * Returns: IEnumerator meaning this is an async method
      */
     public IEnumerator DecreaseBar()
     {

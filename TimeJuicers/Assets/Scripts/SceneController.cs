@@ -14,7 +14,7 @@ public class SceneController : MonoBehaviour, ISerializable
 
     public string nextSceneName;
     private AsyncOperation nextScene; // After the scene is loaded, it is put here
-                                      // Be careful not to reference it before it is guranteed to be safe
+                                      // Be careful not to reference it before it is guaranteed to be safe
     private bool mayProcceed;
 
     public GlobalUI interfaceHandler;
@@ -173,7 +173,7 @@ public class SceneController : MonoBehaviour, ISerializable
     }
 
     /*
-     * FadeInUI - grandually animates the win UI becoming more opaque
+     * FadeInUI - gradually animates the win UI becoming more opaque
      * Params:
      *  - float rate: the speed at which the animate is performed 
      * Returns: IEnumerator meaning this method is async

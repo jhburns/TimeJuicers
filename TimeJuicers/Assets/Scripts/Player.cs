@@ -22,7 +22,7 @@ public class Player : MonoBehaviour, ISerializable
 
     public float axisBounds;
 
-    private bool leftHorizontalAxisDown; // These vars are used to act as a keydown for stick controls
+    private bool leftHorizontalAxisDown; // These vars are used to act as a key-down for stick controls
     private bool rightHorizontalAxisDown;
 
     public GlobalUI deathHandler; //IM
@@ -80,8 +80,6 @@ public class Player : MonoBehaviour, ISerializable
      */
     void Update()
     {
-        // bascially everywhere: https://docs.unity3d.com/ScriptReference/Rigidbody2D.html
-
         /* Disabling death for now, since it can get in the way of development
         if (deathHandler.IsAlive)
         {
@@ -115,7 +113,7 @@ public class Player : MonoBehaviour, ISerializable
     }
 
     /*
-     * InitialVelocitySet - sets initial values to move move player left/right
+     * InitialVelocitySet - sets initial values to move player left/right
      */
     private void InitialVelocitySet()
     {
@@ -232,7 +230,7 @@ public class Player : MonoBehaviour, ISerializable
      */
     private void StopMoving()
     {
-        float accScale = 0.5f; // Air resistence
+        float accScale = 0.5f; // Air resistance
 
         if (grounded)
         {
@@ -252,7 +250,7 @@ public class Player : MonoBehaviour, ISerializable
     }
 
     /*
-     * RoundToZero - prevents player from ossilating back and forth
+     * RoundToZero - prevents player from oscillating back and forth
      * Params:
      *  - float num: the number to be rounded down
      * Returns: float number that is either itself of zero, if near zero
@@ -319,7 +317,7 @@ public class Player : MonoBehaviour, ISerializable
         sceneCamera.ExactMode();
         Destroy(flag.GetComponent<BoxCollider2D>());
 
-        // Has to set to flag postion or else the z value won't change
+        // Has to set to flag position or else the z value won't change
         // Not sure why, I believe Unity skips only z changes in 2D mode to save resources
         transform.position = new Vector3(flag.transform.position.x, flag.transform.position.y, 20); // Move Behind the flag
 

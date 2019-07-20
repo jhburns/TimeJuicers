@@ -6,7 +6,7 @@ namespace Serial
     {
         //     It is recommended to put a '//IM' comment next to each field in a class
         // that isn't tracked by the serialization. This tell us that other fields are
-        // saved by the respective ISerialDataStore, or are purposly not saved.
+        // saved by the respective ISerialDataStore, or are purposely not saved.
 
         /*
          * GetCurrentState - called by StateController each frame, unless rewinding
