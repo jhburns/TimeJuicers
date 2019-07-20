@@ -7,7 +7,7 @@ namespace InputMapping
 {
     public class UserInput
     {
-        private float axisBounds;
+        private float axisBounds; // inside range [0-1]
 
         public UserInput(float axis)
         {
