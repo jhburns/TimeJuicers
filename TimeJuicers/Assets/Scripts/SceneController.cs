@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Serial;
 using UnityEngine.UI;
+using InputMapping;
 
 
 public class SceneController : MonoBehaviour, ISerializable
@@ -26,6 +27,8 @@ public class SceneController : MonoBehaviour, ISerializable
 
     public Player winningPlayer;
 
+    private UserInput input;
+
     void Start()
     {
         Init();
@@ -39,6 +42,8 @@ public class SceneController : MonoBehaviour, ISerializable
     {
         jumpTriggersRestart = false;
         mayProcceed = false;
+
+        input = new UserInput(axisBounds);
     }
 
     /*
@@ -57,7 +62,7 @@ public class SceneController : MonoBehaviour, ISerializable
      */
     void Update()
     {
-        if (jumpTriggersRestart && CheckJumpDown())
+        if (jumpTriggersRestart && input.JumpDown())
         {
             DifficultyPersister diff = FindDiff();
 

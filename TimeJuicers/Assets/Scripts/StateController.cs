@@ -5,12 +5,12 @@ using System.Linq;
 using Serial;
 using System;
 using UnityEngine.UI;
+using InputMapping;
 
 
 public class StateController : MonoBehaviour
 {
-    ISerializable[] allSerialObjects; // Are also of the MonoBehaviour class, so can be cast to
-    // https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.stack-1?view=netframework-4.7.2
+    ISerializable[] allSerialObjects;
     private FixedStack<ISerialDataStore[]> pastStates;
     public int frameCount; // About 60 frames per second so 'frameCount = 3600' means the you can rewind for 1 minute
 
@@ -23,17 +23,18 @@ public class StateController : MonoBehaviour
     private bool rewindDisabled; 
     private bool allowRewindTime; // Used to make sure that the user has to reinput rewind time when it was disabled
 
+    private UserInput input;
+
     /*
      * Start - finds serializable objects and initalizes stack  
      */
     void Start()
     {
         FindSerializable();
+
         InitStack();
-
         InitUI();
-
-        pastTrigger = 0f;
+        InitInput();
     }
 
     /*
@@ -73,6 +74,12 @@ public class StateController : MonoBehaviour
         isPaused = false;
         rewindDisabled = false;
         allowRewindTime = true;
+    }
+
+    private void InitInput()
+    {
+        pastTrigger = 0f;
+        input = new UserInput();
     }
 
     /*
@@ -119,15 +126,8 @@ public class StateController : MonoBehaviour
      */
     private void RewindTime()
     {
-        // https://docs.unity3d.com/ScriptReference/Input.GetKeyDown.html
-        // https://wiki.unity3d.com/index.php/Xbox360Controller
-        if ((Input.GetKey(KeyCode.K) ||
-             Input.GetKey(KeyCode.R) ||
-             Input.GetKey(KeyCode.JoystickButton3) || // Y button on xbox 360 controller
-             Input.GetAxisRaw("LeftTrigger") == 1
-            )
-            && pastStates.Count > 1 // Check for greater than 1 to prevent initialization issues
-            && allowRewindTime)
+        // Check for greater than 1 to prevent initialization issues
+        if (input.RewindDown() && pastStates.Count > 1 && allowRewindTime)
         {
             RevertState();
             AudioListener.volume = 0;

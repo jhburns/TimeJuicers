@@ -3,11 +3,24 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-namespace InputMapping
-{
+// for reference: https://wiki.unity3d.com/index.php/Xbox360Controller
+
+namespace InputMapping {
+
+    /* 
+     * Purpose of this namespace is to share code for the same buttons across objects
+     * Currently cause users can't choose their input scheme,
+     * Just returns if any of a number of inputs were selected
+     */
+
     public class UserInput
     {
         private float axisBounds; // inside range [0-1]
+
+        public UserInput()
+        {
+            axisBounds = 0.5f;
+        }
 
         public UserInput(float axis)
         {
@@ -29,6 +42,14 @@ namespace InputMapping
                     Input.GetKeyDown(KeyCode.Joystick1Button0) || // A button on xbox 360 controller
                     Input.GetKeyDown(KeyCode.Joystick1Button2) || // X button on xbox 360 controller
                     Input.GetAxisRaw("Vertical") > axisBounds;
+        }
+
+        public bool RewindDown()
+        {
+            return  Input.GetKey(KeyCode.K) ||
+                    Input.GetKey(KeyCode.R) ||
+                    Input.GetKey(KeyCode.JoystickButton3) || // Y button on xbox 360 controller
+                    Input.GetAxisRaw("LeftTrigger") == 1;
         }
     }
 
