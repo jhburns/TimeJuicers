@@ -415,7 +415,7 @@ internal class IllegalRemoveStackException : Exception
     }
 
     public IllegalRemoveStackException(string message)
-        : base(String.Format("Trying to performn the following operation on the FixedArray Stack is illegal: {0}", message))
+        : base(String.Format("Trying to perform the following operation on the FixedArray Stack is illegal: {0}", message))
     {
 
     }

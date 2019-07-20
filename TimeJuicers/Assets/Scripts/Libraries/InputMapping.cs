@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace InputMapping
 {
@@ -10,7 +11,14 @@ namespace InputMapping
 
         public UserInput(float axis)
         {
-            axisBounds = axis;
+            if (axis >= 0 && axis <= 1)
+            {
+                axisBounds = axis;
+            }
+            else
+            {
+                throw new RangeOutOfBoundsException("Range for axis bounds should be 0-1");
+            }
         }
 
         public bool JumpDown()
@@ -24,5 +32,18 @@ namespace InputMapping
         }
     }
 
+    internal class RangeOutOfBoundsException : Exception
+    {
+        public RangeOutOfBoundsException()
+        {
+
+        }
+
+        public RangeOutOfBoundsException(string message)
+            : base(String.Format("Outside of range bounds: {0}", message))
+        {
+
+        }
+    }
 }
 
