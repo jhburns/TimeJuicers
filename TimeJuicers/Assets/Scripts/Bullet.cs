@@ -17,7 +17,7 @@ public class Bullet : MonoBehaviour, ISerializable
     private float timeLeftInPLay;
     public float maxTime; //IM
 
-    public bool IsMovingRight { get; private set; } // Used by other objects to know where the bullet is headed
+    public bool IsMovingRight { get; private set; }
 
     void Start()
     {
@@ -26,16 +26,18 @@ public class Bullet : MonoBehaviour, ISerializable
         rb.freezeRotation = true;
 
         StoreStartingPos();
+
+        isInPlay = false;
     }
 
     /*
-     * StoreStartingPos - initializes storage vars and isInPlay
+     * StoreStartingPos - initializes storage vars
+     * So this bullet knows where to return to after timing out
      */
     private void StoreStartingPos()
     {
         storageX = transform.position.x;
         storageY = transform.position.y;
-        isInPlay = false;
     }
 
     void Update()
@@ -69,14 +71,15 @@ public class Bullet : MonoBehaviour, ISerializable
     }
 
     /*
-     * HasTimeEnded - stores the bullets after a period of time, so it doesn't move forever
+     * HasTimeEnded - stores the bullets after a period of time, so it doesn't continue forever
      */
     private void HasTimeEnded()
     {
         if (timeLeftInPLay < 0)
         {
             Store();
-        } else
+        }
+        else
         {
             timeLeftInPLay -= Time.deltaTime;
         }

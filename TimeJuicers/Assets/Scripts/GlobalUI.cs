@@ -29,7 +29,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
     public Text rewindPrompt;
     public Text restartPrompt;
     public Text outOfJuiceText;
-    private bool fadeInWhichPrompt; // true means display rewind text, false restart text
+    private bool fadeInWhichPrompt; // true means display rewind prompt, false restart prompt
     private float startingAlphaPromt;
 
     public SceneController scene;
@@ -61,14 +61,14 @@ public class GlobalUI : MonoBehaviour, ISerializable
         rewindPrompt.enabled = false;
         restartPrompt.enabled = false;
         outOfJuiceText.enabled = false;
-        startingAlphaPromt = rewindPrompt.color.a; // Lazy, starting alpha is only dependent on rewind
+        startingAlphaPromt = rewindPrompt.color.a; // Lazy implementation, starting alpha is only dependent on rewind color
         rewindPrompt.color = GetAlphaChange(rewindPrompt, 0f);
         restartPrompt.color = GetAlphaChange(restartPrompt, 0f);
         outOfJuiceText.color = GetAlphaChange(outOfJuiceText, 0f);
     }
 
     /*
-    * Update - Checks every frame if death interface animations should be done
+    * Update - Checks every frame if death interface animations should be played
     */
     void Update()
     {
@@ -97,6 +97,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
 
     /*
      * AnimateDeath - triggers animations for death interface 
+     * TODO: refactor to not just be chained if statements
      */
     private void AnimateDeath()
     {
@@ -141,6 +142,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
         }
 
         // After here animation timing is now frame based, not time based
+        // Due to the game becoming paused
 
         if (deathAnimationTrigger < 7.5f)
         {
@@ -167,7 +169,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
     }
 
     /*
-     * PromptOnDeath - determines, then displays, the correct text prompting the player for input
+     * PromptOnDeath - determines then displays, the appropriate text prompting the player for input
      */
     private void PromptOnDeath() {
         if (fadeInWhichPrompt)
@@ -219,8 +221,9 @@ public class GlobalUI : MonoBehaviour, ISerializable
     }
 
     /*
-     * CannotDie - to prevent death after winning,
-     * Fun you can only live forever after living
+     * CannotDie - to prevent death after winning : ),
+     * Funny you can only live forever after dying,
+     * (For real, is used to prevent the player from re triggering death event)
      */
     public void CannotDie()
     {

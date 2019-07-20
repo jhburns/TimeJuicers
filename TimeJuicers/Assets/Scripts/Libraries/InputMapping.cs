@@ -66,7 +66,7 @@ namespace InputMapping {
          */
         public bool FireDown()
         {
-            return Input.GetKey(KeyCode.F) ||
+            return  Input.GetKey(KeyCode.F) ||
                     Input.GetKey(KeyCode.J) ||
                     Input.GetKey(KeyCode.JoystickButton1) || // B button on xbox 360 controller
                     Input.GetAxisRaw("RightTrigger") == 1;

@@ -35,7 +35,7 @@ public class EnemyFlying : MonoBehaviour, ISerializable
     }
 
     /*
-     * InitRigid - starts the physics on the enemy
+     * InitRigid - starts the physics engine
      */
     private void InitRigid()
     {
@@ -62,7 +62,7 @@ public class EnemyFlying : MonoBehaviour, ISerializable
 
     /* 
      * Update - Moves enemy based on current direction,
-     * Stores enemy after timeout 
+     * Stores enemy after timeout when killed
      */
     void Update()
     {
@@ -108,7 +108,7 @@ public class EnemyFlying : MonoBehaviour, ISerializable
         }
 
 
-        // Enemy can only move up from orgin, range only reverses from height of flight
+        // Enemy can only move up from origin, isHeadingUp only reverses starting location not destination 
         if (transform.position.y - newVelocityY < storageY)
         {
             isHeadingUp = true;

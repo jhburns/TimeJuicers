@@ -4,12 +4,12 @@ using UnityEngine;
 using Serial;
 using InputMapping;
 
+
 public class BulletManager : MonoBehaviour, ISerializable
 {
     public Player player; //IM
 
     public int maxBullets; //IM
-    //https://docs.microsoft.com/en-us/dotnet/api/system.collections.generic.list-1?view=netframework-4.8
     private List<Bullet> bullets; //IM
     private int bulletIndex; //IM
 
@@ -18,7 +18,7 @@ public class BulletManager : MonoBehaviour, ISerializable
 
     public GlobalUI deathHandler; //IM
 
-    private UserInput input;
+    private UserInput input; //IM
 
     void Start()
     {
@@ -28,7 +28,7 @@ public class BulletManager : MonoBehaviour, ISerializable
     }
 
     /*
-     * InitTime - setup non bullet vars
+     * Init - setup non-bullet vars
      */
     private void Init()
     {
@@ -37,7 +37,7 @@ public class BulletManager : MonoBehaviour, ISerializable
     }
 
     /*
-     * InitBullets - adds all the existing bullets to an array
+     * InitBullets - finds then adds all the existing bullets to an array
      */
     private void InitBullets()
     {
@@ -70,7 +70,8 @@ public class BulletManager : MonoBehaviour, ISerializable
     }
 
     /*
-     * Fire - starts a new bullet in the player world, moving in the correct direction
+     * Fire - moves a new bullet in the player world, in the appropriate direction
+     * Or prevents a bullet from being fired during cool-down
      */
     void Fire()
     {
@@ -83,7 +84,7 @@ public class BulletManager : MonoBehaviour, ISerializable
             offset *= -1;
         }
 
-        float xPos = player.transform.position.x + offset; // offset used to place bullet in front, not inside, of player
+        float xPos = player.transform.position.x + offset; // offset used to place bullet in front (not middle) of player
 
         currentBul.InPlay(player.MovingRight, new Vector2(xPos, player.transform.position.y));
 

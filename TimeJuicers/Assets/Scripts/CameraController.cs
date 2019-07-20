@@ -18,9 +18,6 @@ public class CameraController : MonoBehaviour, ISerializable
         isExactMode = false;
     }
 
-    /*
-     * Update - moves camera to new position, based on player position
-     */
     private void Update()
     {
         Vector3 newPosition = Target.position;
@@ -38,7 +35,8 @@ public class CameraController : MonoBehaviour, ISerializable
     }
 
     /*
-     * ExactMode - sets the camera to follow the player exactly
+     * ExactMode - sets the camera to follow the player exactly to their x, y
+     * Called by end of level cinematic to prevent player leaving camera behind
      */
     public void ExactMode()
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /*
- * Purpose is to store selected difficulty between levels
+ * Purpose is to store selected difficulty between level scenes
  */
 
 public class DifficultyPersister : MonoBehaviour

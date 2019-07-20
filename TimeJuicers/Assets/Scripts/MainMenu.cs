@@ -9,8 +9,6 @@ public class MainMenu : MonoBehaviour
 {
     public Toggle loadFourth;
 
-    // https://docs.unity3d.com/ScriptReference/SceneManagement.SceneManager.LoadScene.html
-
     /*
      * StartNormalScene - trigger the starting level to load,
      * Creates Difficulty object with normal settings
@@ -43,7 +41,7 @@ public class MainMenu : MonoBehaviour
 
     /*
      * CreateDifficultyPersister - creates an DifficultyPersister object to store difficulty between scenes,
-     * Note it isn't destroyed on next scene 
+     * Note it isn't destroyed when going to the next
      * Params:
      *  - int maxFrames: the stack size for the state controller
      *  - int framePenalty: how many frames are removed with each death
@@ -63,7 +61,7 @@ public class MainMenu : MonoBehaviour
     }
 
     /*
-     * FirstLevel - loads into the game
+     * FirstLevel - loads into the wanted level
      * Loads the fourth level instead of first if toggled in UI
      */
     private void FirstLevel()

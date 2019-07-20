@@ -11,9 +11,6 @@ public class Cloud : MonoBehaviour, ISerializable
     private float leftXBound; //IM  
     private float rightXBound; //IM
 
-    /* 
-     * Update - Moves the cloud to the right
-     */
     void Update()
     {
         transform.position = new Vector3(transform.position.x + speed * Time.deltaTime, transform.position.y, transform.position.z);        
@@ -25,7 +22,7 @@ public class Cloud : MonoBehaviour, ISerializable
     }
 
     /*
-     * SetBounds - sets both left and right x bounds coordinate 
+     * SetBounds - sets both left and right x coordinates for boundary
      * Params:
      *  - float left: left x-axis bound
      *  - float right: right x-axis bound

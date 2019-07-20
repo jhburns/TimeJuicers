@@ -10,11 +10,12 @@ using InputMapping;
 public class SceneController : MonoBehaviour, ISerializable
 {
     private bool jumpTriggersRestart;
-    public float axisBounds; // likely should be the same as on play, but doesn't have to be, IM
+    public float axisBounds; // likely should be the same as on player, but doesn't have to be, IM
 
     public string nextSceneName;
-    private AsyncOperation nextScene; // After the scene is loaded, it is put here
-                                      // Be careful not to reference it before it is guaranteed to be safe
+    // After the scene is loaded, it is put here
+    // Be careful not to reference it before it is guaranteed to be safe
+    private AsyncOperation nextScene;
     private bool mayProcceed;
 
     public GlobalUI interfaceHandler;
@@ -58,7 +59,7 @@ public class SceneController : MonoBehaviour, ISerializable
     }
 
     /*
-     * Update - Checks for jump input only if dead
+     * Update - checks for jump input only when dead
      */
     void Update()
     {
@@ -75,25 +76,11 @@ public class SceneController : MonoBehaviour, ISerializable
             Scene scene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(scene.name);
         }
-        else if (mayProcceed && CheckJumpDown())
+        else if (mayProcceed && input.JumpDown())
         {
             nextScene.allowSceneActivation = true;
         }
 
-    }
-
-    /*
-     * CheckAndRestart - reloads scene on trigger inputs
-     * Returns: bool true if the player pressed down space on this frame
-     */
-    private bool CheckJumpDown()
-    {
-        return  Input.GetKeyDown(KeyCode.Space) ||
-                Input.GetKeyDown(KeyCode.W) ||
-                Input.GetKeyDown(KeyCode.UpArrow) ||
-                Input.GetKeyDown(KeyCode.Joystick1Button0) || // A button on xbox 360 controller
-                Input.GetKeyDown(KeyCode.Joystick1Button2) || // X button on xbox 360 controller
-                Input.GetAxisRaw("Vertical") > axisBounds;
     }
 
     /*

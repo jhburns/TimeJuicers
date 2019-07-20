@@ -24,7 +24,7 @@ public class CloudController : MonoBehaviour
     }
 
     /*
-     * SetBoundsAllClouds - gives each cloud boundaries to not cross
+     * SetBoundsAllClouds - sets boundaries on each cloud to not cross
      * Params:
      *  - Cloud[] clouds: a group of cloud objects to have their bounds set
      */

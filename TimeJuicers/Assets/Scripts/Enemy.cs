@@ -31,7 +31,7 @@ public class Enemy : MonoBehaviour, ISerializable
     }
 
     /*
-     * InitRigid - starts the physics on the enemy
+     * InitRigid - starts the physics engine
      */
     private void InitRigid()
     {
@@ -52,7 +52,7 @@ public class Enemy : MonoBehaviour, ISerializable
 
     /* 
      * Update - Moves enemy based on current direction,
-     * Stores enemy after timeout 
+     * Stores enemy after timeout when killed
      */
     void Update()
     {
@@ -90,9 +90,8 @@ public class Enemy : MonoBehaviour, ISerializable
     }
 
     /*
-     * OnCollisionEnter2D - handles physics collisions
-     * Params:
-     *  - Collision2D col: the other object being collided with
+     * OnCollisionEnter2D - can collides with multiple other objects,
+     * Importantly turns around when colliding with non-ground blocks
      */
     void OnCollisionEnter2D(Collision2D col)
     {
@@ -131,7 +130,8 @@ public class Enemy : MonoBehaviour, ISerializable
     }
 
     /*
-     * OnTriggerEnter2D - collisions, but only used for non-physics objects
+     * OnTriggerEnter2D - collisions, but only used for non-physical objects that the enemy can pass through
+     * Turns this around on invisible enemy boundary blocks
      */
     void OnTriggerEnter2D(Collider2D col)
     {
