@@ -13,6 +13,9 @@ public class CameraController : MonoBehaviour, ISerializable
 
     private bool isExactMode; //NOT serialized, only needed for cinematic 
 
+    public float maxDistanceY; //IM
+    public float maxDistanceX; //IM
+
     private void Start()
     {
         transform.position = target.position; // Only player needs to be moved, camera follows on start
@@ -31,8 +34,16 @@ public class CameraController : MonoBehaviour, ISerializable
         }
         else
         {
-            newPosition.y = Mathf.Clamp(newPosition.y, minHeight, float.PositiveInfinity);
-            transform.position = Vector3.Slerp(transform.position, newPosition, 0.05f);
+            float smoothY = Mathf.Lerp(transform.position.y, newPosition.y, 0.05f);
+            float smoothX = Mathf.Lerp(transform.position.x, newPosition.x, 0.035f);
+            Vector3 smoothPos = new Vector3(smoothX, smoothY, -10);
+
+            smoothPos.y = Mathf.Clamp(smoothPos.y, newPosition.y - maxDistanceY, newPosition.y + maxDistanceY);
+            smoothPos.x = Mathf.Clamp(smoothPos.x, newPosition.x - maxDistanceX, newPosition.x + maxDistanceX);
+
+            smoothPos.y = Mathf.Clamp(smoothPos.y, minHeight, float.PositiveInfinity);
+ 
+            transform.position = smoothPos;
         }
     }
 
