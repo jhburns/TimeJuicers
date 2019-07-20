@@ -7,7 +7,7 @@ using Serial;
 // https://www.salusgames.com/2016/12/28/smooth-2d-camera-follow-in-unity3d/
 public class CameraController : MonoBehaviour, ISerializable
 {
-    public Transform Target; //IM
+    public Transform target; //IM
 
     public float minHeight; //IM
 
@@ -15,12 +15,14 @@ public class CameraController : MonoBehaviour, ISerializable
 
     private void Start()
     {
+        transform.position = target.position; // Only player needs to be moved, camera follows on start
+
         isExactMode = false;
     }
 
     private void Update()
     {
-        Vector3 newPosition = Target.position;
+        Vector3 newPosition = target.position;
         newPosition.z = -10;
 
         if (isExactMode)
