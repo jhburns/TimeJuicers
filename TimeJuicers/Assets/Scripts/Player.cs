@@ -5,6 +5,7 @@ using System;
 using Serial;
 using InputMapping;
 
+using Direction;
 
 public class Player : MonoBehaviour, ISerializable
 {
