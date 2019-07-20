@@ -34,6 +34,10 @@ namespace InputMapping {
             }
         }
 
+        /*
+         * JumpDown - when user presses whatever button is 'jump' down
+         * Returns: bool true if button is pressed down this frame
+         */
         public bool JumpDown()
         {
             return  Input.GetKeyDown(KeyCode.Space) ||
@@ -44,12 +48,28 @@ namespace InputMapping {
                     Input.GetAxisRaw("Vertical") > axisBounds;
         }
 
+        /*
+         * RewindDown - when user presses whatever button is 'rewind' down
+         * Returns: bool true if button is pressed down this frame
+         */
         public bool RewindDown()
         {
             return  Input.GetKey(KeyCode.K) ||
                     Input.GetKey(KeyCode.R) ||
                     Input.GetKey(KeyCode.JoystickButton3) || // Y button on xbox 360 controller
                     Input.GetAxisRaw("LeftTrigger") == 1;
+        }
+
+        /*
+         * FireDown - when user presses whatever button is 'fire' down
+         * Returns: bool true if button is pressed down this frame
+         */
+        public bool FireDown()
+        {
+            return Input.GetKey(KeyCode.F) ||
+                    Input.GetKey(KeyCode.J) ||
+                    Input.GetKey(KeyCode.JoystickButton1) || // B button on xbox 360 controller
+                    Input.GetAxisRaw("RightTrigger") == 1;
         }
     }
 

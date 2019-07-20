@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Serial;
-
+using InputMapping;
 
 public class BulletManager : MonoBehaviour, ISerializable
 {
@@ -18,6 +18,8 @@ public class BulletManager : MonoBehaviour, ISerializable
 
     public GlobalUI deathHandler; //IM
 
+    private UserInput input;
+
     void Start()
     {
         Init();
@@ -31,6 +33,7 @@ public class BulletManager : MonoBehaviour, ISerializable
     private void Init()
     {
         nextFire = 0f;
+        input = new UserInput();
     }
 
     /*
@@ -54,16 +57,7 @@ public class BulletManager : MonoBehaviour, ISerializable
 
     void Update()
     {
-        // http://wiki.unity3d.com/index.php?title=Xbox360Controller
-        if ((Input.GetKey(KeyCode.F) ||
-             Input.GetKey(KeyCode.J) ||
-             Input.GetKey(KeyCode.JoystickButton1) || // B button on xbox 360 controller
-             Input.GetAxisRaw("RightTrigger") == 1
-            )  
-
-             && nextFire < 0 
-             && deathHandler.IsAlive
-           )
+        if (input.FireDown() && nextFire < 0 && deathHandler.IsAlive)
         {
             nextFire = fireRate;
             Fire();
