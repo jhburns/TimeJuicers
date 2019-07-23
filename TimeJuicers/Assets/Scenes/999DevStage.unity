@@ -511,24 +511,6 @@ Tilemap:
       m_ObjectToInstantiate: {fileID: 0}
       m_TileFlags: 1
       m_ColliderType: 2
-  - first: {x: -7, y: -6, z: 0}
-    second:
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_ObjectToInstantiate: {fileID: 0}
-      m_TileFlags: 1
-      m_ColliderType: 2
-  - first: {x: -6, y: -6, z: 0}
-    second:
-      m_TileIndex: 0
-      m_TileSpriteIndex: 0
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_ObjectToInstantiate: {fileID: 0}
-      m_TileFlags: 1
-      m_ColliderType: 2
   - first: {x: -3, y: -6, z: 0}
     second:
       m_TileIndex: 0
@@ -629,6 +611,24 @@ Tilemap:
       m_TileFlags: 1
       m_ColliderType: 2
   - first: {x: 8, y: -6, z: 0}
+    second:
+      m_TileIndex: 0
+      m_TileSpriteIndex: 0
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 2
+  - first: {x: -1, y: -5, z: 0}
+    second:
+      m_TileIndex: 0
+      m_TileSpriteIndex: 0
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 2
+  - first: {x: 0, y: -5, z: 0}
     second:
       m_TileIndex: 0
       m_TileSpriteIndex: 0
@@ -890,6 +890,14 @@ CompositeCollider2D:
         Y: -40000000
       - X: 60000000
         Y: -50000000
+      - X: 10000000
+        Y: -50000000
+      - X: 10000000
+        Y: -40000000
+      - X: -10000000
+        Y: -40000000
+      - X: -10000000
+        Y: -50000000
       - X: -30000000
         Y: -50000000
       - X: -30000000
@@ -904,14 +912,6 @@ CompositeCollider2D:
         Y: -70000000
       - X: -90000000
         Y: -70000000
-    - - X: -50000000
-        Y: -50000000
-      - X: -70000000
-        Y: -50000000
-      - X: -70000000
-        Y: -60000000
-      - X: -50000000
-        Y: -60000000
   m_CompositePaths:
     m_Paths:
     - - {x: 4, y: 5}
@@ -937,6 +937,10 @@ CompositeCollider2D:
     - - {x: 9, y: -4}
       - {x: 6, y: -4}
       - {x: 6, y: -5}
+      - {x: 1, y: -5}
+      - {x: 1, y: -4}
+      - {x: -1, y: -4}
+      - {x: -1, y: -5}
       - {x: -3, y: -5}
       - {x: -3, y: -7}
       - {x: 9, y: -7}
@@ -944,10 +948,6 @@ CompositeCollider2D:
       - {x: -18, y: -5}
       - {x: -18, y: -7}
       - {x: -9, y: -7}
-    - - {x: -5, y: -5}
-      - {x: -7, y: -5}
-      - {x: -7, y: -6}
-      - {x: -5, y: -6}
   m_VertexDistance: 0.0005
 --- !u!50 &152863321
 Rigidbody2D:
