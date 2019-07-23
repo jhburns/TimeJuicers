@@ -11,7 +11,7 @@ public class CameraController : MonoBehaviour, ISerializable
 
     public float minHeight; //IM
 
-    public bool isExactMode; //NOT serialized, only needed for cinematic 
+    private bool isExactMode; //NOT serialized, only needed for cinematic 
 
     public float maxDistanceY; //IM
     public float maxDistanceX; //IM

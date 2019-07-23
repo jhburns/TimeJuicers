@@ -12,6 +12,7 @@ public class Player : MonoBehaviour, ISerializable
     public float jumpHeight; //IM = suppose to be immutable
     public float moveSpeed; //IM
     private float velHorz;  // Mutable, but not tracked
+    private float velVert;
     private const float acceleration = 0.1f; //IM
     public bool MovingRight { get; private set; }
 
@@ -36,6 +37,8 @@ public class Player : MonoBehaviour, ISerializable
     public float deathShrinkRatio; // range 0-1 inclusive
 
     private UserInput input;
+
+    public float terminalVelocity; // negative number, range < 0 
 
     void Start()
     {
@@ -67,6 +70,7 @@ public class Player : MonoBehaviour, ISerializable
     private void InitPlayer()
     {
         velHorz = 0f;
+        velVert = 0f;
         grounded = false;
         MovingRight = true;
 
@@ -97,6 +101,7 @@ public class Player : MonoBehaviour, ISerializable
         InitialVelocitySet();
 
         MoveDirection();
+
     }
 
     /*
@@ -194,13 +199,15 @@ public class Player : MonoBehaviour, ISerializable
      */
     private void MoveDirection()
     {
+        velVert = Mathf.Clamp(rb.velocity.y, terminalVelocity, float.PositiveInfinity);
+
         if (Input.GetKey(KeyCode.RightArrow) || 
             Input.GetKey(KeyCode.D) ||
             Input.GetAxisRaw("Horizontal") > axisBounds
            )
         { 
             AccelerateDir(1);
-            rb.velocity = new Vector2(velHorz, rb.velocity.y);
+            rb.velocity = new Vector2(velHorz, velVert);
             transform.localScale = new Vector3(1, 1, 1);
         }
         else if (Input.GetKey(KeyCode.LeftArrow) ||
@@ -209,7 +216,7 @@ public class Player : MonoBehaviour, ISerializable
                 )
         {
             AccelerateDir(-1);
-            rb.velocity = new Vector2(velHorz, rb.velocity.y);
+            rb.velocity = new Vector2(velHorz, velVert);
             transform.localScale = new Vector3(-1, 1, 1);
         }
         else
@@ -247,7 +254,7 @@ public class Player : MonoBehaviour, ISerializable
             velHorz = RoundToZero(velHorz + acceleration * accScale);
         }
 
-        rb.velocity = new Vector2(velHorz, rb.velocity.y);
+        rb.velocity = new Vector2(velHorz, velVert);
     }
 
     /*
