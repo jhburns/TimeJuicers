@@ -11,7 +11,7 @@ public class CameraController : MonoBehaviour, ISerializable
 
     public float minHeight; //IM
 
-    private bool isExactMode; //NOT serialized, only needed for cinematic 
+    public bool isExactMode; //NOT serialized, only needed for cinematic 
 
     public float maxDistanceY; //IM
     public float maxDistanceX; //IM
@@ -35,7 +35,7 @@ public class CameraController : MonoBehaviour, ISerializable
         else
         {
             float smoothY = Mathf.Lerp(transform.position.y, newPosition.y, 0.05f);
-            float smoothX = Mathf.Lerp(transform.position.x, newPosition.x, 0.035f);
+            float smoothX = Mathf.Lerp(transform.position.x, newPosition.x, 0.055f);
             Vector3 smoothPos = new Vector3(smoothX, smoothY, -10);
 
             smoothPos.y = Mathf.Clamp(smoothPos.y, newPosition.y - maxDistanceY, newPosition.y + maxDistanceY);
