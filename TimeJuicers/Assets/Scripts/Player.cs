@@ -18,7 +18,7 @@ public class Player : MonoBehaviour, ISerializable
     private Rigidbody2D rb; // Mutable, but not tracked
     private BoxCollider2D col; //IM
 
-    private bool grounded;
+    private bool isGrounded;
     private int jumps;
     private const int maxJumps = 1; //IM
 
@@ -73,7 +73,7 @@ public class Player : MonoBehaviour, ISerializable
     {
         velHorz = 0f;
         velVert = 0f;
-        grounded = false;
+        isGrounded = false;
         MovingRight = true;
 
         leftHorizontalAxisDown = true;
@@ -98,6 +98,8 @@ public class Player : MonoBehaviour, ISerializable
         }
         */
 
+        CheckPlatformCollision();
+
         Jump();
 
         InitialVelocitySet();
@@ -114,7 +116,7 @@ public class Player : MonoBehaviour, ISerializable
         {
             rb.velocity = Vector2.zero; // To allow for wall jumping
             rb.AddForce(new Vector2(0, jumpHeight), ForceMode2D.Impulse);
-            grounded = false;
+            isGrounded = false;
             jumps--;
         }
     }
@@ -241,7 +243,7 @@ public class Player : MonoBehaviour, ISerializable
     {
         float accScale = 0.5f; // Air resistance
 
-        if (grounded)
+        if (isGrounded)
         {
             accScale = 3f; // Grounded friction
         }
@@ -280,23 +282,6 @@ public class Player : MonoBehaviour, ISerializable
      */
     void OnCollisionEnter2D(Collision2D col)
     {
-        // Make sure to check if the object has a material first
-        if (col.collider.sharedMaterial != null)
-        {
-            if (col.collider.sharedMaterial.name == "PlatformMaterial")
-            {
-                grounded = true;
-                jumps = maxJumps;
-            }
-
-            if (col.collider.sharedMaterial.name == "BouncyMaterial") {
-                jumps = maxJumps;
-                rb.velocity = Vector2.zero; // Prevents unlimited jump height
-                rb.AddForce(new Vector2(0, jumpHeight * 0.9f), ForceMode2D.Impulse);
-            }
-
-        }
-
         if ((col.gameObject.GetComponent<Enemy>() != null ||
              col.gameObject.GetComponent<EnemyFlying>() != null ||
              col.gameObject.name == "DeathZone"
@@ -306,6 +291,18 @@ public class Player : MonoBehaviour, ISerializable
             deathHandler.OnDeath();
             AnimateDeath();
          }
+    }
+
+    private void CheckPlatformCollision()
+    {
+        // Vertical velocity check is so that when the player is leaving the ground,
+        // It can't gain a double jump
+        if (RaycastCollision(-Vector2.up, 0.02f, true) && velVert < 10f)
+        {
+            jumps = maxJumps;
+            isGrounded = true;
+        }
+
     }
 
     /*
@@ -396,7 +393,7 @@ public class Player : MonoBehaviour, ISerializable
     /// Serial Methods, see Serial Namespace 
     public ISerialDataStore GetCurrentState()
     {
-        return new SavePlayer(  MovingRight, grounded, 
+        return new SavePlayer(  MovingRight, isGrounded, 
                                 jumps, transform.position.x, 
                                 transform.position.y, leftHorizontalAxisDown, 
                                 rightHorizontalAxisDown, rb.freezeRotation,
@@ -411,7 +408,7 @@ public class Player : MonoBehaviour, ISerializable
         velHorz = 0f;
 
         MovingRight = past.movingRight;
-        grounded = past.grounded;
+        isGrounded = past.grounded;
         jumps = past.jumps;
 
         transform.position = new Vector3(past.positionX, past.positionY, transform.position.z);
