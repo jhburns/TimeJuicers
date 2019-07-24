@@ -10,8 +10,8 @@ public class Player : MonoBehaviour, ISerializable
 {
     public float jumpHeight; //IM = suppose to be immutable
     public float moveSpeed; //IM
-    private float velHorz;  // Mutable, but not tracked
-    private float velVert;
+    private float velHorz;
+    private float velVert; 
     private const float acceleration = 0.1f; //IM
     public bool MovingRight { get; private set; }
 
@@ -21,6 +21,9 @@ public class Player : MonoBehaviour, ISerializable
     private bool isGrounded;
     private int jumps;
     private const int maxJumps = 1; //IM
+    private int wallJumps;
+    private bool canWallJump;
+    private const int maxWallJumps = 1; //IM
 
     public float axisBounds;
 
@@ -55,7 +58,6 @@ public class Player : MonoBehaviour, ISerializable
         rb = GetComponent<Rigidbody2D>();
         rb.freezeRotation = true;
         rb.gravityScale = 3f;
-        jumps = 0;
         rb.interpolation = RigidbodyInterpolation2D.Interpolate; //Prevents jittery camera
 
         col = GetComponent<BoxCollider2D>();
@@ -75,6 +77,10 @@ public class Player : MonoBehaviour, ISerializable
         velVert = 0f;
         isGrounded = false;
         MovingRight = true;
+
+        jumps = 0;
+        wallJumps = 0;
+        canWallJump = false;
 
         leftHorizontalAxisDown = true;
         rightHorizontalAxisDown = true;
@@ -100,7 +106,7 @@ public class Player : MonoBehaviour, ISerializable
 
         CheckPlatformCollision();
 
-        Jump();
+        CheckJump();
 
         InitialVelocitySet();
 
@@ -108,17 +114,31 @@ public class Player : MonoBehaviour, ISerializable
     }
 
     /*
+     * CheckJump
+     */
+
+    private void CheckJump()
+    {
+        if (input.JumpDown() && jumps > 0)
+        {
+            Jump();
+            jumps--;
+        }
+        else if (input.JumpDown() && wallJumps > 0 && canWallJump)
+        {
+            Jump();
+            wallJumps--;
+        }
+    }
+
+    /*
      * Jump - player moves like a normal platformer jump
      */
     private void Jump()
     {
-        if (input.JumpDown() && jumps > 0)
-        {
-            rb.velocity = Vector2.zero; // To allow for wall jumping
-            rb.AddForce(new Vector2(0, jumpHeight), ForceMode2D.Impulse);
-            isGrounded = false;
-            jumps--;
-        }
+        rb.velocity = Vector2.zero; // To allow for wall jumping
+        rb.AddForce(new Vector2(0, jumpHeight), ForceMode2D.Impulse);
+        isGrounded = false;
     }
 
     /*
@@ -300,7 +320,17 @@ public class Player : MonoBehaviour, ISerializable
         if (RaycastCollision(-Vector2.up, 0.02f, true) && velVert < 10f)
         {
             jumps = maxJumps;
+            wallJumps = maxWallJumps;
             isGrounded = true;
+        }
+
+        if (RaycastCollision(Vector2.left, 0.2f, false) || RaycastCollision(-Vector2.left, 0.2f, false))
+        {
+            canWallJump = true;
+        }
+        else
+        {
+            canWallJump = false;
         }
 
     }
@@ -393,8 +423,10 @@ public class Player : MonoBehaviour, ISerializable
     /// Serial Methods, see Serial Namespace 
     public ISerialDataStore GetCurrentState()
     {
-        return new SavePlayer(  MovingRight, isGrounded, 
-                                jumps, transform.position.x, 
+        return new SavePlayer(  velHorz, velVert,
+                                MovingRight, isGrounded, 
+                                jumps, wallJumps,
+                                canWallJump, transform.position.x, 
                                 transform.position.y, leftHorizontalAxisDown, 
                                 rightHorizontalAxisDown, rb.freezeRotation,
                                 rb.rotation, transform.localScale.x
@@ -405,11 +437,14 @@ public class Player : MonoBehaviour, ISerializable
     {
         SavePlayer past = (SavePlayer) state;
 
-        velHorz = 0f;
+        velHorz = past.velHorz;
+        velVert = past.velVert;
 
         MovingRight = past.movingRight;
         isGrounded = past.grounded;
         jumps = past.jumps;
+        wallJumps = past.wallJumps;
+        canWallJump = past.canWallJump;
 
         transform.position = new Vector3(past.positionX, past.positionY, transform.position.z);
         rb.velocity = Vector2.zero; // Needed because velocity isn't conserved
@@ -426,10 +461,15 @@ public class Player : MonoBehaviour, ISerializable
 
 internal class SavePlayer : ISerialDataStore
 {
+    public float velHorz { get; private set; }
+    public float velVert { get; private set; }
+
     public bool movingRight { get; private set; }
 
     public bool grounded { get; private set; }
     public int jumps { get; private set; }
+    public int wallJumps { get; private set; }
+    public bool canWallJump { get; private set; }
 
     public float positionX { get; private set; }
     public float positionY { get; private set; }
@@ -444,17 +484,24 @@ internal class SavePlayer : ISerialDataStore
 
     public float localXScale { get; private set; }
 
-    public SavePlayer(bool movingR, bool g,
-                        int j, float posX,
+    public SavePlayer(  float velX, float velY,
+                        bool movingR, bool g,
+                        int j, int wallJ,
+                        bool canW, float posX,
                         float posY, bool leftDown,
                         bool rightDown, bool fRot,
                         float rot, float lxScale
                      )
     {
+        velHorz = velX;
+        velVert = velX;
+
         movingRight = movingR;
 
         grounded = g;
         jumps = j;
+        wallJumps = wallJ;
+        canWallJump = canW;
 
         positionX = posX;
         positionY = posY;
