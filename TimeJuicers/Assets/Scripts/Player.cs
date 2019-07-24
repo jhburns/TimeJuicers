@@ -4,8 +4,7 @@ using UnityEngine;
 using System;
 using Serial;
 using InputMapping;
-
-using Direction;
+using static Direction.Convert;
 
 public class Player : MonoBehaviour, ISerializable
 {
@@ -17,6 +16,7 @@ public class Player : MonoBehaviour, ISerializable
     public bool MovingRight { get; private set; }
 
     private Rigidbody2D rb; // Mutable, but not tracked
+    private BoxCollider2D col; //IM
 
     private bool grounded;
     private int jumps;
@@ -57,6 +57,8 @@ public class Player : MonoBehaviour, ISerializable
         rb.gravityScale = 3f;
         jumps = 0;
         rb.interpolation = RigidbodyInterpolation2D.Interpolate; //Prevents jittery camera
+
+        col = GetComponent<BoxCollider2D>();
     }
 
     private void InitInput()
@@ -101,7 +103,6 @@ public class Player : MonoBehaviour, ISerializable
         InitialVelocitySet();
 
         MoveDirection();
-
     }
 
     /*
@@ -282,7 +283,7 @@ public class Player : MonoBehaviour, ISerializable
         // Make sure to check if the object has a material first
         if (col.collider.sharedMaterial != null)
         {
-            if (col.collider.sharedMaterial.name == "GroundMaterial")
+            if (col.collider.sharedMaterial.name == "PlatformMaterial")
             {
                 grounded = true;
                 jumps = maxJumps;
@@ -305,6 +306,44 @@ public class Player : MonoBehaviour, ISerializable
             deathHandler.OnDeath();
             AnimateDeath();
          }
+    }
+
+    /*
+     * RaycastCollision - check if a there is a nearby object, based on player side
+     * Params:
+     *  - Vector2 direction: where to point the ray
+     *  - float lengthFromEdge: distance for the ray to extend past the player's own hitbox
+     *  - bool isUp: whether the direction is vertical or horizontal
+     *  Returns: bool true if the ray hits something
+     */
+    private bool RaycastCollision(Vector2 direction, float lengthFromEdge, bool isUp)
+    {
+        // GetMask returns a binary value, 
+        // tilde inverts it so this means any layer but Player's
+        LayerMask notPlayerLayer =~ LayerMask.GetMask("Player");
+
+        float hitboxMargins = ChooseFrom<float>(isUp, col.size.y / 2, col.size.x / 2);
+        float offsetY;
+        float offsetX;
+
+        if (isUp)
+        {
+            offsetY = 0f;
+            offsetX = col.size.x / 2;
+        }
+        else
+        {
+            offsetY = col.size.y / 2;
+            offsetX = 0f;
+        }
+
+        Vector2 leftRayPos = new Vector2(transform.position.x + offsetX, transform.position.y + offsetY);
+        Vector2 rightRayPos = new Vector2(transform.position.x - offsetX, transform.position.y - offsetY);
+
+        RaycastHit2D hitLeft = Physics2D.Raycast(leftRayPos, direction, lengthFromEdge + hitboxMargins, notPlayerLayer);
+        RaycastHit2D hitRight = Physics2D.Raycast(rightRayPos, direction, lengthFromEdge + hitboxMargins, notPlayerLayer);
+
+        return hitLeft.collider != null || hitRight.collider != null;
     }
 
     /*
