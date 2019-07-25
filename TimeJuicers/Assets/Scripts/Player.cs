@@ -114,9 +114,7 @@ public class Player : MonoBehaviour, ISerializable
 
         InitialVelocitySet();
 
-        MoveDirection();
-
-        Debug.Log(velocityX);
+        VelocityUpdate();
     }
 
     /*
@@ -171,7 +169,8 @@ public class Player : MonoBehaviour, ISerializable
 
     /*
      * ControllerInitVelSet - moves player left/right based on controller input,
-     * Works like ghetto GetKeyDown for axis inputs
+     * Works like ghetto GetKeyDown for axis inputs,
+     * NOT maintained right now due to lacking access to a controller for testing
      */
     private void ControllerInitVelSet()
     {
@@ -218,11 +217,11 @@ public class Player : MonoBehaviour, ISerializable
     /*
      * MoveDirection - moves the player, or stops it with air resistance/friction
      */
-    private void MoveDirection()
+    private void VelocityUpdate()
     {
         if (isExitingRewind)
         {
-            isExitingRewind = false;
+            OnExitRewind();
         }
         else
         {
@@ -234,7 +233,7 @@ public class Player : MonoBehaviour, ISerializable
             Input.GetAxisRaw("Horizontal") > axisBounds
            )
         { 
-            AccelerateDir(1);
+            Accelerate(true);
             transform.localScale = new Vector3(1, 1, 1);
         }
         else if (Input.GetKey(KeyCode.LeftArrow) ||
@@ -242,7 +241,7 @@ public class Player : MonoBehaviour, ISerializable
                  Input.GetAxisRaw("Horizontal") < -axisBounds
                 )
         {
-            AccelerateDir(-1);
+            Accelerate(false);
             transform.localScale = new Vector3(-1, 1, 1);
         }
         else
@@ -253,12 +252,17 @@ public class Player : MonoBehaviour, ISerializable
         rb.velocity = new Vector2(velocityX, velocityY);
     }
 
-    /*
-     * AccelerateDir - sets velHorz to an increase in the current direction 
-     */
-    private void AccelerateDir(int direction)
+    private void OnExitRewind()
     {
-        velocityX = Mathf.Clamp(velocityX + acceleration * direction, -maxMoveSpeed, maxMoveSpeed);
+        isExitingRewind = false;
+    }
+
+    /*
+     * AccelerateDir - sets velocityX to an increase in the current direction 
+     */
+    private void Accelerate(bool direction)
+    {
+        velocityX = Mathf.Clamp(velocityX + acceleration * boolToScalar(direction), -maxMoveSpeed, maxMoveSpeed);
     }
 
     /*
@@ -273,14 +277,8 @@ public class Player : MonoBehaviour, ISerializable
             accScale = 3f; // Grounded friction
         }
 
-        if (velocityX > 0)
-        {
-            velocityX = RoundToZero(velocityX - acceleration * accScale);
-        }
-        else
-        {
-            velocityX = RoundToZero(velocityX + acceleration * accScale);
-        }
+        bool direction = velocityX > 0;
+        velocityX = RoundToZero(velocityX - boolToScalar(direction) * acceleration * accScale);
     }
 
     /*
@@ -297,7 +295,6 @@ public class Player : MonoBehaviour, ISerializable
         }
 
         return num;
-
     }
 
     /*
@@ -335,7 +332,6 @@ public class Player : MonoBehaviour, ISerializable
         {
             canWallJump = false;
         }
-
     }
 
     /*
@@ -356,16 +352,8 @@ public class Player : MonoBehaviour, ISerializable
         float offsetY;
         float offsetX;
 
-        if (isUp)
-        {
-            offsetY = 0f;
-            offsetX = col.size.x / 2;
-        }
-        else
-        {
-            offsetY = col.size.y / 2;
-            offsetX = 0f;
-        }
+        offsetY = ChooseFrom<float>(isUp, 0f, col.size.y / 2);
+        offsetX = ChooseFrom<float>(isUp, col.size.x / 2, 0f);
 
         Vector2 leftRayPos = new Vector2(transform.position.x + offsetX, transform.position.y + offsetY);
         Vector2 rightRayPos = new Vector2(transform.position.x - offsetX, transform.position.y - offsetY);

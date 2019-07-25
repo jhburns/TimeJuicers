@@ -7280,7 +7280,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpHeight: 15
-  moveSpeed: 5
+  maxMoveSpeed: 5
+  startingMoveSpeed: 3
   terminalVelocity: -10
   acceleration: 0.1
   deathHandler: {fileID: 242386373}
