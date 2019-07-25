@@ -43,6 +43,8 @@ public class Player : MonoBehaviour, ISerializable
 
     public float terminalVelocity; // negative number, range < 0 
 
+    private bool justLeftRewind;
+
     void Start()
     {
         InitRigid();
@@ -86,6 +88,8 @@ public class Player : MonoBehaviour, ISerializable
         rightHorizontalAxisDown = true;
 
         flightVel = 0.1f;
+
+        justLeftRewind = false;
     }
 
     /* 
@@ -111,10 +115,12 @@ public class Player : MonoBehaviour, ISerializable
         InitialVelocitySet();
 
         MoveDirection();
+
+        Debug.Log(velVert);
     }
 
     /*
-     * CheckJump
+     * CheckJump - confirms the player both inputs, and is able to jump
      */
 
     private void CheckJump()
@@ -136,7 +142,7 @@ public class Player : MonoBehaviour, ISerializable
      */
     private void Jump()
     {
-        rb.velocity = Vector2.zero; // To allow for wall jumping
+        rb.velocity = Vector2.zero; // Prevent wall jumping abuse
         rb.AddForce(new Vector2(0, jumpHeight), ForceMode2D.Impulse);
         isGrounded = false;
     }
@@ -222,7 +228,15 @@ public class Player : MonoBehaviour, ISerializable
      */
     private void MoveDirection()
     {
-        velVert = Mathf.Clamp(rb.velocity.y, terminalVelocity, float.PositiveInfinity);
+        if (justLeftRewind)
+        {
+            Debug.Log("out");
+            justLeftRewind = false;
+        }
+        else
+        {
+            velVert = Mathf.Clamp(rb.velocity.y, terminalVelocity, float.PositiveInfinity);
+        }
 
         if (Input.GetKey(KeyCode.RightArrow) || 
             Input.GetKey(KeyCode.D) ||
@@ -230,7 +244,6 @@ public class Player : MonoBehaviour, ISerializable
            )
         { 
             AccelerateDir(1);
-            rb.velocity = new Vector2(velHorz, velVert);
             transform.localScale = new Vector3(1, 1, 1);
         }
         else if (Input.GetKey(KeyCode.LeftArrow) ||
@@ -239,13 +252,14 @@ public class Player : MonoBehaviour, ISerializable
                 )
         {
             AccelerateDir(-1);
-            rb.velocity = new Vector2(velHorz, velVert);
             transform.localScale = new Vector3(-1, 1, 1);
         }
         else
         {
             StopMoving();
         }
+
+        rb.velocity = new Vector2(velHorz, velVert);
     }
 
     /*
@@ -276,8 +290,6 @@ public class Player : MonoBehaviour, ISerializable
         {
             velHorz = RoundToZero(velHorz + acceleration * accScale);
         }
-
-        rb.velocity = new Vector2(velHorz, velVert);
     }
 
     /*
@@ -437,8 +449,10 @@ public class Player : MonoBehaviour, ISerializable
     {
         SavePlayer past = (SavePlayer) state;
 
+        rb.velocity = Vector2.zero; // Needed because velocity isn't conserved
         velHorz = past.velHorz;
         velVert = past.velVert;
+        justLeftRewind = true;
 
         MovingRight = past.movingRight;
         isGrounded = past.grounded;
@@ -447,7 +461,6 @@ public class Player : MonoBehaviour, ISerializable
         canWallJump = past.canWallJump;
 
         transform.position = new Vector3(past.positionX, past.positionY, transform.position.z);
-        rb.velocity = Vector2.zero; // Needed because velocity isn't conserved
 
         rightHorizontalAxisDown = past.rightHorizontalAxisDown;
         leftHorizontalAxisDown = past.leftHorizontalAxisDown;
@@ -494,7 +507,7 @@ internal class SavePlayer : ISerialDataStore
                      )
     {
         velHorz = velX;
-        velVert = velX;
+        velVert = velY;
 
         movingRight = movingR;
 
