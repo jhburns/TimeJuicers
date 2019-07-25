@@ -71,6 +71,7 @@ namespace InputMapping {
                     Input.GetKey(KeyCode.JoystickButton1) || // B button on xbox 360 controller
                     Input.GetAxisRaw("RightTrigger") == 1;
         }
+
     }
 
     internal class RangeOutOfBoundsException : Exception

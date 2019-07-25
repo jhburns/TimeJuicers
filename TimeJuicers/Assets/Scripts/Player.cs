@@ -9,9 +9,10 @@ using static Direction.Convert;
 public class Player : MonoBehaviour, ISerializable
 {
     public float jumpHeight; //IM = suppose to be immutable
-    public float moveSpeed; //IM
+    public float maxMoveSpeed; //IM
+    public float startingMoveSpeed; //IM
     public float terminalVelocity; // negative number, range < 0
-    private const float acceleration = 0.1f; //IM
+    public float acceleration; //IM
     private bool isExitingRewind; // mutable but tracked, used to transition out of time rewind
 
     private float velocityX;
@@ -68,6 +69,8 @@ public class Player : MonoBehaviour, ISerializable
      */
     private void InitMovement()
     {
+        isExitingRewind = false;
+
         velocityX = 0f;
         velocityY = 0f;
         MovingRight = true;
@@ -78,12 +81,10 @@ public class Player : MonoBehaviour, ISerializable
         wallJumps = 0;
         canWallJump = false;
 
-        leftHorizontalAxisDown = true;
-        rightHorizontalAxisDown = true;
-
         flightVel = 0.1f;
 
-        isExitingRewind = false;
+        leftHorizontalAxisDown = true;
+        rightHorizontalAxisDown = true;
     }
 
     private void InitInput()
@@ -114,6 +115,8 @@ public class Player : MonoBehaviour, ISerializable
         InitialVelocitySet();
 
         MoveDirection();
+
+        Debug.Log(velocityX);
     }
 
     /*
@@ -153,14 +156,14 @@ public class Player : MonoBehaviour, ISerializable
             Input.GetKeyDown(KeyCode.D) 
            )
         {
-            SetRightInitialVel();
+            InitialVelocitySet(true);
         }
 
         if (Input.GetKeyDown(KeyCode.LeftArrow) || 
             Input.GetKeyDown(KeyCode.A)
            )
         {
-            SetLeftInitialVel();
+            InitialVelocitySet(false);
         }
 
         ControllerInitVelSet();
@@ -172,12 +175,11 @@ public class Player : MonoBehaviour, ISerializable
      */
     private void ControllerInitVelSet()
     {
-        // https://www.reddit.com/r/Unity3D/comments/61hjiy/can_you_get_axis_input_like_getbuttondown/
         if (Input.GetAxisRaw("Horizontal") > axisBounds)
         {
             if (!rightHorizontalAxisDown)
             {
-                SetRightInitialVel();
+                InitialVelocitySet(true);
             }
 
             rightHorizontalAxisDown = true;
@@ -191,7 +193,7 @@ public class Player : MonoBehaviour, ISerializable
         {
             if (!leftHorizontalAxisDown)
             {
-                SetLeftInitialVel();
+                InitialVelocitySet(false);
             }
 
             leftHorizontalAxisDown = true;
@@ -203,21 +205,14 @@ public class Player : MonoBehaviour, ISerializable
     }
 
     /*
-     * SetRightInitialVel - sets move right
+     * InitialVelocitySet - Sets starting values for player
+     * Params:
+     *  - bool direction: true for right, false for left
      */
-    private void SetRightInitialVel()
+    private void InitialVelocitySet(bool direction)
     {
-        velocityX = moveSpeed - 2.0f;
-        MovingRight = true;
-    }
-
-    /*
-     * SetLeftInitialVel - sets move left 
-     */
-    private void SetLeftInitialVel()
-    {
-        velocityX = -(moveSpeed - 2.0f);
-        MovingRight = false;
+        velocityX = boolToScalar(direction) * startingMoveSpeed;
+        MovingRight = direction;
     }
 
     /*
@@ -263,7 +258,7 @@ public class Player : MonoBehaviour, ISerializable
      */
     private void AccelerateDir(int direction)
     {
-        velocityX = Mathf.Clamp(velocityX + acceleration * direction, -moveSpeed, moveSpeed);
+        velocityX = Mathf.Clamp(velocityX + acceleration * direction, -maxMoveSpeed, maxMoveSpeed);
     }
 
     /*
