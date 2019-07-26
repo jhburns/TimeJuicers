@@ -10,12 +10,15 @@ public class Player : MonoBehaviour, ISerializable
 {
     public float jumpHeight; //IM = suppose to be immutable
     public float moveSpeed; //IM
-    private float velHorz;
-    private float velVert; 
+    public float terminalVelocity; // negative number, range < 0
     private const float acceleration = 0.1f; //IM
+    private bool isExitingRewind; // mutable but tracked, used to transition out of time rewind
+
+    private float velocityX;
+    private float velocityY;
     public bool MovingRight { get; private set; }
 
-    private Rigidbody2D rb; // Mutable, but not tracked
+    private Rigidbody2D rb; // Mutable, only parts of it tracked
     private BoxCollider2D col; //IM
 
     private bool isGrounded;
@@ -25,37 +28,32 @@ public class Player : MonoBehaviour, ISerializable
     private bool canWallJump;
     private const int maxWallJumps = 1; //IM
 
-    public float axisBounds;
-
-    private bool leftHorizontalAxisDown; // These vars are used to act as a key-down for stick controls
-    private bool rightHorizontalAxisDown;
-
     public GlobalUI deathHandler; //IM
+    public float deathShrinkRatio; // range 0-1 inclusive
 
+    // Irrelevant to rewind, all IM
     public CameraController sceneCamera;
     public WinFlag flag;
     public float maxFlightSpeed;
     private float flightVel;
 
-    public float deathShrinkRatio; // range 0-1 inclusive
-
     private UserInput input;
-
-    public float terminalVelocity; // negative number, range < 0 
-
-    private bool justLeftRewind;
+    public float axisBounds;
+    // These vars are used to act as a key-down for stick controls
+    private bool leftHorizontalAxisDown;
+    private bool rightHorizontalAxisDown;
 
     void Start()
     {
-        InitRigid();
-        InitPlayer();
+        InitPhysics();
+        InitMovement();
         InitInput();
     }
 
     /*
-     * InitRigid - starts physics on the player
+     * InitPhysics - sets up rigidbody and collider for player
      */
-    private void InitRigid()
+    private void InitPhysics()
     {
         rb = GetComponent<Rigidbody2D>();
         rb.freezeRotation = true;
@@ -65,22 +63,18 @@ public class Player : MonoBehaviour, ISerializable
         col = GetComponent<BoxCollider2D>();
     }
 
-    private void InitInput()
-    {
-        input = new UserInput(axisBounds);
-    }
-
     /*
-     * InitPlayer - sets up starting point for player variables 
+     * InitMovement - sets up starting point for player variables 
      */
-    private void InitPlayer()
+    private void InitMovement()
     {
-        velHorz = 0f;
-        velVert = 0f;
-        isGrounded = false;
+        velocityX = 0f;
+        velocityY = 0f;
         MovingRight = true;
 
+        isGrounded = false;
         jumps = 0;
+
         wallJumps = 0;
         canWallJump = false;
 
@@ -89,7 +83,12 @@ public class Player : MonoBehaviour, ISerializable
 
         flightVel = 0.1f;
 
-        justLeftRewind = false;
+        isExitingRewind = false;
+    }
+
+    private void InitInput()
+    {
+        input = new UserInput(axisBounds);
     }
 
     /* 
@@ -115,8 +114,6 @@ public class Player : MonoBehaviour, ISerializable
         InitialVelocitySet();
 
         MoveDirection();
-
-        Debug.Log(velVert);
     }
 
     /*
@@ -210,7 +207,7 @@ public class Player : MonoBehaviour, ISerializable
      */
     private void SetRightInitialVel()
     {
-        velHorz = moveSpeed - 2.0f;
+        velocityX = moveSpeed - 2.0f;
         MovingRight = true;
     }
 
@@ -219,7 +216,7 @@ public class Player : MonoBehaviour, ISerializable
      */
     private void SetLeftInitialVel()
     {
-        velHorz = -(moveSpeed - 2.0f);
+        velocityX = -(moveSpeed - 2.0f);
         MovingRight = false;
     }
 
@@ -228,14 +225,13 @@ public class Player : MonoBehaviour, ISerializable
      */
     private void MoveDirection()
     {
-        if (justLeftRewind)
+        if (isExitingRewind)
         {
-            Debug.Log("out");
-            justLeftRewind = false;
+            isExitingRewind = false;
         }
         else
         {
-            velVert = Mathf.Clamp(rb.velocity.y, terminalVelocity, float.PositiveInfinity);
+            velocityY = Mathf.Clamp(rb.velocity.y, terminalVelocity, float.PositiveInfinity);
         }
 
         if (Input.GetKey(KeyCode.RightArrow) || 
@@ -259,7 +255,7 @@ public class Player : MonoBehaviour, ISerializable
             StopMoving();
         }
 
-        rb.velocity = new Vector2(velHorz, velVert);
+        rb.velocity = new Vector2(velocityX, velocityY);
     }
 
     /*
@@ -267,7 +263,7 @@ public class Player : MonoBehaviour, ISerializable
      */
     private void AccelerateDir(int direction)
     {
-        velHorz = Mathf.Clamp(velHorz + acceleration * direction, -moveSpeed, moveSpeed);
+        velocityX = Mathf.Clamp(velocityX + acceleration * direction, -moveSpeed, moveSpeed);
     }
 
     /*
@@ -282,13 +278,13 @@ public class Player : MonoBehaviour, ISerializable
             accScale = 3f; // Grounded friction
         }
 
-        if (velHorz > 0)
+        if (velocityX > 0)
         {
-            velHorz = RoundToZero(velHorz - acceleration * accScale);
+            velocityX = RoundToZero(velocityX - acceleration * accScale);
         }
         else
         {
-            velHorz = RoundToZero(velHorz + acceleration * accScale);
+            velocityX = RoundToZero(velocityX + acceleration * accScale);
         }
     }
 
@@ -300,7 +296,7 @@ public class Player : MonoBehaviour, ISerializable
      */
     private float RoundToZero(float num)
     {
-        if (velHorz < acceleration * 2 && velHorz > -acceleration * 2) // Needs to be twice to fix an edge case, player was still moving a little
+        if (velocityX < acceleration * 2 && velocityX > -acceleration * 2) // Needs to be twice to fix an edge case, player was still moving a little
         {
             return 0f;
         }
@@ -329,7 +325,7 @@ public class Player : MonoBehaviour, ISerializable
     {
         // Vertical velocity check is so that when the player is leaving the ground,
         // It can't gain a double jump
-        if (RaycastCollision(-Vector2.up, 0.02f, true) && velVert < 10f)
+        if (RaycastCollision(-Vector2.up, 0.02f, true) && velocityX < 10f)
         {
             jumps = maxJumps;
             wallJumps = maxWallJumps;
@@ -400,9 +396,6 @@ public class Player : MonoBehaviour, ISerializable
      */
     public void Fly()
     {
-        sceneCamera.ExactMode();
-        Destroy(flag.GetComponent<BoxCollider2D>());
-
         // Has to set to flag position or else the z value won't change
         // Not sure why, I believe Unity skips only z changes in 2D mode to save resources
         transform.position = new Vector3(flag.transform.position.x, flag.transform.position.y, 20); // Move Behind the flag
@@ -435,7 +428,7 @@ public class Player : MonoBehaviour, ISerializable
     /// Serial Methods, see Serial Namespace 
     public ISerialDataStore GetCurrentState()
     {
-        return new SavePlayer(  velHorz, velVert,
+        return new SavePlayer(  velocityX, velocityY,
                                 MovingRight, isGrounded, 
                                 jumps, wallJumps,
                                 canWallJump, transform.position.x, 
@@ -450,9 +443,9 @@ public class Player : MonoBehaviour, ISerializable
         SavePlayer past = (SavePlayer) state;
 
         rb.velocity = Vector2.zero; // Needed because velocity isn't conserved
-        velHorz = past.velHorz;
-        velVert = past.velVert;
-        justLeftRewind = true;
+        velocityX = past.velocityX;
+        velocityY = past.velocityY;
+        isExitingRewind = true;
 
         MovingRight = past.movingRight;
         isGrounded = past.grounded;
@@ -474,8 +467,8 @@ public class Player : MonoBehaviour, ISerializable
 
 internal class SavePlayer : ISerialDataStore
 {
-    public float velHorz { get; private set; }
-    public float velVert { get; private set; }
+    public float velocityX { get; private set; }
+    public float velocityY { get; private set; }
 
     public bool movingRight { get; private set; }
 
@@ -506,8 +499,8 @@ internal class SavePlayer : ISerialDataStore
                         float rot, float lxScale
                      )
     {
-        velHorz = velX;
-        velVert = velY;
+        velocityX = velX;
+        velocityY = velY;
 
         movingRight = movingR;
 

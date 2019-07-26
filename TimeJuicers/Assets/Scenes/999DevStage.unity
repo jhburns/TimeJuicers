@@ -3706,6 +3706,15 @@ Tilemap:
       m_ObjectToInstantiate: {fileID: 0}
       m_TileFlags: 1
       m_ColliderType: 2
+  - first: {x: 0, y: 2, z: 0}
+    second:
+      m_TileIndex: 0
+      m_TileSpriteIndex: 0
+      m_TileMatrixIndex: 0
+      m_TileColorIndex: 0
+      m_ObjectToInstantiate: {fileID: 0}
+      m_TileFlags: 1
+      m_ColliderType: 2
   - first: {x: 13, y: 2, z: 0}
     second:
       m_TileIndex: 0
@@ -5778,13 +5787,13 @@ Tilemap:
       m_ColliderType: 2
   m_AnimatedTiles: {}
   m_TileAssetArray:
-  - m_RefCount: 615
+  - m_RefCount: 616
     m_Data: {fileID: 11400000, guid: b82cf6e1e3c77874c9e9d8aecfd8cbf3, type: 2}
   m_TileSpriteArray:
-  - m_RefCount: 615
+  - m_RefCount: 616
     m_Data: {fileID: 21300000, guid: 4a01a284993c249a6bd7ac3140bb7d26, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 615
+  - m_RefCount: 616
     m_Data:
       e00: 1
       e01: 0
@@ -5803,7 +5812,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 615
+  - m_RefCount: 616
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -5954,9 +5963,9 @@ CompositeCollider2D:
         Y: -10000000
       - X: -10000000
         Y: 20000000
-      - X: 0
+      - X: 10000000
         Y: 20000000
-      - X: 0
+      - X: 10000000
         Y: 30000000
       - X: -10000000
         Y: 30000000
@@ -6267,8 +6276,8 @@ CompositeCollider2D:
       - {x: -2, y: -1}
       - {x: -1, y: -1}
       - {x: -1, y: 2}
-      - {x: 0, y: 2}
-      - {x: 0, y: 3}
+      - {x: 1, y: 2}
+      - {x: 1, y: 3}
       - {x: -1, y: 3}
       - {x: -1, y: 4}
       - {x: -2, y: 4}
@@ -6612,13 +6621,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   jumpHeight: 15
   moveSpeed: 5
-  axisBounds: 0.5
+  terminalVelocity: -10
   deathHandler: {fileID: 242386373}
+  deathShrinkRatio: 0
   sceneCamera: {fileID: 1804466146}
   flag: {fileID: 300291013}
   maxFlightSpeed: 100
-  deathShrinkRatio: 0
-  terminalVelocity: -10
+  axisBounds: 0.5
 --- !u!212 &505467975
 SpriteRenderer:
   m_ObjectHideFlags: 0
