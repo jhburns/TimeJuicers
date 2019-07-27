@@ -72,6 +72,24 @@ namespace InputMapping {
                     Input.GetAxisRaw("RightTrigger") == 1;
         }
 
+        public bool Left()
+        {
+            return  Input.GetKey(KeyCode.LeftArrow) ||
+                    Input.GetKey(KeyCode.A) ||
+                    Input.GetAxisRaw("Horizontal") < -axisBounds;
+        }
+
+        public bool Right()
+        {
+            return  Input.GetKey(KeyCode.RightArrow) ||
+                    Input.GetKey(KeyCode.D) ||
+                    Input.GetAxisRaw("Horizontal") > axisBounds;
+        }
+
+        public bool EitherDir()
+        {
+            return Left() || Right();
+        }
     }
 
     internal class RangeOutOfBoundsException : Exception

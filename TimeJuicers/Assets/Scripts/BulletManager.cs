@@ -79,14 +79,14 @@ public class BulletManager : MonoBehaviour, ISerializable
 
         float offset = 0.6f;
 
-        if (!player.MovingRight)
+        if (!player.IsMovingRight)
         {
             offset *= -1;
         }
 
         float xPos = player.transform.position.x + offset; // offset used to place bullet in front (not middle) of player
 
-        currentBul.InPlay(player.MovingRight, new Vector2(xPos, player.transform.position.y));
+        currentBul.InPlay(player.IsMovingRight, new Vector2(xPos, player.transform.position.y));
 
         // Looping through all bullets shouldn't be an issue even with a high fire rate, with about 20 right now
         bulletIndex = (bulletIndex + 1) % maxBullets;

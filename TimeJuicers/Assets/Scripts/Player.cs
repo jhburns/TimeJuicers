@@ -10,14 +10,19 @@ public class Player : MonoBehaviour, ISerializable
 {
     public float jumpHeight; //IM = suppose to be immutable
     public float maxMoveSpeed; //IM
-    public float startingMoveSpeed; //IM
     public float terminalVelocity; // negative number, range < 0
-    public float acceleration; //IM
     private bool isExitingRewind; // mutable but tracked, used to transition out of time rewind
 
+    public float acceleration;
     private float velocityX;
     private float velocityY;
-    public bool MovingRight { get; private set; }
+    public bool IsMovingRight { get; private set; }
+
+    private bool isEitherDown;
+    private bool isLeftDown;
+    private bool isRightDown;
+    private bool isLeftUp;
+    private bool isRightUp;
 
     private Rigidbody2D rb; // Mutable, only parts of it tracked
     private BoxCollider2D col; //IM
@@ -43,12 +48,14 @@ public class Player : MonoBehaviour, ISerializable
     // These vars are used to act as a key-down for stick controls
     private bool leftHorizontalAxisDown;
     private bool rightHorizontalAxisDown;
+    private float accerlation;
 
     void Start()
     {
         InitPhysics();
         InitMovement();
         InitInput();
+        ResetDown();
     }
 
     /*
@@ -71,9 +78,10 @@ public class Player : MonoBehaviour, ISerializable
     {
         isExitingRewind = false;
 
+        acceleration = 0.1f;
         velocityX = 0f;
         velocityY = 0f;
-        MovingRight = true;
+        IsMovingRight = true;
 
         isGrounded = false;
         jumps = 0;
@@ -92,6 +100,15 @@ public class Player : MonoBehaviour, ISerializable
         input = new UserInput(axisBounds);
     }
 
+    private void ResetDown()
+    {
+        isEitherDown = true;
+        isLeftDown = true;
+        isRightDown = true;
+        isLeftUp = false;
+        isRightUp = false;
+    }
+
     /* 
      * Update - Handles input for player
      */
@@ -100,19 +117,13 @@ public class Player : MonoBehaviour, ISerializable
         /* Disabling death for now, since it can get in the way of development
         if (deathHandler.IsAlive)
         {
-            Jump();
 
-            InitialVelocitySet();
-
-            MoveDirection();
         }
         */
 
         CheckPlatformCollision();
 
         CheckJump();
-
-        InitialVelocitySet();
 
         VelocityUpdate();
     }
@@ -146,75 +157,6 @@ public class Player : MonoBehaviour, ISerializable
     }
 
     /*
-     * InitialVelocitySet - sets initial values to move player left/right
-     */
-    private void InitialVelocitySet()
-    {
-        if (Input.GetKeyDown(KeyCode.RightArrow) ||
-            Input.GetKeyDown(KeyCode.D) 
-           )
-        {
-            InitialVelocitySet(true);
-        }
-
-        if (Input.GetKeyDown(KeyCode.LeftArrow) || 
-            Input.GetKeyDown(KeyCode.A)
-           )
-        {
-            InitialVelocitySet(false);
-        }
-
-        ControllerInitVelSet();
-    }
-
-    /*
-     * ControllerInitVelSet - moves player left/right based on controller input,
-     * Works like ghetto GetKeyDown for axis inputs,
-     * NOT maintained right now due to lacking access to a controller for testing
-     */
-    private void ControllerInitVelSet()
-    {
-        if (Input.GetAxisRaw("Horizontal") > axisBounds)
-        {
-            if (!rightHorizontalAxisDown)
-            {
-                InitialVelocitySet(true);
-            }
-
-            rightHorizontalAxisDown = true;
-        }
-        else
-        {
-            rightHorizontalAxisDown = false;
-        }
-
-        if (Input.GetAxisRaw("Horizontal") < -axisBounds)
-        {
-            if (!leftHorizontalAxisDown)
-            {
-                InitialVelocitySet(false);
-            }
-
-            leftHorizontalAxisDown = true;
-        }
-        else
-        {
-            leftHorizontalAxisDown = false;
-        }
-    }
-
-    /*
-     * InitialVelocitySet - Sets starting values for player
-     * Params:
-     *  - bool direction: true for right, false for left
-     */
-    private void InitialVelocitySet(bool direction)
-    {
-        velocityX = boolToScalar(direction) * startingMoveSpeed;
-        MovingRight = direction;
-    }
-
-    /*
      * MoveDirection - moves the player, or stops it with air resistance/friction
      */
     private void VelocityUpdate()
@@ -228,25 +170,17 @@ public class Player : MonoBehaviour, ISerializable
             velocityY = Mathf.Clamp(rb.velocity.y, terminalVelocity, float.PositiveInfinity);
         }
 
-        if (Input.GetKey(KeyCode.RightArrow) || 
-            Input.GetKey(KeyCode.D) ||
-            Input.GetAxisRaw("Horizontal") > axisBounds
-           )
-        { 
-            Accelerate(true);
-            transform.localScale = new Vector3(1, 1, 1);
-        }
-        else if (Input.GetKey(KeyCode.LeftArrow) ||
-                 Input.GetKey(KeyCode.A) ||
-                 Input.GetAxisRaw("Horizontal") < -axisBounds
-                )
+        if (input.EitherDir())
         {
-            Accelerate(false);
-            transform.localScale = new Vector3(-1, 1, 1);
+            OnEitherDown();
+            Accelerate(IsMovingRight);
+
+            transform.localScale = new Vector3(boolToScalar(IsMovingRight) * 1, 1, 1);
         }
         else
         {
             StopMoving();
+            ResetDown();
         }
 
         rb.velocity = new Vector2(velocityX, velocityY);
@@ -258,11 +192,95 @@ public class Player : MonoBehaviour, ISerializable
     }
 
     /*
-     * AccelerateDir - sets velocityX to an increase in the current direction 
+     * Accelerate - sets velocityX to an increase in the current direction 
      */
     private void Accelerate(bool direction)
     {
         velocityX = Mathf.Clamp(velocityX + acceleration * boolToScalar(direction), -maxMoveSpeed, maxMoveSpeed);
+    }
+
+    private void OnEitherDown()
+    {
+        if (isEitherDown)
+        {
+            isEitherDown = false;
+
+            CheckFirstInputDown(input.Left(), ref isLeftDown, false);
+            CheckFirstInputDown(input.Right(), ref isRightDown, true);
+        }
+        else
+        {
+            CheckNextInput(input.Left(), ref isLeftDown, ref isLeftUp, ref isRightUp, false);
+            CheckNextInput(input.Right(), ref isRightDown, ref isRightUp, ref isLeftUp, true);
+        }
+    }
+
+    private void CheckFirstInputDown(bool inputCase, ref bool downVar, bool direction)
+    {
+        if (inputCase)
+        {
+            if (IsMovingRight == direction)
+            {
+                //1Normal Start, Other Up
+            }
+            else
+            {
+                //2Turn Around, Other Up
+            }
+
+            downVar = false;
+            IsMovingRight = direction;
+        }
+    }
+
+    private void CheckNextInput(bool inputCase, ref bool downVar, ref bool sameUpVar, ref bool otherUpVar, bool direction)
+    {
+        if (inputCase)
+        {
+            CheckNextInputChange(ref downVar, ref otherUpVar, direction);
+        }
+        else
+        {
+            if (!downVar)
+            {
+                sameUpVar = true;
+            }
+
+            downVar = true;
+        }
+    }
+
+    private void CheckNextInputChange(ref bool downVar, ref bool otherUpVar, bool direction)
+    {
+        if (downVar)
+        {
+            downVar = false;
+            IsMovingRight = direction;
+            //3Turn Around, when other is already down
+        }
+
+
+        if (otherUpVar)
+        {
+            if (IsMovingRight != direction)
+            {
+                IsMovingRight = direction;
+                //4Turn around, when other input was let go of
+            }
+
+            otherUpVar = false;
+        }
+    }
+
+    /*
+     * InitialMovementSet - Sets starting values for player
+     * Params:
+     *  - bool direction: true for right, false for left
+     */
+    private void InitialMovementSet(bool direction, float startingMoveSpeed, float newAcc)
+    {
+        velocityX = boolToScalar(direction) * startingMoveSpeed;
+        acceleration = newAcc;
     }
 
     /*
@@ -411,8 +429,10 @@ public class Player : MonoBehaviour, ISerializable
     /// Serial Methods, see Serial Namespace 
     public ISerialDataStore GetCurrentState()
     {
-        return new SavePlayer(  velocityX, velocityY,
-                                MovingRight, isGrounded, 
+        return new SavePlayer(  acceleration, velocityX,
+                                velocityY, isEitherDown,
+                                isLeftDown, isRightDown,
+                                IsMovingRight, isGrounded, 
                                 jumps, wallJumps,
                                 canWallJump, transform.position.x, 
                                 transform.position.y, leftHorizontalAxisDown, 
@@ -426,11 +446,16 @@ public class Player : MonoBehaviour, ISerializable
         SavePlayer past = (SavePlayer) state;
 
         rb.velocity = Vector2.zero; // Needed because velocity isn't conserved
+        acceleration = past.acceleration;
         velocityX = past.velocityX;
         velocityY = past.velocityY;
         isExitingRewind = true;
 
-        MovingRight = past.movingRight;
+        isEitherDown = past.isEitherDown;
+        isLeftDown = past.isLeftDown;
+        isRightDown = past.isRightDown;
+
+        IsMovingRight = past.IsMovingRight;
         isGrounded = past.grounded;
         jumps = past.jumps;
         wallJumps = past.wallJumps;
@@ -450,10 +475,15 @@ public class Player : MonoBehaviour, ISerializable
 
 internal class SavePlayer : ISerialDataStore
 {
+    public float acceleration { get; private set; }
     public float velocityX { get; private set; }
     public float velocityY { get; private set; }
 
-    public bool movingRight { get; private set; }
+    public bool IsMovingRight { get; private set; }
+
+    public bool isEitherDown { get; private set; }
+    public bool isLeftDown { get; private set; }
+    public bool isRightDown { get; private set; }
 
     public bool grounded { get; private set; }
     public int jumps { get; private set; }
@@ -473,8 +503,10 @@ internal class SavePlayer : ISerialDataStore
 
     public float localXScale { get; private set; }
 
-    public SavePlayer(  float velX, float velY,
-                        bool movingR, bool g,
+    public SavePlayer(  float acc, float velX, 
+                        float velY, bool movingR,
+                        bool isED, bool isLD,
+                        bool isRD, bool g,
                         int j, int wallJ,
                         bool canW, float posX,
                         float posY, bool leftDown,
@@ -482,10 +514,15 @@ internal class SavePlayer : ISerialDataStore
                         float rot, float lxScale
                      )
     {
+        acceleration = acc;
         velocityX = velX;
         velocityY = velY;
 
-        movingRight = movingR;
+        IsMovingRight = movingR;
+
+        isEitherDown = isED;
+        isLeftDown = isLD;
+        isRightDown = isRD;
 
         grounded = g;
         jumps = j;
