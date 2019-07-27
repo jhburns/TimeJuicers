@@ -136,9 +136,8 @@ public class Player : MonoBehaviour, ISerializable
     }
 
     /*
-     * CheckJump - confirms the player both inputs, and is able to jump
+     * CheckJump - confirms that the player both inputs, and is able to jump
      */
-
     private void CheckJump()
     { 
         if (input.JumpDown())
@@ -205,6 +204,9 @@ public class Player : MonoBehaviour, ISerializable
         rb.velocity = new Vector2(velocityX, velocityY);
     }
 
+    /*
+     * OnExitRewind - should be called only once after the player leaves the rewind state
+     */
     private void OnExitRewind()
     {
         isExitingRewind = false;
@@ -218,6 +220,9 @@ public class Player : MonoBehaviour, ISerializable
         velocityX = Mathf.Clamp(velocityX + acceleration * boolToScalar(direction), -maxMoveSpeed, maxMoveSpeed);
     }
 
+    /*
+     * OnEitherDown - checks if either input has been started to be pressed down
+     */
     private void OnEitherDown()
     {
         if (isEitherDown)
@@ -234,12 +239,20 @@ public class Player : MonoBehaviour, ISerializable
         }
     }
 
+    /*
+     * CheckFirstInputDown - should only be called when this is the first down for either input
+     * Params:
+     *  - bool inputCase: true when this input is happening
+     *  - ref bool downVar: this object's respective isLeftDown or isRightDown variable
+     *  - bool direction: true for the input meaning right
+     */
     private void CheckFirstInputDown(bool inputCase, ref bool downVar, bool direction)
     {
         if (inputCase)
         {
             if (IsMovingRight == direction)
             {
+                // Starting moving normally, meaning no turning around
                 InitialMovementSet(direction, maxMoveSpeed - 2f, 0.085f);
             }
             else
@@ -253,6 +266,15 @@ public class Player : MonoBehaviour, ISerializable
         }
     }
 
+    /*
+     * CheckNextInput - should only be called when this is not the first down for either input
+     * Params:
+     *  - bool inputCase: true when this input is happening
+     *  - ref bool downVar: this object's respective isLeftDown or isRightDown variable
+     *  - ref bool sameUpVar: this object's corresponding isLeftUp or isRightUp variable to downVar
+     *  - ref bool otherUpVar: passed through to CheckNextInputChange
+     *  - bool direction: passed through to CheckNextInputChange
+     */
     private void CheckNextInput(bool inputCase, ref bool downVar, ref bool sameUpVar, ref bool otherUpVar, bool direction)
     {
         if (inputCase)
@@ -270,13 +292,20 @@ public class Player : MonoBehaviour, ISerializable
         }
     }
 
+    /*
+     * CheckNextInputChange - determines which case of turning around to apply
+     * Params:
+     *  - ref bool downVar: this object's respective isLeftDown or isRightDown variable
+     *  - ref bool otherUpVar: this object's opposite isLeftUp or isRightUp variable to downVar
+     *  - bool direction: true for the input meaning right
+     */
     private void CheckNextInputChange(ref bool downVar, ref bool otherUpVar, bool direction)
     {
         if (downVar)
         {
+            // Turning Around, when other direction is already down
             downVar = false;
             IsMovingRight = direction;
-            // When Turning Around, when other direction is already down
             InitialMovementSet(direction, Mathf.Clamp(Mathf.Abs(velocityX) - 3f, 0, maxFlightSpeed), 0.075f);
         }
 
@@ -285,8 +314,8 @@ public class Player : MonoBehaviour, ISerializable
         {
             if (IsMovingRight != direction)
             {
+                // Turning around, when other direction was let go of
                 IsMovingRight = direction;
-                // When Turning around, when other direction was let go of
                 InitialMovementSet(direction, Mathf.Clamp(Mathf.Abs(velocityX) - 3f, 0, maxFlightSpeed), 0.075f);
             }
 
@@ -361,6 +390,9 @@ public class Player : MonoBehaviour, ISerializable
          }
     }
 
+    /*
+     * CheckPlatformCollision - Detects how the player collides with platforms, from below or the sides
+     */
     private void CheckPlatformCollision()
     {
         // Vertical velocity check is so that when the player is leaving the ground,

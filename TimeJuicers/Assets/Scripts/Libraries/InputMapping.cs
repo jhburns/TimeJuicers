@@ -48,6 +48,10 @@ namespace InputMapping {
                     Input.GetAxisRaw("Vertical") > axisBounds;
         }
 
+        /*
+         * Jump - when user presses whatever button is 'jump'
+         * Returns: bool true if button pressed this frame
+         */
         public bool Jump()
         {
             return  Input.GetKey(KeyCode.Space) ||
