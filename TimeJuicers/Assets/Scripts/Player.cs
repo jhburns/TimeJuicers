@@ -13,7 +13,7 @@ public class Player : MonoBehaviour, ISerializable
     public float terminalVelocity; // negative number, range < 0
     private bool isExitingRewind; // mutable but tracked, used to transition out of time rewind
 
-    public float acceleration;
+    private float acceleration;
     private float velocityX;
     private float velocityY;
     public bool IsMovingRight { get; private set; }
@@ -30,9 +30,11 @@ public class Player : MonoBehaviour, ISerializable
     private bool isGrounded;
     private int jumps;
     private const int maxJumps = 1; //IM
+
     private int wallJumps;
     private bool canWallJump;
     private const int maxWallJumps = 1; //IM
+    private int coolDownJump;
 
     private int jumpBuffer; // Untracked, so leaving rewind always allows the player to buffer a jump
     public int maxJumpBuffer; //IM
@@ -92,6 +94,8 @@ public class Player : MonoBehaviour, ISerializable
         wallJumps = 0;
         canWallJump = false;
 
+        coolDownJump = 0;
+
         flightVel = 0.1f;
 
         leftHorizontalAxisDown = true;
@@ -129,8 +133,6 @@ public class Player : MonoBehaviour, ISerializable
         CheckJump();
 
         VelocityUpdate();
-
-        Debug.Log(jumpBuffer);
     }
 
     /*
@@ -154,12 +156,15 @@ public class Player : MonoBehaviour, ISerializable
         {
             Jump();
             jumps--;
+            coolDownJump = 10;
         }
-        else if (canJump && wallJumps > 0 && canWallJump)
+        else if (canJump && wallJumps > 0 && canWallJump && coolDownJump == 0)
         {
             Jump();
             wallJumps--;
         }
+
+        coolDownJump = Mathf.Clamp(coolDownJump - 1, 0, 10);
     }
 
     /*
@@ -235,11 +240,12 @@ public class Player : MonoBehaviour, ISerializable
         {
             if (IsMovingRight == direction)
             {
-                //1Normal Start, Other Up
+                InitialMovementSet(direction, maxMoveSpeed - 2f, 0.075f);
             }
             else
             {
-                //2Turn Around, Other Up
+                // When Turning Around, from standing still
+                InitialMovementSet(direction, Mathf.Clamp(velocityX, maxMoveSpeed - 3f, maxMoveSpeed), 0.075f);
             }
 
             downVar = false;
@@ -270,7 +276,8 @@ public class Player : MonoBehaviour, ISerializable
         {
             downVar = false;
             IsMovingRight = direction;
-            //3Turn Around, when other is already down
+            // When Turning Around, when other direction is already down
+            InitialMovementSet(direction, Mathf.Clamp(Mathf.Abs(velocityX) - 3f, 0, maxFlightSpeed), 0.05f);
         }
 
 
@@ -279,7 +286,8 @@ public class Player : MonoBehaviour, ISerializable
             if (IsMovingRight != direction)
             {
                 IsMovingRight = direction;
-                //4Turn around, when other input was let go of
+                // When Turning around, when other direction was let go of
+                InitialMovementSet(direction, Mathf.Clamp(Mathf.Abs(velocityX) - 3f, 0, maxFlightSpeed), 0.05f);
             }
 
             otherUpVar = false;
@@ -293,9 +301,16 @@ public class Player : MonoBehaviour, ISerializable
      */
     private void InitialMovementSet(bool direction, float startingMoveSpeed, float newAcc)
     {
-        velocityX = boolToScalar(direction) * startingMoveSpeed;
-        acceleration = newAcc;
-        transform.localScale = new Vector3(boolToScalar(IsMovingRight) * 1, 1, 1);
+        float airDampening = maxFlightSpeed;
+        
+        if (!isGrounded)
+        {
+            airDampening = 2f;
+        }
+        
+        velocityX = boolToScalar(direction) * Mathf.Clamp(startingMoveSpeed, 0, airDampening);
+        acceleration = Mathf.Clamp(newAcc, 0, airDampening / 10);
+        transform.localScale = new Vector3(boolToScalar(direction) * 1, 1, 1);
     }
 
     /*
@@ -303,15 +318,15 @@ public class Player : MonoBehaviour, ISerializable
      */
     private void StopMoving()
     {
-        float accScale = 0.5f; // Air resistance
+        float decceleration = 0.05f; // Air resistance
 
         if (isGrounded)
         {
-            accScale = 3f; // Grounded friction
+            decceleration = 0.4f; // Grounded friction
         }
 
         bool direction = velocityX > 0;
-        velocityX = RoundToZero(velocityX - boolToScalar(direction) * acceleration * accScale);
+        velocityX = RoundToZero(velocityX - boolToScalar(direction) * decceleration, decceleration);
     }
 
     /*
@@ -320,9 +335,9 @@ public class Player : MonoBehaviour, ISerializable
      *  - float num: the number to be rounded down
      * Returns: float number that is either itself of zero, if near zero
      */
-    private float RoundToZero(float num)
+    private float RoundToZero(float num, float decceleration)
     {
-        if (velocityX < acceleration * 2 && velocityX > -acceleration * 2) // Needs to be twice to fix an edge case, player was still moving a little
+        if (velocityX < decceleration * 2 && velocityX > -decceleration * 2) // Needs to be twice to fix an edge case, player was still moving a little
         {
             return 0f;
         }
@@ -354,6 +369,12 @@ public class Player : MonoBehaviour, ISerializable
         {
             jumps = maxJumps;
             wallJumps = maxWallJumps;
+
+            if (!isGrounded)
+            {
+                acceleration = 0.075f;
+            }
+
             isGrounded = true;
         }
 
@@ -445,14 +466,16 @@ public class Player : MonoBehaviour, ISerializable
     public ISerialDataStore GetCurrentState()
     {
         return new SavePlayer(  acceleration, velocityX,
-                                velocityY, isEitherDown,
-                                isLeftDown, isRightDown,
-                                IsMovingRight, isGrounded, 
+                                velocityY, IsMovingRight,
+                                isEitherDown, isLeftDown,
+                                isRightDown, isLeftUp,
+                                isRightUp, isGrounded, 
                                 jumps, wallJumps,
-                                canWallJump, transform.position.x, 
-                                transform.position.y, leftHorizontalAxisDown, 
-                                rightHorizontalAxisDown, rb.freezeRotation,
-                                rb.rotation, transform.localScale.x
+                                canWallJump, coolDownJump,
+                                transform.position.x, transform.position.y, 
+                                leftHorizontalAxisDown, rightHorizontalAxisDown, 
+                                rb.freezeRotation, rb.rotation, 
+                                transform.localScale.x
                              );
     }
 
@@ -469,12 +492,16 @@ public class Player : MonoBehaviour, ISerializable
         isEitherDown = past.isEitherDown;
         isLeftDown = past.isLeftDown;
         isRightDown = past.isRightDown;
+        isLeftDown = past.isLeftUp;
+        isRightUp = past.isRightUp;
 
         IsMovingRight = past.IsMovingRight;
         isGrounded = past.grounded;
         jumps = past.jumps;
+
         wallJumps = past.wallJumps;
         canWallJump = past.canWallJump;
+        coolDownJump = past.coolDownJump;
 
         jumpBuffer = maxJumpBuffer;
 
@@ -501,11 +528,15 @@ internal class SavePlayer : ISerialDataStore
     public bool isEitherDown { get; private set; }
     public bool isLeftDown { get; private set; }
     public bool isRightDown { get; private set; }
+    public bool isLeftUp { get; private set; }
+    public bool isRightUp { get; private set; }
 
     public bool grounded { get; private set; }
     public int jumps { get; private set; }
+
     public int wallJumps { get; private set; }
     public bool canWallJump { get; private set; }
+    public int coolDownJump { get; private set; }
 
     public float positionX { get; private set; }
     public float positionY { get; private set; }
@@ -523,12 +554,14 @@ internal class SavePlayer : ISerialDataStore
     public SavePlayer(  float acc, float velX, 
                         float velY, bool movingR,
                         bool isED, bool isLD,
-                        bool isRD, bool g,
+                        bool isRD, bool isLU,
+                        bool isRU, bool g,
                         int j, int wallJ,
-                        bool canW, float posX,
-                        float posY, bool leftDown,
-                        bool rightDown, bool fRot,
-                        float rot, float lxScale
+                        bool canW, int coolDJ,
+                        float posX, float posY, 
+                        bool leftDown, bool rightDown, 
+                        bool fRot, float rot, 
+                        float lxScale
                      )
     {
         acceleration = acc;
@@ -540,11 +573,15 @@ internal class SavePlayer : ISerialDataStore
         isEitherDown = isED;
         isLeftDown = isLD;
         isRightDown = isRD;
+        isLeftDown = isLU;
+        isRightUp = isRU;
 
         grounded = g;
         jumps = j;
+
         wallJumps = wallJ;
         canWallJump = canW;
+        coolDownJump = coolDJ;
 
         positionX = posX;
         positionY = posY;
