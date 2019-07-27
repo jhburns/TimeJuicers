@@ -141,7 +141,9 @@ public class Enemy : MonoBehaviour, ISerializable
         }
     }
 
-    /// Serial Methods, see Serial Namespace 
+    ////////////////////////////////////////////////////
+    // Serial implementation, see Libraries/Serial.cs //
+    ////////////////////////////////////////////////////
     public ISerialDataStore GetCurrentState()
     {
         return new SaveEnemy(   isMovingRight, isGrounded,

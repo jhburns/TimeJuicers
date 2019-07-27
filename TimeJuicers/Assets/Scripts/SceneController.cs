@@ -202,7 +202,9 @@ public class SceneController : MonoBehaviour, ISerializable
         return new Color(UIElement.color.r, UIElement.color.g, UIElement.color.b, alpha);
     }
 
-    /// Serial Methods, see Serial Namespace 
+    ////////////////////////////////////////////////////
+    // Serial implementation, see Libraries/Serial.cs //
+    ////////////////////////////////////////////////////
     public ISerialDataStore GetCurrentState()
     {
         return new SaveSceneController(jumpTriggersRestart);

@@ -33,7 +33,9 @@ public class Cloud : MonoBehaviour, ISerializable
         rightXBound = right;
     }
 
-    /// Serial Methods, see Serial Namespace 
+    ////////////////////////////////////////////////////
+    // Serial implementation, see Libraries/Serial.cs //
+    ////////////////////////////////////////////////////
     public ISerialDataStore GetCurrentState()
     {
         return new SaveCloud(transform.position.x);

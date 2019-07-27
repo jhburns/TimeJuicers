@@ -230,7 +230,9 @@ public class GlobalUI : MonoBehaviour, ISerializable
         immortal = true;
     }
 
-    /// Serial Methods, see Serial Namespace 
+    ////////////////////////////////////////////////////
+    // Serial implementation, see Libraries/Serial.cs //
+    ////////////////////////////////////////////////////
     public ISerialDataStore GetCurrentState()
     {
         return new SaveUI(  IsAlive, filterImg.enabled, 

@@ -159,7 +159,9 @@ public class EnemyFlying : MonoBehaviour, ISerializable
 
     }
 
-    /// Serial Methods, see Serial Namespace 
+    ////////////////////////////////////////////////////
+    // Serial implementation, see Libraries/Serial.cs //
+    ////////////////////////////////////////////////////
     public ISerialDataStore GetCurrentState()
     {
         return new SaveFlyingEnemy( isAlive, timeLeftInPlay,

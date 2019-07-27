@@ -56,7 +56,9 @@ public class CameraController : MonoBehaviour, ISerializable
         isExactMode = true;
     }
 
-    /// Serial Methods, see Serial Namespace 
+    ////////////////////////////////////////////////////
+    // Serial implementation, see Libraries/Serial.cs //
+    ////////////////////////////////////////////////////
     public ISerialDataStore GetCurrentState()
     {
         return new SaveCamera(transform.position.x, transform.position.y);

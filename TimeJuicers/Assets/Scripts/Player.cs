@@ -494,7 +494,9 @@ public class Player : MonoBehaviour, ISerializable
         }
     }
 
-    /// Serial Methods, see Serial Namespace 
+    ////////////////////////////////////////////////////
+    // Serial implementation, see Libraries/Serial.cs //
+    ////////////////////////////////////////////////////
     public ISerialDataStore GetCurrentState()
     {
         return new SavePlayer(  acceleration, velocityX,

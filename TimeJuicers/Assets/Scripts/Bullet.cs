@@ -102,7 +102,9 @@ public class Bullet : MonoBehaviour, ISerializable
         rb.velocity = new Vector2(0, 0);
     }
 
-    /// Serial Methods, see Serial namespace 
+    ////////////////////////////////////////////////////
+    // Serial implementation, see Libraries/Serial.cs //
+    ////////////////////////////////////////////////////
     public ISerialDataStore GetCurrentState()
     {
         return new SaveBullet(  isInPlay, timeLeftInPLay,

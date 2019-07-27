@@ -92,7 +92,9 @@ public class BulletManager : MonoBehaviour, ISerializable
         bulletIndex = (bulletIndex + 1) % maxBullets;
     }
 
-    /// Serial Methods, see Serial Namespace 
+    ////////////////////////////////////////////////////
+    // Serial implementation, see Libraries/Serial.cs //
+    ////////////////////////////////////////////////////
     public ISerialDataStore GetCurrentState()
     {
         return new SaveBulletMan(bulletIndex, nextFire);
