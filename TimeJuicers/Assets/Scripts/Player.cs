@@ -34,6 +34,9 @@ public class Player : MonoBehaviour, ISerializable
     private bool canWallJump;
     private const int maxWallJumps = 1; //IM
 
+    private int jumpBuffer; // Untracked, so leaving rewind always allows the player to buffer a jump
+    public int maxJumpBuffer; //IM
+
     public GlobalUI deathHandler; //IM
     public float deathShrinkRatio; // range 0-1 inclusive
 
@@ -126,6 +129,8 @@ public class Player : MonoBehaviour, ISerializable
         CheckJump();
 
         VelocityUpdate();
+
+        Debug.Log(jumpBuffer);
     }
 
     /*
@@ -133,13 +138,24 @@ public class Player : MonoBehaviour, ISerializable
      */
 
     private void CheckJump()
-    {
-        if (input.JumpDown() && jumps > 0)
+    { 
+        if (input.JumpDown())
+        {
+            jumpBuffer = maxJumpBuffer;
+        }
+        else
+        {
+            jumpBuffer = Mathf.Clamp(jumpBuffer - 1, 0, maxJumpBuffer);
+        }
+
+        bool canJump = input.Jump() && jumpBuffer > 0;
+
+        if (canJump && jumps > 0)
         {
             Jump();
             jumps--;
         }
-        else if (input.JumpDown() && wallJumps > 0 && canWallJump)
+        else if (canJump && wallJumps > 0 && canWallJump)
         {
             Jump();
             wallJumps--;
@@ -174,8 +190,6 @@ public class Player : MonoBehaviour, ISerializable
         {
             OnEitherDown();
             Accelerate(IsMovingRight);
-
-            transform.localScale = new Vector3(boolToScalar(IsMovingRight) * 1, 1, 1);
         }
         else
         {
@@ -281,6 +295,7 @@ public class Player : MonoBehaviour, ISerializable
     {
         velocityX = boolToScalar(direction) * startingMoveSpeed;
         acceleration = newAcc;
+        transform.localScale = new Vector3(boolToScalar(IsMovingRight) * 1, 1, 1);
     }
 
     /*
@@ -460,6 +475,8 @@ public class Player : MonoBehaviour, ISerializable
         jumps = past.jumps;
         wallJumps = past.wallJumps;
         canWallJump = past.canWallJump;
+
+        jumpBuffer = maxJumpBuffer;
 
         transform.position = new Vector3(past.positionX, past.positionY, transform.position.z);
 

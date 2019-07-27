@@ -40,6 +40,16 @@ namespace InputMapping {
          */
         public bool JumpDown()
         {
+            return  Input.GetKeyDown(KeyCode.Space) ||
+                    Input.GetKeyDown(KeyCode.W) ||
+                    Input.GetKeyDown(KeyCode.UpArrow) ||
+                    Input.GetKeyDown(KeyCode.Joystick1Button0) || // A button on xbox 360 controller
+                    Input.GetKeyDown(KeyCode.Joystick1Button2) || // X button on xbox 360 controller
+                    Input.GetAxisRaw("Vertical") > axisBounds;
+        }
+
+        public bool Jump()
+        {
             return  Input.GetKey(KeyCode.Space) ||
                     Input.GetKey(KeyCode.W) ||
                     Input.GetKey(KeyCode.UpArrow) ||
