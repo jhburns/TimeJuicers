@@ -240,7 +240,7 @@ public class Player : MonoBehaviour, ISerializable
         {
             if (IsMovingRight == direction)
             {
-                InitialMovementSet(direction, maxMoveSpeed - 2f, 0.075f);
+                InitialMovementSet(direction, maxMoveSpeed - 2f, 0.085f);
             }
             else
             {
@@ -277,7 +277,7 @@ public class Player : MonoBehaviour, ISerializable
             downVar = false;
             IsMovingRight = direction;
             // When Turning Around, when other direction is already down
-            InitialMovementSet(direction, Mathf.Clamp(Mathf.Abs(velocityX) - 3f, 0, maxFlightSpeed), 0.05f);
+            InitialMovementSet(direction, Mathf.Clamp(Mathf.Abs(velocityX) - 3f, 0, maxFlightSpeed), 0.075f);
         }
 
 
@@ -287,7 +287,7 @@ public class Player : MonoBehaviour, ISerializable
             {
                 IsMovingRight = direction;
                 // When Turning around, when other direction was let go of
-                InitialMovementSet(direction, Mathf.Clamp(Mathf.Abs(velocityX) - 3f, 0, maxFlightSpeed), 0.05f);
+                InitialMovementSet(direction, Mathf.Clamp(Mathf.Abs(velocityX) - 3f, 0, maxFlightSpeed), 0.075f);
             }
 
             otherUpVar = false;

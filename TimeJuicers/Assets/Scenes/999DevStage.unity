@@ -7220,7 +7220,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpHeight: 15
-  maxMoveSpeed: 6
+  maxMoveSpeed: 5.5
   terminalVelocity: -8.5
   maxJumpBuffer: 5
   deathHandler: {fileID: 242386373}
