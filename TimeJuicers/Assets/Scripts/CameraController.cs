@@ -9,7 +9,7 @@ public class CameraController : MonoBehaviour, ISerializable
 
     public float minHeight; //IM
 
-    private bool isExactMode; //NOT serialized, only needed for cinematic 
+    public bool isExactMode; // NOT serialized, only needed for cinematic 
 
     public float maxDistanceY; //IM
     public float maxDistanceX; //IM
@@ -17,8 +17,6 @@ public class CameraController : MonoBehaviour, ISerializable
     private void Start()
     {
         transform.position = target.position; // Only player needs to be moved, camera follows on start
-
-        isExactMode = false;
     }
 
     private void Update()

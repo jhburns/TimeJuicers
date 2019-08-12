@@ -209,6 +209,10 @@ public class Player : MonoBehaviour, ISerializable
     private void OnExitRewind()
     {
         isExitingRewind = false;
+        // Making player kinematic during rewind 
+        // should hopefully prevent bug where collisions aren't registered by player
+        // right after coming out of rewind. So player would be in an impossible state.
+        rb.isKinematic = false; 
     }
 
     /*
@@ -526,8 +530,9 @@ public class Player : MonoBehaviour, ISerializable
         SavePlayer past = (SavePlayer) state;
 
         isExitingRewind = true;
+        rb.isKinematic = true;
 
-        rb.velocity = Vector2.zero; // Needed because velocity isn't conserved
+        rb.velocity = Vector2.zero; // Needed to cancel velocity applied during rewind
         acceleration = past.acceleration;
         velocityX = past.velocityX;
         velocityY = past.velocityY;
