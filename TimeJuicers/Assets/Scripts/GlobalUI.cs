@@ -101,8 +101,6 @@ public class GlobalUI : MonoBehaviour, ISerializable
      */
     private void AnimateDeath()
     {
-        // https://docs.unity3d.com/ScriptReference/Mathf.html
-
         if (deathAnimationTrigger < 9.8f)
         {
             float nextAlphaText = Mathf.Lerp(deathText.color.a, startingAlphaText, 0.03f);
@@ -162,7 +160,7 @@ public class GlobalUI : MonoBehaviour, ISerializable
 
         if (!hasDied)
         {
-            StartCoroutine(timeBarController.DecreaseBar()); //https://docs.unity3d.com/ScriptReference/MonoBehaviour.StartCoroutine.html
+            StartCoroutine(timeBarController.DecreaseBar());
             hasDied = true;
             pastStates.ToggleRewindDisabled(false);
         }

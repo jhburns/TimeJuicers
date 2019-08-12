@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using Serial;
 
-
-// https://www.salusgames.com/2016/12/28/smooth-2d-camera-follow-in-unity3d/
 public class CameraController : MonoBehaviour, ISerializable
 {
     public Transform target; //IM

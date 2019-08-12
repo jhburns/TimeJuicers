@@ -72,7 +72,6 @@ public class SceneController : MonoBehaviour, ISerializable
                 diff.MaxFrames += 90; //1.5 seconds
             }
 
-            //https://answers.unity.com/questions/1422096/reload-current-scene-with-scene-manager.html
             Scene scene = SceneManager.GetActiveScene();
             SceneManager.LoadScene(scene.name);
         }
@@ -130,8 +129,6 @@ public class SceneController : MonoBehaviour, ISerializable
         }
     }
 
-    // https://docs.unity3d.com/ScriptReference/SceneManagement.SceneManager.LoadSceneAsync.html
-
     /*
      * LoadNextSceneAsync - loads the next scene in the background, based on the given nextSceneName,
      * Put the loaded scene trigger into the global nextScene variable
@@ -146,8 +143,6 @@ public class SceneController : MonoBehaviour, ISerializable
         // Wait until the asynchronous scene fully loads
         while (!asyncSceneLoad.isDone)
         {
-
-            // https://docs.unity3d.com/ScriptReference/AsyncOperation-allowSceneActivation.html
             if (asyncSceneLoad.progress >= 0.9f)
             {
                 nextScene = asyncSceneLoad;
