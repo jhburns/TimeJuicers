@@ -7,72 +7,32 @@ using UnityEngine.UI;
 
 public class MainMenu : MonoBehaviour
 {
-    public Toggle loadFourth;
+    public string levelName;
 
     /*
-     * StartNormalScene - trigger the starting level to load,
-     * Creates Difficulty object with normal settings
+     * StartScene - creates DifficultyManager thats saved between levels,
+     * And calls LoadLevel to start the first level
      */
-    public void StartNormalScene()
+    public void StartScene(DifficultyPersister settings)
     {
-        CreateDifficultyPersister(600, 150, "normal");
-        FirstLevel();
-    }
-
-    /*
-     * StartHardScene - trigger the starting level to load,
-     * Creates Difficulty object with hard settings
-     */
-    public void StartHardScene()
-    {
-        CreateDifficultyPersister(400, 200, "hard");
-        FirstLevel();
-    }
-
-    /*
-     * StartFreeScene - trigger the starting level to load,
-     * Creates Difficulty object with nearly unlimited settings
-     */
-    public void StartFreeScene()
-    {
-        CreateDifficultyPersister(60000, 0, "free");
-        FirstLevel();
-    }
-
-    /*
-     * CreateDifficultyPersister - creates an DifficultyPersister object to store difficulty between scenes,
-     * Note it isn't destroyed when going to the next
-     * Params:
-     *  - int maxFrames: the stack size for the state controller
-     *  - int framePenalty: how many frames are removed with each death
-     *  - string modeName: the identifier of the difficulty, should only be 'normal', 'hard', or 'free'
-     */
-    private void CreateDifficultyPersister(int maxFrames, int framePenalty, string modeName)
-    {
-        // https://answers.unity.com/questions/572852/how-do-you-create-an-empty-gameobject-in-code-and.html
         GameObject diffPersister = new GameObject("DifficultyManager");
         diffPersister.AddComponent<DifficultyPersister>();
+        DifficultyPersister diffComponent = diffPersister.GetComponent<DifficultyPersister>();
 
-        diffPersister.GetComponent<DifficultyPersister>().MaxFrames = maxFrames;
-        diffPersister.GetComponent<DifficultyPersister>().FramePenalty = framePenalty;
-        diffPersister.GetComponent<DifficultyPersister>().modeName = modeName;
+        diffComponent.MaxFrames = settings.MaxFrames;
+        diffComponent.FramePenalty = settings.FramePenalty;
+        diffComponent.name = settings.name;
 
         GameObject.DontDestroyOnLoad(diffPersister);
+
+        LoadLevel();
     }
 
     /*
-     * FirstLevel - loads into the wanted level
-     * Loads the fourth level instead of first if toggled in UI
+     * LoadLevel - loads into levelName scene
      */
-    private void FirstLevel()
+    private void LoadLevel()
     {
-        if (loadFourth.isOn)
-        {
-            SceneManager.LoadScene("4Guess");
-        }
-        else
-        {
-            SceneManager.LoadScene("1Tutorial");
-        }
+        SceneManager.LoadScene(levelName);
     }
 }

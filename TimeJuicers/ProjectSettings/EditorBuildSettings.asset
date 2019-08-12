@@ -23,7 +23,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/ArchiveLevels/0MainMenu.unity
     guid: bb288633d84146b4b9b39afd98ef2c1c
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/ArchiveLevels/1Tutorial.unity
     guid: 7921a9d02ab763f499865a4a3ebbca14
   - enabled: 0
