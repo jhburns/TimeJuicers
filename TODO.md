@@ -5,4 +5,3 @@
 - Investigate frame drops
 - fix packages
 - Upgrade Unity version
-- move scripts to more specific folders
