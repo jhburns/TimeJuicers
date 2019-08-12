@@ -11,19 +11,11 @@ public class MainMenu : MonoBehaviour
 
     /*
      * StartScene - creates DifficultyManager thats saved between levels,
-     * And calls LoadLevel to start the first level
+     * And calls LoadLevel to start the begin level
      */
     public void StartScene(DifficultyPersister settings)
     {
-        GameObject diffPersister = new GameObject("DifficultyManager");
-        diffPersister.AddComponent<DifficultyPersister>();
-        DifficultyPersister diffComponent = diffPersister.GetComponent<DifficultyPersister>();
-
-        diffComponent.MaxFrames = settings.MaxFrames;
-        diffComponent.FramePenalty = settings.FramePenalty;
-        diffComponent.name = settings.name;
-
-        GameObject.DontDestroyOnLoad(diffPersister);
+        GameObject.DontDestroyOnLoad(settings);
 
         LoadLevel();
     }
