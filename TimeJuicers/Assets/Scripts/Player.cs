@@ -18,6 +18,9 @@ public class Player : MonoBehaviour, ISerializable
     private float velocityY;
     public bool IsMovingRight { get; private set; }
 
+    public float wallStartingSpeed; //IM
+    private float lastX;
+
     private bool isEitherDown;
     private bool isLeftDown;
     private bool isRightDown;
@@ -121,18 +124,14 @@ public class Player : MonoBehaviour, ISerializable
      */
     void Update()
     {
-        /* Disabling death for now, since it can get in the way of development
         if (deathHandler.IsAlive)
         {
+            CheckPlatformCollision();
 
+            CheckJump();
+
+            VelocityUpdate();
         }
-        */
-
-        CheckPlatformCollision();
-
-        CheckJump();
-
-        VelocityUpdate();
     }
 
     /*
@@ -217,7 +216,16 @@ public class Player : MonoBehaviour, ISerializable
      */
     private void Accelerate(bool direction)
     {
-        velocityX = Mathf.Clamp(velocityX + acceleration * boolToScalar(direction), -maxMoveSpeed, maxMoveSpeed);
+        if (lastX != transform.position.x)
+        {
+            velocityX = Mathf.Clamp(velocityX + acceleration * boolToScalar(direction), -maxMoveSpeed, maxMoveSpeed);
+        }
+        else
+        {
+            velocityX = wallStartingSpeed * boolToScalar(direction);
+        }
+
+        lastX = transform.position.x;
     }
 
     /*
@@ -501,15 +509,15 @@ public class Player : MonoBehaviour, ISerializable
     {
         return new SavePlayer(  acceleration, velocityX,
                                 velocityY, IsMovingRight,
-                                isEitherDown, isLeftDown,
-                                isRightDown, isLeftUp,
-                                isRightUp, isGrounded, 
-                                jumps, wallJumps,
-                                canWallJump, coolDownJump,
-                                transform.position.x, transform.position.y, 
-                                leftHorizontalAxisDown, rightHorizontalAxisDown, 
-                                rb.freezeRotation, rb.rotation, 
-                                transform.localScale.x
+                                lastX, isEitherDown, 
+                                isLeftDown, isRightDown, 
+                                isLeftUp, isRightUp, 
+                                isGrounded, jumps, 
+                                wallJumps, canWallJump, 
+                                coolDownJump, transform.position.x, 
+                                transform.position.y, leftHorizontalAxisDown, 
+                                rightHorizontalAxisDown, rb.freezeRotation, 
+                                rb.rotation, transform.localScale.x
                              );
     }
 
@@ -517,11 +525,15 @@ public class Player : MonoBehaviour, ISerializable
     {
         SavePlayer past = (SavePlayer) state;
 
+        isExitingRewind = true;
+
         rb.velocity = Vector2.zero; // Needed because velocity isn't conserved
         acceleration = past.acceleration;
         velocityX = past.velocityX;
         velocityY = past.velocityY;
-        isExitingRewind = true;
+        IsMovingRight = past.IsMovingRight;
+
+        lastX = past.lastX;
 
         isEitherDown = past.isEitherDown;
         isLeftDown = past.isLeftDown;
@@ -529,7 +541,6 @@ public class Player : MonoBehaviour, ISerializable
         isLeftDown = past.isLeftUp;
         isRightUp = past.isRightUp;
 
-        IsMovingRight = past.IsMovingRight;
         isGrounded = past.grounded;
         jumps = past.jumps;
 
@@ -556,8 +567,9 @@ internal class SavePlayer : ISerialDataStore
     public float acceleration { get; private set; }
     public float velocityX { get; private set; }
     public float velocityY { get; private set; }
-
     public bool IsMovingRight { get; private set; }
+
+    public float lastX { get; private set; }
 
     public bool isEitherDown { get; private set; }
     public bool isLeftDown { get; private set; }
@@ -587,22 +599,23 @@ internal class SavePlayer : ISerialDataStore
 
     public SavePlayer(  float acc, float velX, 
                         float velY, bool movingR,
-                        bool isED, bool isLD,
-                        bool isRD, bool isLU,
-                        bool isRU, bool g,
-                        int j, int wallJ,
-                        bool canW, int coolDJ,
-                        float posX, float posY, 
-                        bool leftDown, bool rightDown, 
-                        bool fRot, float rot, 
-                        float lxScale
+                        float lX, bool isED, 
+                        bool isLD, bool isRD, 
+                        bool isLU, bool isRU, 
+                        bool g, int j, 
+                        int wallJ, bool canW, 
+                        int coolDJ, float posX, 
+                        float posY, bool leftDown, 
+                        bool rightDown, bool fRot, 
+                        float rot, float lxScale
                      )
     {
         acceleration = acc;
         velocityX = velX;
         velocityY = velY;
-
         IsMovingRight = movingR;
+
+        lastX = lX;
 
         isEitherDown = isED;
         isLeftDown = isLD;

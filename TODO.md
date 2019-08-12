@@ -2,7 +2,6 @@
 
 - Remove all old art assets
 - Simple demo/tutorial level
-- Fix wall acceleration
 - Investigate frame drops
 - fix packages
 - Upgrade Unity version
