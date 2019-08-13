@@ -19,7 +19,7 @@ public class CameraController : MonoBehaviour, ISerializable
         transform.position = target.position; // Only player needs to be moved, camera follows on start
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         Vector3 newPosition = target.position;
         newPosition.z = -10;

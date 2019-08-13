@@ -3,5 +3,3 @@
 - Remove all old art assets
 - Simple demo/tutorial level
 - Investigate frame drops
-- fix packages
-- Upgrade Unity version
